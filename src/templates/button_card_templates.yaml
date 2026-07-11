@@ -252,9 +252,15 @@ kotapish_bas_equipment_header:
       - color: var(--kotapish-teal)
 
 # -----------------------------------------------------------------------------
-# Ghost / list-row button — used for schedules, trends, event lists
+# Ghost / list-row button — a standalone glass card in a horizontal row
+# layout, used for Settings-style info rows. Stack several of these inside
+# a plain `vertical-stack` — do NOT nest custom:button-card inside a core
+# `type: entities` card's `entities:` list; that list only accepts simple
+# entity-row configs (entity/name/icon/...), not full nested card configs,
+# and Home Assistant will reject the whole dashboard config if you do.
 # -----------------------------------------------------------------------------
 kotapish_list_row:
+  template: kotapish_glass_base
   show_name: true
   show_state: true
   show_icon: true
@@ -264,12 +270,7 @@ kotapish_list_row:
     card:
       - flex-direction: row
       - justify-content: space-between
-      - background: transparent
-      - box-shadow: none
-      - border: none
-      - border-bottom: 1px solid var(--kotapish-glass-border)
-      - border-radius: 0
-      - padding: 12px 4px
+      - padding: 14px 18px
     name:
       - font-size: 14px
       - font-weight: "500"

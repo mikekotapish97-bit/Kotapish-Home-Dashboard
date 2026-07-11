@@ -3,6 +3,39 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.1.1] - 2026-07-11
+
+### Fixed
+
+- **"Configuration error" / blank content on every view.** The Settings
+  page's "Wall Display" section used a core `type: entities` card with
+  full `type: custom:button-card` configs nested inside its `entities:`
+  list. That list only accepts simple entity-row configs
+  (`entity`/`name`/`icon`/...), not full nested cards — this is schema-
+  invalid, and because a YAML-mode dashboard's config is validated as one
+  whole document, this single bad card made Home Assistant reject the
+  ENTIRE dashboard config, showing "Configuration error" regardless of
+  which view tab was actually selected. Replaced the `entities` card with
+  a plain `vertical-stack` of standalone glass cards, and updated the
+  `kotapish_list_row` button-card template to be a self-contained glass
+  row (extends `kotapish_glass_base`, matching the existing
+  `kotapish_status_chip` pattern) instead of assuming it's nested inside
+  an `entities` card's chrome. Also removed a leftover duplicate
+  `card_mod:` key on the same card left over from a previous edit.
+- Re-validated the whole project with a YAML loader that raises on
+  duplicate mapping keys (plain `yaml.safe_load` silently allows them,
+  last-key-wins) — this specific duplicate-key bug wouldn't have been
+  caught by the plain-syntax check used for earlier fixes.
+
+### Note
+
+Once the header/sidebar are visible (as of 1.1.0's Kiosk Mode removal),
+Home Assistant automatically renders each view's `icon`/`title` as a tab
+strip along the top of the dashboard — this is core Lovelace behavior for
+any multi-view YAML dashboard, not something this project adds or can
+remove without reintroducing a hiding hack. It's a harmless, safe
+secondary way to navigate alongside the custom left nav rail.
+
 ## [1.1.0] - 2026-07-11
 
 ### Changed

@@ -45,13 +45,30 @@ cards:
       # are always visible; the wall-mounted "kiosk" feel instead comes
       # from iPadOS's own Guided Access, which is a physical, OS-level
       # lock with no dependency on any frontend plugin's config being
-      # correct. This row is purely informational (see INSTALLATION.md
-      # step 6 to set it up).
+      # correct. These rows are purely informational.
+      #
+      # NOTE: this is a plain vertical-stack of standalone glass cards, NOT
+      # a core `type: entities` card. The `entities:` card's own list only
+      # accepts simple entity-row configs (entity/name/icon/...) — nesting
+      # full `type: custom:button-card` configs in there is invalid and
+      # will make Home Assistant reject the ENTIRE dashboard config with a
+      # generic "Configuration error", on every view, not just this one.
       # -----------------------------------------------------------------------
-      - type: entities
-        title: Wall Display
-        show_header_toggle: false
-        entities:
+      - type: vertical-stack
+        card_mod:
+          style: |
+            ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+        cards:
+          - type: custom:button-card
+            template: kotapish_glass_base
+            show_name: false
+            show_icon: false
+            styles:
+              card:
+                - padding: 4px 20px
+                - align-items: flex-start
+            name: Wall Display
+
           - type: custom:button-card
             template: kotapish_list_row
             icon: mdi:tablet-dashboard
@@ -98,9 +115,6 @@ cards:
             state_display: Off
             tap_action:
               action: none
-        card_mod:
-          style: |
-            ha-card { padding: 8px 20px; }
 
       # -----------------------------------------------------------------------
       # Camera + input helpers reset
