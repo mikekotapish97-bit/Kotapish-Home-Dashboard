@@ -21,14 +21,17 @@ layout:
 cards:
   - !include ../components/nav_rail.yaml
 
-  - type: custom:grid-layout
+  # ---------------------------------------------------------------------------
+  # Main content — a plain vertical-stack (not a nested layout-card: layout-card
+  # only renders correctly as a VIEW's own type, not as a card nested inside
+  # a `cards:` list) assigned to the "main" grid-area of the view above.
+  # ---------------------------------------------------------------------------
+  - type: vertical-stack
     view_layout:
       grid-area: main
-    layout:
-      grid-template-columns: "1fr"
-      grid-template-rows: repeat(8, auto)
-      grid-gap: var(--kotapish-gutter)
-      margin: var(--kotapish-gutter)
+    card_mod:
+      style: |
+        ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
     cards:
       - type: custom:button-card
         template: kotapish_glass_base
@@ -43,13 +46,9 @@ cards:
       # -----------------------------------------------------------------------
       # Supervisory layer status: BACnet gateway, Niagara, JACE controller
       # -----------------------------------------------------------------------
-      - type: custom:grid-layout
-        layout:
-          grid-template-columns: repeat(3, 1fr)
-          grid-gap: var(--kotapish-gutter)
-          mediaquery:
-            "(max-width: 1000px)":
-              grid-template-columns: 1fr
+      - type: grid
+        columns: 3
+        square: false
         cards:
           - type: custom:button-card
             template: kotapish_bas_equipment_header
@@ -82,13 +81,9 @@ cards:
         name: AHU-1 — Air Handling Unit
         state_display: "[[[ return states['binary_sensor.ahu_1_fan_status_placeholder'].state === 'on' ? 'Running' : 'Stopped'; ]]]"
 
-      - type: custom:grid-layout
-        layout:
-          grid-template-columns: repeat(6, 1fr)
-          grid-gap: 12px
-          mediaquery:
-            "(max-width: 1200px)":
-              grid-template-columns: repeat(3, 1fr)
+      - type: grid
+        columns: 6
+        square: false
         cards:
           - type: custom:button-card
             template: kotapish_bas_point
@@ -142,13 +137,9 @@ cards:
         name: RTU-1 — Rooftop Unit
         state_display: "[[[ return states['binary_sensor.rtu_1_fan_status_placeholder'].state === 'on' ? 'Running' : 'Stopped'; ]]]"
 
-      - type: custom:grid-layout
-        layout:
-          grid-template-columns: repeat(6, 1fr)
-          grid-gap: 12px
-          mediaquery:
-            "(max-width: 1200px)":
-              grid-template-columns: repeat(3, 1fr)
+      - type: grid
+        columns: 6
+        square: false
         cards:
           - type: custom:button-card
             template: kotapish_bas_point
@@ -195,13 +186,7 @@ cards:
       # -----------------------------------------------------------------------
       # Boiler-1 & Chiller-1
       # -----------------------------------------------------------------------
-      - type: custom:grid-layout
-        layout:
-          grid-template-columns: 1fr 1fr
-          grid-gap: var(--kotapish-gutter)
-          mediaquery:
-            "(max-width: 1000px)":
-              grid-template-columns: 1fr
+      - type: horizontal-stack
         cards:
           - type: vertical-stack
             card_mod:
@@ -214,10 +199,9 @@ cards:
                 icon: mdi:water-boiler
                 name: Boiler-1
                 state_display: "[[[ return states['binary_sensor.boiler_1_run_status_placeholder'].state === 'on' ? 'Firing' : 'Standby'; ]]]"
-              - type: custom:grid-layout
-                layout:
-                  grid-template-columns: repeat(2, 1fr)
-                  grid-gap: 12px
+              - type: grid
+                columns: 2
+                square: false
                 cards:
                   - type: custom:button-card
                     template: kotapish_bas_point
@@ -243,10 +227,9 @@ cards:
                 icon: mdi:snowflake
                 name: Chiller-1
                 state_display: "[[[ return states['binary_sensor.chiller_1_run_status_placeholder'].state === 'on' ? 'Running' : 'Standby'; ]]]"
-              - type: custom:grid-layout
-                layout:
-                  grid-template-columns: repeat(2, 1fr)
-                  grid-gap: 12px
+              - type: grid
+                columns: 2
+                square: false
                 cards:
                   - type: custom:button-card
                     template: kotapish_bas_point

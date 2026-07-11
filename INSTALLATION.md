@@ -43,11 +43,13 @@ key in `dashboard.yaml` (already configured).
 
 ## 4. Register the dashboard
 
-Add to `configuration.yaml`:
+Add to `configuration.yaml`. **Do not** put `mode: yaml` directly under the
+top-level `lovelace:` key — that legacy form is deprecated and is removed
+in Home Assistant 2026.8. The per-dashboard `mode: yaml` below is a
+different, still-supported setting and is required:
 
 ```yaml
 lovelace:
-  mode: yaml
   dashboards:
     kotapish-home:
       mode: yaml
@@ -56,6 +58,12 @@ lovelace:
       show_in_sidebar: true
       filename: kotapish-home-dashboard/src/dashboard.yaml
 ```
+
+If you were previously on the old `lovelace: mode: yaml` single-dashboard
+form and want to keep managing Lovelace *resources* (the HACS card
+registrations) via YAML too, add `resource_mode: yaml` alongside
+`dashboards:` — otherwise manage resources from **Settings → Dashboards →
+Resources** as normal.
 
 Restart Home Assistant (a full restart, not just a reload, is required the
 first time a new YAML dashboard is registered).
@@ -70,11 +78,30 @@ first time a new YAML dashboard is registered).
 3. Rename that device (e.g. `ipad_pro_wall_dashboard`) for clarity when
    targeting it from automations later.
 
-## 6. Set up Kiosk Mode
+## 6. Set up Kiosk Mode safely (read this before mounting the iPad)
 
-Kiosk Mode is already configured at the top of `dashboard.yaml`
-(`hide_header`, `hide_sidebar`, etc.). No extra YAML is required — it
-activates automatically once the Kiosk Mode HACS resource is installed.
+Kiosk Mode is already configured in `dashboard.yaml` using its
+`non_admin_settings` / `admin_settings` split, **not** a single global
+`hide_header`/`hide_sidebar` pair. This matters: hiding the sidebar
+globally leaves no way back into Settings on a device with no other means
+of navigating away (no browser address bar in a home-screen web app, no
+back button). With the split config, any account with **Administrator**
+turned on always keeps the sidebar and header, everywhere; the hide
+behavior only applies to non-admin accounts.
+
+Before mounting the iPad:
+
+1. Create a dedicated, **non-admin** user for daily wall-display use:
+   **Settings → People → Users → Add User**, name it e.g. `Wall Display`,
+   leave "Administrator" unchecked.
+2. Log the wall-mounted iPad into Home Assistant as that `Wall Display`
+   user (this is the session that gets the chrome hidden).
+3. Keep using your own admin account from your phone/laptop (or a private
+   browsing tab on the same iPad, logged in separately) whenever you need
+   to edit the dashboard, add integrations, or change settings — the
+   sidebar will always be there for that account.
+4. No extra YAML is required beyond what's already in `dashboard.yaml` —
+   Kiosk Mode activates automatically once its HACS resource is installed.
 
 ## 7. Replace placeholder entities
 

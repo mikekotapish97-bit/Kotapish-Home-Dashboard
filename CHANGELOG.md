@@ -3,6 +3,30 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.0.1] - 2026-07-11
+
+### Fixed
+
+- **Blank page content on every view.** `custom:grid-layout` (Layout Card)
+  is only valid as a view's own `type:`, not as a card nested inside a
+  `cards:` list — every page nested it 2-3 levels deep for the "main"
+  content area, tile rows, and BAS point grids, which silently failed to
+  render. Replaced every nested occurrence with Home Assistant's built-in
+  `vertical-stack` / `horizontal-stack` / `grid` cards; only the one
+  view-level `custom:grid-layout` per page (nav rail + main content
+  columns) remains.
+- **Kiosk Mode could lock out administration.** `kiosk_mode` previously
+  hid the header/sidebar unconditionally for every session, including
+  admin accounts, with no way back to Settings on a device with no
+  browser chrome. Replaced with `non_admin_settings` / `admin_settings`,
+  so any Administrator account always keeps the sidebar and header.
+  `INSTALLATION.md` now documents creating a separate non-admin "Wall
+  Display" user for the iPad's daily session.
+- **Deprecated `lovelace: mode: yaml`.** Home Assistant 2026.8 removes the
+  legacy top-level `mode: yaml` key. `INSTALLATION.md` and the header
+  comment in `dashboard.yaml` now show the current `lovelace: dashboards:`
+  form only.
+
 ## [1.0.0] - 2026-07-11
 
 ### Added

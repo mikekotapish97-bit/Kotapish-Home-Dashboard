@@ -2,10 +2,10 @@
 # Kotapish Home Dashboard — Root Lovelace Configuration
 #
 # This is the entry point. Install it as a YAML-mode dashboard, e.g. in
-# configuration.yaml:
+# configuration.yaml (2026-current syntax — do NOT put `mode: yaml` directly
+# under the top-level `lovelace:` key, that form is deprecated/removed):
 #
 #   lovelace:
-#     mode: yaml
 #     dashboards:
 #       kotapish-home:
 #         mode: yaml
@@ -30,17 +30,27 @@ background: var(--kotapish-page-background)
 button_card_templates: !include templates/button_card_templates.yaml
 
 # -----------------------------------------------------------------------------
-# Kiosk Mode (HACS) — wall-mounted iPad: no HA header, no sidebar, no back
-# button. Toggle from Settings page (kiosk_mode.user_settings service) if you
-# ever need chrome back for administration.
+# Kiosk Mode (HACS) — hides header/sidebar ONLY for non-admin sessions.
+# `admin_settings` is an explicit escape hatch: any account with the Home
+# Assistant "Administrator" toggle enabled ALWAYS keeps the sidebar and
+# header, on every device, so you can never get physically locked out of
+# Settings on the wall iPad. Log the wall iPad in as a separate, non-admin
+# "Wall Display" user for daily use — see INSTALLATION.md step 6 — and use
+# your own admin account (on this iPad or any other device) to edit.
 # -----------------------------------------------------------------------------
 kiosk_mode:
-  hide_header: true
-  hide_sidebar: true
-  ignore_entity_settings: false
-  hide_menu_button: true
-  hide_sidebar_toggle: true
-  hide_scrollbar: true
+  non_admin_settings:
+    hide_header: true
+    hide_sidebar: true
+    hide_menu_button: true
+    hide_sidebar_toggle: true
+    hide_scrollbar: true
+  admin_settings:
+    hide_header: false
+    hide_sidebar: false
+    hide_menu_button: false
+    hide_sidebar_toggle: false
+    hide_scrollbar: false
 
 # -----------------------------------------------------------------------------
 # Views — one per nav rail destination. Order here MUST match the icon order

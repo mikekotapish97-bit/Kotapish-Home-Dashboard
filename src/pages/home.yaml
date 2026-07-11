@@ -21,25 +21,24 @@ layout:
 cards:
   - !include ../components/nav_rail.yaml
 
-  - type: custom:grid-layout
+  # ---------------------------------------------------------------------------
+  # Main content — a plain vertical-stack (not a nested layout-card: layout-card
+  # only renders correctly as a VIEW's own type, not as a card nested inside
+  # a `cards:` list) assigned to the "main" grid-area of the view above.
+  # ---------------------------------------------------------------------------
+  - type: vertical-stack
     view_layout:
       grid-area: main
-    layout:
-      grid-template-columns: "1fr"
-      grid-template-rows: auto auto auto
-      grid-gap: var(--kotapish-gutter)
-      margin: var(--kotapish-gutter)
+    card_mod:
+      style: |
+        ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
     cards:
       - !include ../components/header.yaml
 
-      - type: custom:grid-layout
-        layout:
-          grid-template-columns: 2fr 1fr
-          grid-template-rows: 1fr
-          grid-gap: var(--kotapish-gutter)
-          mediaquery:
-            "(max-width: 1100px)":
-              grid-template-columns: 1fr
+      - type: horizontal-stack
+        card_mod:
+          style: |
+            ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
         cards:
           - !include ../components/camera_card.yaml
 

@@ -3,17 +3,14 @@
 # Living Room / Kitchen / Bedroom / Office / Garage / Patio. Each tile opens a
 # Browser Mod popup (src/popups/room_*.yaml) with room-specific controls.
 # All sensor/light entities are PLACEHOLDERS — see popups for full lists.
+#
+# Uses Home Assistant's built-in `grid` card (not a custom/nested layout
+# card) so this renders reliably wherever it is included as a plain card.
 # =============================================================================
 
-type: custom:grid-layout
-layout:
-  grid-template-columns: repeat(6, 1fr)
-  grid-template-rows: 1fr
-  grid-gap: var(--kotapish-gutter)
-  mediaquery:
-    "(max-width: 1100px)":
-      grid-template-columns: repeat(3, 1fr)
-      grid-template-rows: repeat(2, 1fr)
+type: grid
+columns: 6
+square: false
 cards:
   - type: custom:button-card
     template: kotapish_room_tile

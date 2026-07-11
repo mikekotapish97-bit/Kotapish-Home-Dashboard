@@ -19,14 +19,12 @@ layout:
 cards:
   - !include ../components/nav_rail.yaml
 
-  - type: custom:grid-layout
+  - type: vertical-stack
     view_layout:
       grid-area: main
-    layout:
-      grid-template-columns: "1fr"
-      grid-template-rows: auto auto
-      grid-gap: var(--kotapish-gutter)
-      margin: var(--kotapish-gutter)
+    card_mod:
+      style: |
+        ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
     cards:
       - type: custom:button-card
         template: kotapish_glass_base
@@ -38,13 +36,7 @@ cards:
             - align-items: flex-start
         name: Media
 
-      - type: custom:grid-layout
-        layout:
-          grid-template-columns: 1.4fr 1fr
-          grid-gap: var(--kotapish-gutter)
-          mediaquery:
-            "(max-width: 1100px)":
-              grid-template-columns: 1fr
+      - type: horizontal-stack
         cards:
           # ------------------------------------------------------------------
           # Now Playing hero — Apple TV
@@ -98,13 +90,9 @@ cards:
       # -----------------------------------------------------------------------
       # Quick source shortcuts
       # -----------------------------------------------------------------------
-      - type: custom:grid-layout
-        layout:
-          grid-template-columns: repeat(4, 1fr)
-          grid-gap: var(--kotapish-gutter)
-          mediaquery:
-            "(max-width: 1000px)":
-              grid-template-columns: repeat(2, 1fr)
+      - type: grid
+        columns: 4
+        square: false
         cards:
           - type: custom:button-card
             template: kotapish_glass_base
