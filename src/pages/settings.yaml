@@ -88,6 +88,12 @@ cards:
                       `INSTALLATION.md` step 6 for how to create the
                       non-admin Wall Display user.
 
+
+                      **Stuck with no sidebar and no way back?** Add
+                      `?disable_km` to the end of this page's URL and
+                      reload — Kiosk Mode reads that and turns itself off
+                      for this session no matter what.
+
           - type: custom:button-card
             template: kotapish_list_row
             icon: mdi:screen-rotation-lock

@@ -103,6 +103,31 @@ Before mounting the iPad:
 4. No extra YAML is required beyond what's already in `dashboard.yaml` —
    Kiosk Mode activates automatically once its HACS resource is installed.
 
+### If the sidebar/header ever disappears with no way back
+
+This is a long-archived HACS project (the original `maykar/kiosk-mode`
+repo has been read-only since 2022) and HACS may resolve it to any of
+several community forks that don't all behave identically — so treat
+this as a real possibility, not a hypothetical:
+
+1. **Immediate fix, works regardless of any YAML config or which fork is
+   installed:** add `?disable_km` to the end of the dashboard's URL and
+   reload the page — e.g. `.../kotapish-home/home?disable_km`. The plugin
+   reads this query parameter and disables itself for that session no
+   matter what.
+2. If that doesn't bring the chrome back, the resource may not be Kiosk
+   Mode at all — check **HACS → Frontend → kiosk-mode** for which
+   repository is actually installed, and open the browser console
+   (`Cmd+Option+I` on Mac Safari/Chrome) for JavaScript errors mentioning
+   `kiosk-mode` while loading the dashboard.
+3. As a last resort, edit `dashboard.yaml` and delete the entire
+   `kiosk_mode:` block, then restart Home Assistant — this disables the
+   feature outright until you've confirmed the escape hatch works.
+
+**Test the `?disable_km` escape hatch once, on purpose, before you ever
+rely on Kiosk Mode day-to-day** — don't wait to discover it works only
+after getting stuck.
+
 ## 7. Replace placeholder entities
 
 Search the project for the comment tag `# PLACEHOLDER ENTITY` — every

@@ -3,6 +3,27 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.0.3] - 2026-07-11
+
+### Fixed
+
+- **Sidebar/header could still disappear with no way back, even for an
+  admin account.** `dashboard.yaml`'s `kiosk_mode` block used an incorrect
+  key (`hide_menu_button` instead of the plugin's actual `hide_menubutton`)
+  and two undocumented keys (`hide_sidebar_toggle`, `hide_scrollbar`).
+  More importantly, per the plugin's own docs, `mobile_settings` and
+  `entity_settings` can silently override `admin_settings`/
+  `non_admin_settings` unless told not to — added
+  `ignore_mobile_settings: true` and `ignore_entity_settings: true` to
+  both blocks so nothing can override the "admins always keep chrome"
+  guarantee.
+- Documented the plugin's `?disable_km` URL query-string override in
+  `INSTALLATION.md` and in the Settings page's Kiosk Mode popup as a
+  guaranteed manual escape hatch, independent of any YAML config — added
+  because the underlying HACS project (`maykar/kiosk-mode`) has been
+  archived/read-only since 2022 and HACS may resolve to any of several
+  community forks with possibly different behavior.
+
 ## [1.0.2] - 2026-07-11
 
 ### Fixed
