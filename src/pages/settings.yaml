@@ -1,7 +1,8 @@
 # =============================================================================
 # Page: Settings
-# Dashboard/system settings: Kiosk Mode toggle, camera selector reset, theme
-# info, and links back into HA's own Settings for full administration.
+# Dashboard/system settings: Guided Access info, camera selector reset,
+# theme info. The HA sidebar/header are always visible on this dashboard —
+# see the note in dashboard.yaml for why Kiosk Mode is deliberately not used.
 # =============================================================================
 
 title: Settings
@@ -37,16 +38,15 @@ cards:
         name: Settings
 
       # -----------------------------------------------------------------------
-      # Wall-mount / Kiosk Mode controls
+      # Wall-mount controls
       #
-      # NOTE: Kiosk Mode (the HACS frontend resource) has no backend
-      # integration and registers no Home Assistant services — it is pure
-      # client-side CSS driven entirely by the static `kiosk_mode:` block in
-      # dashboard.yaml (non_admin_settings / admin_settings). There is no
-      # service to call to "toggle" it at runtime, so this row is
-      # informational: it reports whether THIS signed-in session currently
-      # has chrome hidden, and tapping it explains how to change that
-      # (sign in as a different account — see INSTALLATION.md step 6).
+      # This project does NOT use the Kiosk Mode HACS resource — see the
+      # note at the top of dashboard.yaml for why. The HA sidebar/header
+      # are always visible; the wall-mounted "kiosk" feel instead comes
+      # from iPadOS's own Guided Access, which is a physical, OS-level
+      # lock with no dependency on any frontend plugin's config being
+      # correct. This row is purely informational (see INSTALLATION.md
+      # step 6 to set it up).
       # -----------------------------------------------------------------------
       - type: entities
         title: Wall Display
@@ -54,45 +54,34 @@ cards:
         entities:
           - type: custom:button-card
             template: kotapish_list_row
-            icon: mdi:tablet
-            name: Kiosk Mode
-            state_display: |
-              [[[
-                return hass.user.is_admin ? 'Off — signed in as Admin' : 'On — signed in as Wall Display';
-              ]]]
+            icon: mdi:tablet-dashboard
+            name: Guided Access
+            state_display: iPadOS setting — see INSTALLATION.md
             tap_action:
               action: fire-dom-event
               browser_mod:
                 service: browser_mod.popup
                 data:
-                  title: Kiosk Mode
+                  title: Guided Access
                   size: normal
                   content:
                     type: markdown
                     content: >-
-                      Kiosk Mode is not a live toggle — it is applied
-                      automatically based on **which account is signed in**,
-                      configured once in `dashboard.yaml`.
+                      This dashboard intentionally leaves the Home
+                      Assistant sidebar and header **always visible** —
+                      no frontend plugin hides it, so there is never a
+                      risk of being locked out.
 
 
-                      - Signed in as an **Administrator**: sidebar and
-                      header always stay visible (this session).
-
-                      - Signed in as a **non-admin** account (e.g. a
-                      dedicated "Wall Display" user): sidebar and header
-                      are hidden.
-
-
-                      To change this session's chrome, sign out and sign
-                      back in as the other kind of account. See
-                      `INSTALLATION.md` step 6 for how to create the
-                      non-admin Wall Display user.
+                      The wall-mounted, single-app "kiosk" feel comes
+                      from **iPadOS Guided Access** instead: **Settings →
+                      Accessibility → Guided Access**, enable it, then
+                      triple-click the side button while this dashboard
+                      is open in Safari to lock the iPad to this one tab.
+                      Triple-click again and enter your passcode to exit.
 
 
-                      **Stuck with no sidebar and no way back?** Add
-                      `?disable_km` to the end of this page's URL and
-                      reload — Kiosk Mode reads that and turns itself off
-                      for this session no matter what.
+                      See `INSTALLATION.md` step 6 for the full setup.
 
           - type: custom:button-card
             template: kotapish_list_row

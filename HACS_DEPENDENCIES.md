@@ -25,7 +25,13 @@ repository URL, unless HACS reports it isn't found in your version.
 | **State Switch** | Camera hero card + fullscreen popup camera switching |
 | **Mini Graph Card** | All temperature/humidity/energy/BAS trend graphs |
 | **auto-entities** | Recent motion events, security events, UniFi device lists |
-| **Kiosk Mode** | Hides HA's own header/sidebar for the wall-mounted iPad |
+
+**Not used: Kiosk Mode.** This project intentionally does not hide the HA
+sidebar/header via the Kiosk Mode HACS resource — its role-based hiding
+repeatedly failed to reliably keep the sidebar reachable, and the
+underlying project has been archived/unmaintained since 2022. The wall
+iPad's kiosk feel comes from iPadOS's own Guided Access instead — see
+`INSTALLATION.md` step 6. Do not install Kiosk Mode for this dashboard.
 
 ## Home Assistant Core (no HACS needed)
 

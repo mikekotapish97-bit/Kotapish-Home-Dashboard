@@ -3,6 +3,27 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] - 2026-07-11
+
+### Changed
+
+- **Removed the Kiosk Mode HACS resource entirely.** Despite two rounds
+  of config hardening (`admin_settings`/`non_admin_settings`,
+  `ignore_mobile_settings`, `ignore_entity_settings`), the sidebar/header
+  could still disappear with no way back, even for the only (admin)
+  account on the instance. Given the underlying project has been
+  archived/unmaintained since 2022 with uncertain fork behavior, it's no
+  longer worth the risk. The HA sidebar/header are now always left
+  visible; `dashboard.yaml` no longer has a `kiosk_mode:` block at all.
+- The wall-mounted, single-app "kiosk" feel now comes entirely from
+  **iPadOS's own Guided Access** (OS-level, no plugin config involved) —
+  see `INSTALLATION.md` step 6 (rewritten) and the Settings page's
+  "Wall Display" row (now shows Guided Access info instead of a Kiosk
+  Mode status/popup).
+- Updated `README.md` and `HACS_DEPENDENCIES.md` to drop Kiosk Mode from
+  the required components list and explicitly call out that it should
+  not be installed for this project.
+
 ## [1.0.3] - 2026-07-11
 
 ### Fixed

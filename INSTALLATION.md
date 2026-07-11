@@ -78,55 +78,38 @@ first time a new YAML dashboard is registered).
 3. Rename that device (e.g. `ipad_pro_wall_dashboard`) for clarity when
    targeting it from automations later.
 
-## 6. Set up Kiosk Mode safely (read this before mounting the iPad)
+## 6. Wall-mount the iPad with Guided Access (no Kiosk Mode plugin)
 
-Kiosk Mode is already configured in `dashboard.yaml` using its
-`non_admin_settings` / `admin_settings` split, **not** a single global
-`hide_header`/`hide_sidebar` pair. This matters: hiding the sidebar
-globally leaves no way back into Settings on a device with no other means
-of navigating away (no browser address bar in a home-screen web app, no
-back button). With the split config, any account with **Administrator**
-turned on always keeps the sidebar and header, everywhere; the hide
-behavior only applies to non-admin accounts.
+This project deliberately does **not** use the Kiosk Mode HACS resource.
+It repeatedly failed to reliably guarantee the sidebar/header stayed
+reachable — up to and including for admin accounts — and it's a
+long-archived, unmaintained project (the original `maykar/kiosk-mode`
+repo has been read-only since 2022, with HACS resolving to any of several
+forks of uncertain behavior). The Home Assistant sidebar and header are
+simply left **always visible** here; there is no config to get wrong and
+no way to get locked out.
 
-Before mounting the iPad:
+The single-app "kiosk" feel for the wall-mounted iPad comes entirely from
+**iPadOS's own Guided Access** instead — an OS-level lock, not a frontend
+plugin:
 
-1. Create a dedicated, **non-admin** user for daily wall-display use:
-   **Settings → People → Users → Add User**, name it e.g. `Wall Display`,
-   leave "Administrator" unchecked.
-2. Log the wall-mounted iPad into Home Assistant as that `Wall Display`
-   user (this is the session that gets the chrome hidden).
-3. Keep using your own admin account from your phone/laptop (or a private
-   browsing tab on the same iPad, logged in separately) whenever you need
-   to edit the dashboard, add integrations, or change settings — the
-   sidebar will always be there for that account.
-4. No extra YAML is required beyond what's already in `dashboard.yaml` —
-   Kiosk Mode activates automatically once its HACS resource is installed.
+1. Add the dashboard URL to the Home Screen from Safari (`Share → Add to
+   Home Screen`) so it opens full-screen without Safari's own browser
+   chrome.
+2. In iPadOS **Settings → Accessibility → Guided Access**, turn it on and
+   set a passcode.
+3. Open the dashboard, then **triple-click the side button** to start a
+   Guided Access session — this locks the iPad to that one Safari tab.
+   Triple-click again and enter the passcode to exit and get back to the
+   Home Screen (e.g. to adjust iPad-level settings).
+4. Set **Auto-Lock** to *Never* for this iPad (Settings → Display &
+   Brightness), since it's a permanently powered wall display.
 
-### If the sidebar/header ever disappears with no way back
-
-This is a long-archived HACS project (the original `maykar/kiosk-mode`
-repo has been read-only since 2022) and HACS may resolve it to any of
-several community forks that don't all behave identically — so treat
-this as a real possibility, not a hypothetical:
-
-1. **Immediate fix, works regardless of any YAML config or which fork is
-   installed:** add `?disable_km` to the end of the dashboard's URL and
-   reload the page — e.g. `.../kotapish-home/home?disable_km`. The plugin
-   reads this query parameter and disables itself for that session no
-   matter what.
-2. If that doesn't bring the chrome back, the resource may not be Kiosk
-   Mode at all — check **HACS → Frontend → kiosk-mode** for which
-   repository is actually installed, and open the browser console
-   (`Cmd+Option+I` on Mac Safari/Chrome) for JavaScript errors mentioning
-   `kiosk-mode` while loading the dashboard.
-3. As a last resort, edit `dashboard.yaml` and delete the entire
-   `kiosk_mode:` block, then restart Home Assistant — this disables the
-   feature outright until you've confirmed the escape hatch works.
-
-**Test the `?disable_km` escape hatch once, on purpose, before you ever
-rely on Kiosk Mode day-to-day** — don't wait to discover it works only
-after getting stuck.
+The Home Assistant sidebar/header remain visible on-screen the whole
+time — that's expected and intentional. If you ever want to hide them
+again in the future, revisit a Kiosk Mode–style plugin only after
+confirming its current, actively maintained fork and testing its escape
+hatch thoroughly first.
 
 ## 7. Replace placeholder entities
 
@@ -139,17 +122,7 @@ data. The only entities guaranteed to exist out of the box are:
 - `camera.entry_cam`
 - `input_select.dashboard_camera` (must have options: `Entry`, `Driveway`, `Deck`)
 
-## 8. iPad setup (kiosk wall mount)
-
-1. Add the dashboard URL to the Home Screen from Safari (`Share → Add to
-   Home Screen`) so it opens full-screen without Safari chrome.
-2. In iPadOS **Settings → Accessibility → Guided Access**, enable Guided
-   Access and triple-click the side button once the dashboard is open to
-   lock the iPad to this single app.
-3. Set **Auto-Lock** to *Never* for the dedicated wall-mount iPad (Settings
-   → Display & Brightness), since this is a permanently powered display.
-
-## 9. Verify
+## 8. Verify
 
 Open each of the 10 views from the nav rail and confirm no
 `custom-element-not-found` or YAML parse errors appear. See

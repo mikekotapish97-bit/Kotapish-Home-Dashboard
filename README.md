@@ -24,8 +24,8 @@ kotapish-home-dashboard/
 ├── HACS_DEPENDENCIES.md
 └── src/
     ├── dashboard.yaml            # Root Lovelace config — title, theme,
-    │                              # button-card templates, Kiosk Mode,
-    │                              # view registry (10 pages)
+    │                              # button-card templates, view registry
+    │                              # (10 pages)
     ├── theme/
     │   └── kotapish_glass.yaml   # Single source of truth: colors, blur,
     │                              # radius, spacing, fonts, global Card Mod
@@ -94,13 +94,18 @@ kotapish-home-dashboard/
 | Media | `/media` | Apple TV now playing, per-room speakers, sources |
 | Network | `/network` | Internet/Ping/VPN/WiFi tiles, bandwidth graph, UniFi devices |
 | Commercial HVAC | `/commercial-hvac` | BAS front-end: AHU/RTU/Boiler/Chiller/VFD, BACnet/Niagara/JACE status, schedules, trends |
-| Settings | `/settings` | Kiosk Mode controls, dashboard data, about |
+| Settings | `/settings` | Guided Access info, dashboard data, about |
 
 ## Required HACS components
 
 Button Card, Mushroom, Bubble Card, Browser Mod, Layout Card, Card Mod,
-Clock Weather Card, State Switch, Mini Graph Card, Auto Entities, Kiosk
-Mode. Full detail in [`HACS_DEPENDENCIES.md`](HACS_DEPENDENCIES.md).
+Clock Weather Card, State Switch, Mini Graph Card, Auto Entities. Full
+detail in [`HACS_DEPENDENCIES.md`](HACS_DEPENDENCIES.md).
+
+**Not used: Kiosk Mode.** The HA sidebar/header are left always visible;
+the wall-mounted feel comes from iPadOS's own Guided Access instead (see
+`INSTALLATION.md` step 6) — Kiosk Mode's role-based hiding repeatedly
+failed to reliably guarantee a way back into Settings.
 
 ## Entities
 

@@ -30,40 +30,20 @@ background: var(--kotapish-page-background)
 button_card_templates: !include templates/button_card_templates.yaml
 
 # -----------------------------------------------------------------------------
-# Kiosk Mode (HACS) — hides header/sidebar ONLY for non-admin sessions.
-# `admin_settings` is an explicit escape hatch: any account with the Home
-# Assistant "Administrator" toggle enabled ALWAYS keeps the sidebar and
-# header, on every device, so you can never get physically locked out of
-# Settings on the wall iPad. Log the wall iPad in as a separate, non-admin
-# "Wall Display" user for daily use — see INSTALLATION.md step 6 — and use
-# your own admin account (on this iPad or any other device) to edit.
+# NOTE ON KIOSK MODE: this project intentionally does NOT use the Kiosk
+# Mode HACS resource. Its `admin_settings`/`non_admin_settings` role-based
+# hiding repeatedly failed to guarantee the Home Assistant sidebar/header
+# stayed reachable, up to and including for admin accounts — and it's a
+# long-archived, unmaintained project (the original `maykar/kiosk-mode`
+# repo has been read-only since 2022, with HACS resolving to any of
+# several forks of uncertain behavior). The HA sidebar/header are left
+# fully visible here on purpose: reliability and always having a way back
+# into Settings wins over a fully edge-to-edge look.
 #
-# `ignore_mobile_settings` / `ignore_entity_settings` are set explicitly on
-# BOTH blocks: per the plugin's own docs, mobile-viewport detection and any
-# per-entity override otherwise take priority over admin_settings and
-# non_admin_settings — without these two flags a narrow/tablet-width
-# browser window can silently override the "always show chrome for admins"
-# guarantee above, regardless of who is signed in.
-#
-# HARD SAFETY NET (works regardless of any of the above): this plugin reads
-# a `?disable_km` query-string parameter and turns itself off for that
-# session no matter what the YAML says. If chrome ever disappears and you
-# have no way back, add `?disable_km` to the end of the dashboard's URL
-# and reload. See INSTALLATION.md step 6.
+# The wall-mount "kiosk" experience instead comes entirely from iPadOS's
+# own built-in Guided Access, which locks the iPad's hardware to this one
+# Safari tab — see INSTALLATION.md step 6.
 # -----------------------------------------------------------------------------
-kiosk_mode:
-  non_admin_settings:
-    hide_header: true
-    hide_sidebar: true
-    hide_menubutton: true
-    ignore_mobile_settings: true
-    ignore_entity_settings: true
-  admin_settings:
-    hide_header: false
-    hide_sidebar: false
-    hide_menubutton: false
-    ignore_mobile_settings: true
-    ignore_entity_settings: true
 
 # -----------------------------------------------------------------------------
 # Views — one per nav rail destination. Order here MUST match the icon order
