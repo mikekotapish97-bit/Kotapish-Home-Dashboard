@@ -38,6 +38,15 @@ cards:
 
       # -----------------------------------------------------------------------
       # Wall-mount / Kiosk Mode controls
+      #
+      # NOTE: Kiosk Mode (the HACS frontend resource) has no backend
+      # integration and registers no Home Assistant services — it is pure
+      # client-side CSS driven entirely by the static `kiosk_mode:` block in
+      # dashboard.yaml (non_admin_settings / admin_settings). There is no
+      # service to call to "toggle" it at runtime, so this row is
+      # informational: it reports whether THIS signed-in session currently
+      # has chrome hidden, and tapping it explains how to change that
+      # (sign in as a different account — see INSTALLATION.md step 6).
       # -----------------------------------------------------------------------
       - type: entities
         title: Wall Display
@@ -47,14 +56,37 @@ cards:
             template: kotapish_list_row
             icon: mdi:tablet
             name: Kiosk Mode
-            state_display: Enabled
+            state_display: |
+              [[[
+                return hass.user.is_admin ? 'Off — signed in as Admin' : 'On — signed in as Wall Display';
+              ]]]
             tap_action:
               action: fire-dom-event
               browser_mod:
-                service: kiosk_mode.user_settings
+                service: browser_mod.popup
                 data:
-                  hide_header: true
-                  hide_sidebar: true
+                  title: Kiosk Mode
+                  size: normal
+                  content:
+                    type: markdown
+                    content: >-
+                      Kiosk Mode is not a live toggle — it is applied
+                      automatically based on **which account is signed in**,
+                      configured once in `dashboard.yaml`.
+
+
+                      - Signed in as an **Administrator**: sidebar and
+                      header always stay visible (this session).
+
+                      - Signed in as a **non-admin** account (e.g. a
+                      dedicated "Wall Display" user): sidebar and header
+                      are hidden.
+
+
+                      To change this session's chrome, sign out and sign
+                      back in as the other kind of account. See
+                      `INSTALLATION.md` step 6 for how to create the
+                      non-admin Wall Display user.
 
           - type: custom:button-card
             template: kotapish_list_row

@@ -3,6 +3,20 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.0.2] - 2026-07-11
+
+### Fixed
+
+- **Settings → Kiosk Mode row did nothing when tapped.** It called a
+  `kiosk_mode.user_settings` Home Assistant service that does not exist —
+  Kiosk Mode (the HACS resource) has no backend integration and registers
+  no services at all; it is pure client-side CSS driven by the static
+  `kiosk_mode:` block in `dashboard.yaml`. Replaced the fake service call
+  with an accurate, live `state_display` (reports whether the current
+  signed-in session has chrome hidden, via `hass.user.is_admin`) and a
+  tap action that opens an explanatory popup instead of pretending to
+  toggle something at runtime.
+
 ## [1.0.1] - 2026-07-11
 
 ### Fixed
