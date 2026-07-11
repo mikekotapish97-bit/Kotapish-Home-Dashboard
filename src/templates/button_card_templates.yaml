@@ -1,0 +1,281 @@
+# =============================================================================
+# Kotapish Home Dashboard — Button Card Templates
+# Loaded into the root dashboard config as:
+#   button_card_templates: !include_dir_merge_named ../templates_bc
+# (dashboard.yaml merges this file's top-level keys — see comments below)
+#
+# Every custom:button-card in this project extends one of these templates via
+# `template: [kotapish_glass_base, ...]`. This is the ONLY place card geometry,
+# blur and base typography are defined for button-card — never redeclare
+# border-radius/backdrop-filter ad-hoc in a page file.
+# =============================================================================
+
+kotapish_glass_base:
+  show_name: true
+  show_icon: true
+  show_state: false
+  styles:
+    card:
+      - border-radius: var(--kotapish-radius-xl)
+      - background: var(--kotapish-glass-surface)
+      - backdrop-filter: blur(var(--kotapish-glass-blur))
+      - -webkit-backdrop-filter: blur(var(--kotapish-glass-blur))
+      - border: 1px solid var(--kotapish-glass-border)
+      - box-shadow: var(--kotapish-glass-shadow)
+      - transition: var(--kotapish-transition-smooth)
+      - padding: 12px
+    name:
+      - font-family: var(--kotapish-font-family)
+      - font-weight: "600"
+      - font-size: 16px
+      - color: var(--primary-text-color)
+    state:
+      - font-family: var(--kotapish-font-family)
+      - font-size: 13px
+      - color: var(--secondary-text-color)
+    icon:
+      - color: var(--kotapish-blue)
+      - width: 28px
+
+# -----------------------------------------------------------------------------
+# Left navigation rail icon — 80x80 touch target, active-state pill highlight
+# -----------------------------------------------------------------------------
+kotapish_nav_icon:
+  template: kotapish_glass_base
+  show_name: false
+  show_label: true
+  show_icon: true
+  size: 26px
+  styles:
+    card:
+      - width: 56px
+      - height: 56px
+      - border-radius: var(--kotapish-radius-m)
+      # variables.path is the view's `path:` (e.g. "home"). Active state is
+      # derived from the current URL so ONE shared nav_rail.yaml can be
+      # included on every page and still self-highlight correctly.
+      - background: |
+          [[[
+            return (window.location.pathname.indexOf('/' + variables.path) !== -1)
+              ? 'var(--kotapish-blue)' : 'transparent';
+          ]]]
+      - box-shadow: none
+      - border: none
+      - margin: 0 auto
+      - padding: 0
+    icon:
+      - color: |
+          [[[
+            return (window.location.pathname.indexOf('/' + variables.path) !== -1)
+              ? 'white' : 'var(--secondary-text-color)';
+          ]]]
+      - width: 26px
+    label:
+      - font-family: var(--kotapish-font-family)
+      - font-size: 10px
+      - font-weight: "500"
+      - color: |
+          [[[
+            return (window.location.pathname.indexOf('/' + variables.path) !== -1)
+              ? 'var(--primary-text-color)' : 'var(--secondary-text-color)';
+          ]]]
+      - margin-top: 4px
+
+# -----------------------------------------------------------------------------
+# Large room tile (Home page bottom grid) — icon, name, live state, color wash
+# -----------------------------------------------------------------------------
+kotapish_room_tile:
+  template: kotapish_glass_base
+  show_name: true
+  show_state: true
+  show_icon: true
+  size: 34%
+  styles:
+    card:
+      - aspect-ratio: "1.6"
+      - justify-content: flex-end
+      - align-items: flex-start
+      - padding: 18px
+      - position: relative
+      - overflow: hidden
+    icon:
+      - position: absolute
+      - top: 16px
+      - left: 16px
+      - color: var(--kotapish-blue)
+      - width: 26px
+    name:
+      - position: absolute
+      - bottom: 44px
+      - left: 18px
+      - font-size: 17px
+      - font-weight: "700"
+    state:
+      - position: absolute
+      - bottom: 18px
+      - left: 18px
+      - font-size: 13px
+      - color: var(--secondary-text-color)
+
+# -----------------------------------------------------------------------------
+# Status chip — small pill used in the Home Status row (garage/locks/alarm/etc)
+# -----------------------------------------------------------------------------
+kotapish_status_chip:
+  template: kotapish_glass_base
+  show_name: true
+  show_state: true
+  show_icon: true
+  layout: icon_name_state2nd
+  size: 22px
+  styles:
+    card:
+      - flex-direction: row
+      - justify-content: flex-start
+      - align-items: center
+      - padding: 14px 16px
+      - gap: 12px
+    icon:
+      - width: 22px
+      - color: |
+          [[[ return variables.chip_color || 'var(--kotapish-blue)'; ]]]
+    name:
+      - font-size: 14px
+      - font-weight: "600"
+      - justify-self: start
+    state:
+      - font-size: 12px
+      - color: var(--secondary-text-color)
+
+# -----------------------------------------------------------------------------
+# Camera selector pill (Entry / Driveway / Deck)
+# -----------------------------------------------------------------------------
+kotapish_camera_pill:
+  template: kotapish_glass_base
+  show_icon: true
+  show_name: true
+  show_state: false
+  size: 18px
+  styles:
+    card:
+      - flex-direction: row
+      - padding: 10px 18px
+      - border-radius: var(--kotapish-radius-xl)
+      - background: |
+          [[[
+            return variables.selected ? 'var(--kotapish-blue)' : 'var(--kotapish-glass-surface)';
+          ]]]
+    name:
+      - font-size: 14px
+      - font-weight: "600"
+      - color: |
+          [[[ return variables.selected ? 'white' : 'var(--primary-text-color)'; ]]]
+    icon:
+      - width: 18px
+      - color: |
+          [[[ return variables.selected ? 'white' : 'var(--kotapish-blue)'; ]]]
+
+# -----------------------------------------------------------------------------
+# Header circular icon button (fullscreen, notifications)
+# -----------------------------------------------------------------------------
+kotapish_header_icon_button:
+  template: kotapish_glass_base
+  show_name: false
+  show_state: false
+  size: 20px
+  styles:
+    card:
+      - width: 44px
+      - height: 44px
+      - border-radius: 50%
+      - padding: 0
+    icon:
+      - color: var(--primary-text-color)
+      - width: 20px
+
+# -----------------------------------------------------------------------------
+# BAS (Building Automation) point tile — Commercial HVAC page
+# Denser, data-forward variant used for AHU/RTU/Boiler/Chiller points
+# -----------------------------------------------------------------------------
+kotapish_bas_point:
+  template: kotapish_glass_base
+  show_name: true
+  show_state: true
+  show_label: true
+  layout: icon_name_state
+  size: 20px
+  styles:
+    card:
+      - padding: 10px 14px
+      - border-radius: var(--kotapish-radius-m)
+      - align-items: flex-start
+    name:
+      - font-size: 12px
+      - font-weight: "500"
+      - color: var(--secondary-text-color)
+      - justify-self: start
+    state:
+      - font-size: 20px
+      - font-weight: "700"
+      - justify-self: start
+      - color: var(--primary-text-color)
+    icon:
+      - color: var(--kotapish-teal)
+      - width: 18px
+
+# -----------------------------------------------------------------------------
+# BAS equipment header card — AHU-1 / RTU-2 / Boiler-1 title bar with run status
+# -----------------------------------------------------------------------------
+kotapish_bas_equipment_header:
+  template: kotapish_glass_base
+  show_name: true
+  show_state: true
+  show_icon: true
+  layout: icon_name_state2nd
+  size: 26px
+  styles:
+    card:
+      - flex-direction: row
+      - justify-content: space-between
+      - padding: 16px 20px
+      - border-radius: var(--kotapish-radius-l)
+    name:
+      - font-size: 16px
+      - font-weight: "700"
+    state:
+      - font-size: 13px
+      - font-weight: "600"
+      - color: |
+          [[[
+            return (entity && entity.state === 'on') ? 'var(--kotapish-green)' : 'var(--kotapish-red)';
+          ]]]
+    icon:
+      - color: var(--kotapish-teal)
+
+# -----------------------------------------------------------------------------
+# Ghost / list-row button — used for schedules, trends, event lists
+# -----------------------------------------------------------------------------
+kotapish_list_row:
+  show_name: true
+  show_state: true
+  show_icon: true
+  layout: icon_name_state2nd
+  size: 20px
+  styles:
+    card:
+      - flex-direction: row
+      - justify-content: space-between
+      - background: transparent
+      - box-shadow: none
+      - border: none
+      - border-bottom: 1px solid var(--kotapish-glass-border)
+      - border-radius: 0
+      - padding: 12px 4px
+    name:
+      - font-size: 14px
+      - font-weight: "500"
+    state:
+      - font-size: 13px
+      - color: var(--secondary-text-color)
+    icon:
+      - color: var(--kotapish-blue)
+      - width: 20px

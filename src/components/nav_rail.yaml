@@ -1,0 +1,148 @@
+# =============================================================================
+# Component: Left Navigation Rail
+# 80px fixed-width, full height, glass surface. Included, verbatim, as the
+# first card in every page's `cards:` list. Self-highlights the active page
+# via the kotapish_nav_icon template (see templates/button_card_templates.yaml).
+# =============================================================================
+
+type: vertical-stack
+view_layout:
+  grid-area: nav
+card_mod:
+  style: |
+    ha-card {
+      height: 100%;
+      width: var(--kotapish-nav-width);
+      border-radius: 0 var(--kotapish-radius-xl) var(--kotapish-radius-xl) 0;
+      background: var(--kotapish-nav-surface);
+      backdrop-filter: blur(var(--kotapish-glass-blur));
+      -webkit-backdrop-filter: blur(var(--kotapish-glass-blur));
+      border-right: 1px solid var(--kotapish-glass-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 24px 0;
+      gap: 6px;
+      box-shadow: none;
+    }
+cards:
+  # App mark — small glyph at the top of the rail
+  - type: custom:button-card
+    show_name: false
+    show_icon: true
+    icon: mdi:apple
+    size: 22px
+    styles:
+      card:
+        - background: transparent
+        - box-shadow: none
+        - border: none
+        - width: 56px
+        - height: 40px
+        - margin-bottom: 12px
+      icon:
+        - color: var(--kotapish-blue)
+
+  - type: custom:button-card
+    template: kotapish_nav_icon
+    variables:
+      path: home
+    icon: mdi:home
+    label: Home
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/home
+
+  - type: custom:button-card
+    template: kotapish_nav_icon
+    variables:
+      path: cameras
+    icon: mdi:cctv
+    label: Cameras
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/cameras
+
+  - type: custom:button-card
+    template: kotapish_nav_icon
+    variables:
+      path: climate
+    icon: mdi:thermostat
+    label: Climate
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/climate
+
+  - type: custom:button-card
+    template: kotapish_nav_icon
+    variables:
+      path: lighting
+    icon: mdi:lightbulb
+    label: Lighting
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/lighting
+
+  - type: custom:button-card
+    template: kotapish_nav_icon
+    variables:
+      path: security
+    icon: mdi:shield-home
+    label: Security
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/security
+
+  - type: custom:button-card
+    template: kotapish_nav_icon
+    variables:
+      path: energy
+    icon: mdi:lightning-bolt
+    label: Energy
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/energy
+
+  - type: custom:button-card
+    template: kotapish_nav_icon
+    variables:
+      path: media
+    icon: mdi:play-circle
+    label: Media
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/media
+
+  - type: custom:button-card
+    template: kotapish_nav_icon
+    variables:
+      path: network
+    icon: mdi:router-wireless
+    label: Network
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/network
+
+  - type: custom:button-card
+    template: kotapish_nav_icon
+    variables:
+      path: commercial-hvac
+    icon: mdi:hvac
+    label: BAS
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/commercial-hvac
+
+  - type: custom:button-card
+    template: kotapish_nav_icon
+    variables:
+      path: settings
+    icon: mdi:cog
+    label: Settings
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/settings
+    styles:
+      card:
+        - margin-top: auto

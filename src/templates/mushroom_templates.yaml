@@ -1,0 +1,81 @@
+# =============================================================================
+# Kotapish Home Dashboard — Mushroom Card Conventions
+#
+# Mushroom cards have no native named-template engine (unlike button-card),
+# so this file is the canonical REFERENCE COPY of the card_mod block every
+# mushroom card in this project must carry. Copy it verbatim into any new
+# mushroom-*-card you add — do not invent a second variant.
+#
+# Base blur/radius/border already comes for free from the theme's global
+# `card-mod-card` hook (see theme/kotapish_glass.yaml). This file only
+# controls mushroom-internal chrome: icon container shape, tap ripple,
+# slider fill, spacing.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# kotapish_mushroom_card_mod  (reference block — paste under `card_mod:`)
+# -----------------------------------------------------------------------------
+# card_mod:
+#   style: |
+#     ha-card {
+#       --mush-icon-size: 42px;
+#       --mush-icon-border-radius: 14px;
+#       --mush-title-font-weight: 600;
+#       --mush-title-font-size: 16px;
+#       --mush-subtitle-font-weight: 400;
+#       --mush-subtitle-color: var(--secondary-text-color);
+#       padding: 14px 18px;
+#     }
+#     mushroom-shape-icon {
+#       --icon-color: var(--kotapish-blue);
+#       --shape-color: rgba(10, 132, 255, 0.14);
+#     }
+
+# -----------------------------------------------------------------------------
+# kotapish_mushroom_slider_card_mod  (climate / media volume sliders)
+# -----------------------------------------------------------------------------
+# card_mod:
+#   style: |
+#     ha-card {
+#       --mush-control-height: 48px;
+#       --control-slider-color: var(--kotapish-blue);
+#       --control-slider-background: var(--kotapish-glass-surface-strong);
+#       --control-slider-border-radius: var(--kotapish-radius-l);
+#     }
+
+# -----------------------------------------------------------------------------
+# kotapish_mushroom_chip_card_mod  (chips row: notifications / quick toggles)
+# -----------------------------------------------------------------------------
+# card_mod:
+#   style: |
+#     ha-card {
+#       --chip-box-shadow: none;
+#       --chip-background: var(--kotapish-glass-surface);
+#       --chip-border-radius: var(--kotapish-radius-xl);
+#       --chip-spacing: 8px;
+#     }
+
+# -----------------------------------------------------------------------------
+# Concrete, ready-to-use shape (mushroom-template-card) for compact entity
+# rows used throughout Security / Network / Energy pages. YAML anchors do not
+# survive across !include boundaries in Home Assistant, so this is a copy
+# reference, not a live anchor — replicate this exact shape when adding rows.
+# -----------------------------------------------------------------------------
+kotapish_mushroom_entity_row:
+  type: custom:mushroom-template-card
+  primary: "{{ entity_name }}"
+  secondary: "{{ entity_state }}"
+  icon: "{{ entity_icon }}"
+  layout: horizontal
+  tap_action:
+    action: more-info
+  card_mod:
+    style: |
+      ha-card {
+        --mush-icon-size: 40px;
+        padding: 12px 16px;
+      }
+      mushroom-shape-icon {
+        --icon-color: var(--kotapish-blue);
+        --shape-color: rgba(10, 132, 255, 0.14);
+      }

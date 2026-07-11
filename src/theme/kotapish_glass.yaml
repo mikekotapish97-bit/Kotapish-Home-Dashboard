@@ -1,0 +1,132 @@
+# =============================================================================
+# Kotapish Home Dashboard — Theme: "kotapish_glass"
+# Place this file's content under configuration.yaml -> frontend: themes: !include
+# or copy into your themes.yaml as shown below.
+#
+# Visual language: VisionOS / Apple Home frosted glass.
+# All cards use translucent surfaces + backdrop-filter blur via Card Mod,
+# driven by the CSS custom properties defined below so there is exactly
+# ONE place that owns color, radius, blur and spacing.
+# =============================================================================
+
+kotapish_glass:
+  # ---------------------------------------------------------------------------
+  # Core palette — dark, "Apple Home at night" base with vibrant accent tiles
+  # ---------------------------------------------------------------------------
+  modes:
+    light:
+      primary-color: "#0A84FF"
+      accent-color: "#0A84FF"
+      dark-primary-color: "#1c1c1e"
+      text-primary-color: "#000000"
+      primary-text-color: "#1c1c1e"
+      secondary-text-color: "#6e6e73"
+      disabled-text-color: "#a1a1a6"
+
+      # App background — soft light gradient, like iPadOS wallpaper wash
+      background-color: "#eef1f6"
+      kotapish-page-background: "linear-gradient(180deg, #eef2f8 0%, #e3e8f0 100%)"
+
+      # Glass surface tokens
+      kotapish-glass-surface: "rgba(255, 255, 255, 0.55)"
+      kotapish-glass-surface-strong: "rgba(255, 255, 255, 0.75)"
+      kotapish-glass-border: "rgba(255, 255, 255, 0.6)"
+      kotapish-glass-blur: "30px"
+      kotapish-glass-shadow: "0 8px 32px rgba(20, 20, 40, 0.10)"
+
+      kotapish-nav-surface: "rgba(255, 255, 255, 0.65)"
+      kotapish-tile-hover: "rgba(255, 255, 255, 0.85)"
+
+      card-background-color: "rgba(255, 255, 255, 0.55)"
+      ha-card-background: "rgba(255, 255, 255, 0.55)"
+
+    dark:
+      primary-color: "#0A84FF"
+      accent-color: "#0A84FF"
+      dark-primary-color: "#000000"
+      text-primary-color: "#ffffff"
+      primary-text-color: "#f5f5f7"
+      secondary-text-color: "#98989d"
+      disabled-text-color: "#5a5a5e"
+
+      background-color: "#000000"
+      kotapish-page-background: "linear-gradient(180deg, #050505 0%, #101014 100%)"
+
+      kotapish-glass-surface: "rgba(28, 28, 30, 0.55)"
+      kotapish-glass-surface-strong: "rgba(38, 38, 41, 0.75)"
+      kotapish-glass-border: "rgba(255, 255, 255, 0.08)"
+      kotapish-glass-blur: "30px"
+      kotapish-glass-shadow: "0 8px 32px rgba(0, 0, 0, 0.45)"
+
+      kotapish-nav-surface: "rgba(20, 20, 22, 0.65)"
+      kotapish-tile-hover: "rgba(58, 58, 60, 0.85)"
+
+      card-background-color: "rgba(28, 28, 30, 0.55)"
+      ha-card-background: "rgba(28, 28, 30, 0.55)"
+
+  # ---------------------------------------------------------------------------
+  # Shared tokens (identical in both modes) — geometry, motion, type
+  # ---------------------------------------------------------------------------
+  kotapish-radius-xl: "28px"
+  kotapish-radius-l: "22px"
+  kotapish-radius-m: "16px"
+  kotapish-radius-s: "10px"
+
+  kotapish-nav-width: "80px"
+  kotapish-gutter: "20px"
+
+  kotapish-transition-fast: "150ms cubic-bezier(0.25, 0.1, 0.25, 1)"
+  kotapish-transition-smooth: "350ms cubic-bezier(0.16, 1, 0.3, 1)"
+
+  # System font stack — resolves to actual San Francisco on iPadOS/Safari,
+  # falls back gracefully everywhere else. No font files are bundled.
+  kotapish-font-family: >-
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif
+
+  # Accent colors used by room tiles / status chips (Apple Home style hues)
+  kotapish-blue: "#0A84FF"
+  kotapish-green: "#30D158"
+  kotapish-yellow: "#FFD60A"
+  kotapish-orange: "#FF9F0A"
+  kotapish-red: "#FF453A"
+  kotapish-purple: "#BF5AF2"
+  kotapish-teal: "#64D2FF"
+  kotapish-pink: "#FF375F"
+
+  # Base font/entity overrides so stock HA UI matches the design language
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif
+  paper-font-body1_-_font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif
+  ha-card-border-radius: "28px"
+  ha-card-border-width: "0px"
+  ha-card-box-shadow: "0 8px 32px rgba(20, 20, 40, 0.10)"
+
+  # ---------------------------------------------------------------------------
+  # GLOBAL CARD MOD HOOK — the single source of truth for the glass look.
+  # Card Mod applies this to the root of EVERY ha-card (mushroom, picture,
+  # map, weather, mini-graph, auto-entities, ...) so individual page/component
+  # files never need to redeclare blur/radius/border. Only use a local
+  # `card_mod:` block on a card when it needs a genuine exception.
+  # ---------------------------------------------------------------------------
+  card-mod-card: |
+    ha-card {
+      border-radius: var(--kotapish-radius-xl);
+      background: var(--kotapish-glass-surface);
+      backdrop-filter: blur(var(--kotapish-glass-blur));
+      -webkit-backdrop-filter: blur(var(--kotapish-glass-blur));
+      border: 1px solid var(--kotapish-glass-border);
+      box-shadow: var(--kotapish-glass-shadow);
+      transition: var(--kotapish-transition-smooth);
+      font-family: var(--kotapish-font-family);
+    }
+
+  card-mod-more-info: |
+    ha-dialog {
+      --mdc-shape-medium: var(--kotapish-radius-xl);
+      --dialog-surface-background: var(--kotapish-glass-surface-strong);
+    }
+    .mdc-dialog__surface {
+      backdrop-filter: blur(var(--kotapish-glass-blur));
+      -webkit-backdrop-filter: blur(var(--kotapish-glass-blur));
+      border-radius: var(--kotapish-radius-xl) !important;
+    }

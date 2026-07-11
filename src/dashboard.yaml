@@ -1,0 +1,60 @@
+# =============================================================================
+# Kotapish Home Dashboard — Root Lovelace Configuration
+#
+# This is the entry point. Install it as a YAML-mode dashboard, e.g. in
+# configuration.yaml:
+#
+#   lovelace:
+#     mode: yaml
+#     dashboards:
+#       kotapish-home:
+#         mode: yaml
+#         title: Kotapish Home
+#         icon: mdi:apple
+#         show_in_sidebar: true
+#         filename: kotapish-home-dashboard/src/dashboard.yaml
+#
+# Then reload: Developer Tools -> YAML -> Lovelace Dashboards (or restart HA).
+# See ../INSTALLATION.md for the full step-by-step guide.
+# =============================================================================
+
+title: Kotapish Home
+theme: kotapish_glass
+background: var(--kotapish-page-background)
+
+# -----------------------------------------------------------------------------
+# Button Card templates — registered once, globally, at the dashboard root.
+# Any custom:button-card anywhere in this project can now do:
+#   template: [kotapish_glass_base, kotapish_room_tile]
+# -----------------------------------------------------------------------------
+button_card_templates: !include templates/button_card_templates.yaml
+
+# -----------------------------------------------------------------------------
+# Kiosk Mode (HACS) — wall-mounted iPad: no HA header, no sidebar, no back
+# button. Toggle from Settings page (kiosk_mode.user_settings service) if you
+# ever need chrome back for administration.
+# -----------------------------------------------------------------------------
+kiosk_mode:
+  hide_header: true
+  hide_sidebar: true
+  ignore_entity_settings: false
+  hide_menu_button: true
+  hide_sidebar_toggle: true
+  hide_scrollbar: true
+
+# -----------------------------------------------------------------------------
+# Views — one per nav rail destination. Order here MUST match the icon order
+# in components/nav_rail.yaml (Home, Cameras, Climate, Lighting, Security,
+# Energy, Media, Network, Commercial HVAC, Settings).
+# -----------------------------------------------------------------------------
+views:
+  - !include pages/home.yaml
+  - !include pages/cameras.yaml
+  - !include pages/climate.yaml
+  - !include pages/lighting.yaml
+  - !include pages/security.yaml
+  - !include pages/energy.yaml
+  - !include pages/media.yaml
+  - !include pages/network.yaml
+  - !include pages/commercial_hvac.yaml
+  - !include pages/settings.yaml

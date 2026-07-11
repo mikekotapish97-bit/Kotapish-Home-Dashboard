@@ -1,0 +1,33 @@
+# =============================================================================
+# Component: Clock Weather Card
+# Full Apple-Weather-style hero used on the Climate page. Compact weather
+# chip variant lives inline in components/header.yaml.
+#
+# PLACEHOLDER ENTITY: weather.kotapish_home_placeholder
+# Replace with your real weather integration entity.
+# =============================================================================
+
+type: custom:clock-weather-card
+entity: weather.kotapish_home_placeholder # PLACEHOLDER ENTITY
+sun_entity: sun.sun
+time_format: 12
+hide_today_section: false
+hide_forecast_section: false
+forecast_rows: 5
+name: Outside
+card_mod:
+  style: |
+    ha-card {
+      padding: 24px 26px;
+    }
+    .clock {
+      font-family: var(--kotapish-font-family) !important;
+      font-weight: 700 !important;
+    }
+    .date {
+      font-family: var(--kotapish-font-family) !important;
+      color: var(--secondary-text-color) !important;
+    }
+    .weather-icon svg {
+      filter: drop-shadow(0 4px 10px rgba(10, 132, 255, 0.25));
+    }

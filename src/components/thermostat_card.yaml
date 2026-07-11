@@ -1,0 +1,59 @@
+# =============================================================================
+# Component: Honeywell T6 Pro Thermostat
+# Real entity: climate.t6_pro
+# Mushroom climate card for the compact Home-page placement; the full
+# thermostat dial + graphs live on pages/climate.yaml.
+# =============================================================================
+
+type: vertical-stack
+cards:
+  - type: custom:mushroom-title-card
+    title: Thermostat
+    subtitle: Honeywell T6 Pro
+    card_mod:
+      style: |
+        ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; padding: 4px 4px 0 4px; }
+        .primary { font-family: var(--kotapish-font-family); font-weight: 700; font-size: 20px; }
+        .secondary { font-family: var(--kotapish-font-family); color: var(--secondary-text-color); }
+
+  - type: custom:mushroom-climate-card
+    entity: climate.t6_pro
+    show_temperature_control: true
+    hvac_modes:
+      - heat
+      - cool
+      - heat_cool
+      - "off"
+    collapsible_controls: false
+    card_mod:
+      style: |
+        ha-card {
+          --mush-control-height: 56px;
+          padding: 18px 20px;
+        }
+        mushroom-shape-icon {
+          --icon-color: var(--kotapish-orange);
+          --shape-color: rgba(255, 159, 10, 0.14);
+        }
+
+  - type: custom:mini-graph-card
+    entities:
+      - entity: climate.t6_pro
+        attribute: current_temperature
+        name: Current
+        color: var(--kotapish-blue)
+      - entity: climate.t6_pro
+        attribute: temperature
+        name: Target
+        color: var(--kotapish-orange)
+    hours_to_show: 24
+    points_per_hour: 2
+    line_width: 3
+    show:
+      labels: false
+      legend: true
+      name: false
+      icon: false
+    card_mod:
+      style: |
+        ha-card { padding: 8px 16px 12px 16px; }

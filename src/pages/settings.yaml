@@ -1,0 +1,115 @@
+# =============================================================================
+# Page: Settings
+# Dashboard/system settings: Kiosk Mode toggle, camera selector reset, theme
+# info, and links back into HA's own Settings for full administration.
+# =============================================================================
+
+title: Settings
+path: settings
+icon: mdi:cog
+type: custom:grid-layout
+layout:
+  grid-template-columns: var(--kotapish-nav-width) 1fr
+  grid-template-rows: 1fr
+  grid-template-areas: '"nav main"'
+  mediaquery:
+    "(max-width: 900px)":
+      grid-template-columns: 1fr
+      grid-template-areas: '"main"'
+cards:
+  - !include ../components/nav_rail.yaml
+
+  - type: custom:grid-layout
+    view_layout:
+      grid-area: main
+    layout:
+      grid-template-columns: "1fr"
+      grid-template-rows: auto auto auto
+      grid-gap: var(--kotapish-gutter)
+      margin: var(--kotapish-gutter)
+    cards:
+      - type: custom:button-card
+        template: kotapish_glass_base
+        show_name: false
+        show_icon: false
+        styles:
+          card:
+            - padding: 20px 26px
+            - align-items: flex-start
+        name: Settings
+
+      # -----------------------------------------------------------------------
+      # Wall-mount / Kiosk Mode controls
+      # -----------------------------------------------------------------------
+      - type: entities
+        title: Wall Display
+        show_header_toggle: false
+        entities:
+          - type: custom:button-card
+            template: kotapish_list_row
+            icon: mdi:tablet
+            name: Kiosk Mode
+            state_display: Enabled
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                service: kiosk_mode.user_settings
+                data:
+                  hide_header: true
+                  hide_sidebar: true
+
+          - type: custom:button-card
+            template: kotapish_list_row
+            icon: mdi:screen-rotation-lock
+            name: Force Landscape
+            state_display: iPad Pro 12.9"
+            tap_action:
+              action: none
+
+          - type: custom:button-card
+            template: kotapish_list_row
+            icon: mdi:brightness-6
+            name: Idle Screensaver
+            state_display: Off
+            tap_action:
+              action: none
+        card_mod:
+          style: |
+            ha-card { padding: 8px 20px; }
+
+      # -----------------------------------------------------------------------
+      # Camera + input helpers reset
+      # -----------------------------------------------------------------------
+      - type: entities
+        title: Dashboard Data
+        show_header_toggle: false
+        entities:
+          - entity: input_select.dashboard_camera
+            name: Active Camera Selector
+          - entity: camera.entry_cam
+            name: Entry Camera
+          - entity: climate.t6_pro
+            name: Honeywell T6 Pro
+        card_mod:
+          style: |
+            ha-card { padding: 8px 20px; }
+
+      # -----------------------------------------------------------------------
+      # About
+      # -----------------------------------------------------------------------
+      - type: custom:button-card
+        template: kotapish_glass_base
+        show_name: false
+        show_icon: false
+        styles:
+          card:
+            - padding: 20px 26px
+            - align-items: flex-start
+        custom_fields:
+          about: |
+            [[[
+              return `<div style="font-family: var(--kotapish-font-family);">
+                <div style="font-size:17px; font-weight:700; color:var(--primary-text-color);">Kotapish Home Dashboard</div>
+                <div style="font-size:13px; color:var(--secondary-text-color); margin-top:4px;">Version 1.0.0 · Built for iPad Pro 12.9" · Home Assistant 2026</div>
+              </div>`;
+            ]]]

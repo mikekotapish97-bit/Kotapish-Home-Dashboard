@@ -1,0 +1,78 @@
+# =============================================================================
+# Kotapish Home Dashboard — Browser Mod Popup Conventions
+#
+# Every popup in this project (room tiles, camera fullscreen) is triggered
+# with an identical `browser_mod.popup` service call shape so popups feel
+# like one consistent glass sheet sliding up, VisionOS-style. This file is
+# the canonical reference for that shape — copy it, only changing `title`
+# and `content`.
+#
+# Requires: browser_mod (HACS) registered once in configuration.yaml:
+#   browser_mod:
+#     devices:
+#       ipad_pro_wall_dashboard: "REPLACE_WITH_BROWSER_MOD_DEVICE_ID"
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# kotapish_popup_style — shared CSS injected into every browser_mod popup via
+# the `style:` key of the service call. Keeps popups visually identical to
+# the rest of the app (glass sheet, 28px radius, blurred scrim).
+# -----------------------------------------------------------------------------
+kotapish_popup_style: |
+  :host {
+    --popup-border-radius: 28px;
+    --popup-backdrop-filter: blur(40px);
+    --ha-dialog-border-radius: 28px;
+  }
+  ha-dialog {
+    --mdc-shape-medium: 28px;
+    --dialog-surface-background: var(--kotapish-glass-surface-strong);
+  }
+  .mdc-dialog__surface {
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-radius: 28px !important;
+    font-family: var(--kotapish-font-family);
+  }
+  .mdc-dialog__scrim {
+    background-color: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+  }
+
+# -----------------------------------------------------------------------------
+# kotapish_popup_call — reference tap_action shape used verbatim throughout
+# components/room_tiles.yaml, components/header.yaml and components/camera_card.yaml.
+# `fire-dom-event` + a `browser_mod:` payload targets the CURRENT browser
+# without needing to hardcode a device_id — the recommended Browser Mod
+# pattern for tap_actions (as opposed to a bare `call-service`, which
+# broadcasts to every registered browser unless a target is given).
+# `content:` points at one file under src/popups/*.yaml (a single Lovelace
+# card config).
+# -----------------------------------------------------------------------------
+# tap_action:
+#   action: fire-dom-event
+#   browser_mod:
+#     service: browser_mod.popup
+#     data:
+#       title: "Living Room"
+#       size: wide
+#       style: |
+#         (inline the kotapish_popup_style block above verbatim — anchors
+#         do not cross !include file boundaries in Home Assistant)
+#       content: !include ../popups/room_living_room.yaml
+
+# -----------------------------------------------------------------------------
+# kotapish_fullscreen_call — Browser Mod full-viewport popup used by the
+# camera hero card's fullscreen button (no card chrome, edge-to-edge video)
+# -----------------------------------------------------------------------------
+# tap_action:
+#   action: fire-dom-event
+#   browser_mod:
+#     service: browser_mod.popup
+#     data:
+#       title: ""
+#       size: fullscreen
+#       style: |
+#         .mdc-dialog__surface { border-radius: 0 !important; background: black; }
+#         .mdc-dialog__title, .mdc-dialog__actions { display: none !important; }
+#       content: !include ../popups/camera_fullscreen.yaml

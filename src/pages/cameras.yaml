@@ -1,0 +1,121 @@
+# =============================================================================
+# Page: Cameras
+# Large live feed (State Switch, shared selector with Home page) + thumbnail
+# strip + fullscreen + recent motion events list.
+# =============================================================================
+
+title: Cameras
+path: cameras
+icon: mdi:cctv
+type: custom:grid-layout
+layout:
+  grid-template-columns: var(--kotapish-nav-width) 1fr
+  grid-template-rows: 1fr
+  grid-template-areas: '"nav main"'
+  mediaquery:
+    "(max-width: 900px)":
+      grid-template-columns: 1fr
+      grid-template-areas: '"main"'
+cards:
+  - !include ../components/nav_rail.yaml
+
+  - type: custom:grid-layout
+    view_layout:
+      grid-area: main
+    layout:
+      grid-template-columns: "1fr"
+      grid-template-rows: auto auto auto
+      grid-gap: var(--kotapish-gutter)
+      margin: var(--kotapish-gutter)
+    cards:
+      - type: custom:button-card
+        template: kotapish_glass_base
+        show_name: false
+        show_icon: false
+        styles:
+          card:
+            - padding: 20px 26px
+            - align-items: flex-start
+        name: Cameras
+
+      - !include ../components/camera_card.yaml
+
+      # -----------------------------------------------------------------------
+      # Thumbnail selector strip — same three cameras, larger touch targets
+      # -----------------------------------------------------------------------
+      - type: custom:grid-layout
+        layout:
+          grid-template-columns: repeat(3, 1fr)
+          grid-gap: var(--kotapish-gutter)
+        cards:
+          - type: picture-entity
+            entity: camera.entry_cam
+            name: Entry
+            camera_view: live
+            show_state: false
+            aspect_ratio: "16:9"
+            tap_action:
+              action: call-service
+              service: input_select.select_option
+              service_data:
+                entity_id: input_select.dashboard_camera
+                option: Entry
+            card_mod:
+              style: |
+                ha-card { border-radius: var(--kotapish-radius-l); overflow: hidden; }
+
+          - type: picture-entity
+            entity: camera.driveway_cam_placeholder # PLACEHOLDER ENTITY
+            name: Driveway
+            camera_view: live
+            show_state: false
+            aspect_ratio: "16:9"
+            tap_action:
+              action: call-service
+              service: input_select.select_option
+              service_data:
+                entity_id: input_select.dashboard_camera
+                option: Driveway
+            card_mod:
+              style: |
+                ha-card { border-radius: var(--kotapish-radius-l); overflow: hidden; }
+
+          - type: picture-entity
+            entity: camera.deck_cam_placeholder # PLACEHOLDER ENTITY
+            name: Deck
+            camera_view: live
+            show_state: false
+            aspect_ratio: "16:9"
+            tap_action:
+              action: call-service
+              service: input_select.select_option
+              service_data:
+                entity_id: input_select.dashboard_camera
+                option: Deck
+            card_mod:
+              style: |
+                ha-card { border-radius: var(--kotapish-radius-l); overflow: hidden; }
+
+      # -----------------------------------------------------------------------
+      # Recent motion events — Auto Entities pulls any binary_sensor whose
+      # entity_id matches "motion" and belongs to the camera domain group.
+      # PLACEHOLDER ENTITIES until real motion sensors are wired up.
+      # -----------------------------------------------------------------------
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Recent Motion Events
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: "binary_sensor.motion_*_placeholder"
+              options:
+                secondary_info: last-changed
+          exclude:
+            - state: "off"
+        sort:
+          method: last_changed
+          reverse: true
+        card_mod:
+          style: |
+            ha-card { padding: 8px 20px; }

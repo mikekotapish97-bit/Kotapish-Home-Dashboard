@@ -1,0 +1,54 @@
+# =============================================================================
+# Page: Home
+# Layout: 80px nav rail | main content (Layout Card grid)
+#   1. Header (greeting, clock, date, weather, notifications)
+#   2. Camera hero (left, 2/3) + Thermostat & Home Status (right, 1/3)
+#   3. Room tiles (Living Room, Kitchen, Bedroom, Office, Garage, Patio)
+# =============================================================================
+
+title: Home
+path: home
+icon: mdi:home
+type: custom:grid-layout
+layout:
+  grid-template-columns: var(--kotapish-nav-width) 1fr
+  grid-template-rows: 1fr
+  grid-template-areas: '"nav main"'
+  mediaquery:
+    "(max-width: 900px)":
+      grid-template-columns: 1fr
+      grid-template-areas: '"main"'
+cards:
+  - !include ../components/nav_rail.yaml
+
+  - type: custom:grid-layout
+    view_layout:
+      grid-area: main
+    layout:
+      grid-template-columns: "1fr"
+      grid-template-rows: auto auto auto
+      grid-gap: var(--kotapish-gutter)
+      margin: var(--kotapish-gutter)
+    cards:
+      - !include ../components/header.yaml
+
+      - type: custom:grid-layout
+        layout:
+          grid-template-columns: 2fr 1fr
+          grid-template-rows: 1fr
+          grid-gap: var(--kotapish-gutter)
+          mediaquery:
+            "(max-width: 1100px)":
+              grid-template-columns: 1fr
+        cards:
+          - !include ../components/camera_card.yaml
+
+          - type: vertical-stack
+            card_mod:
+              style: |
+                ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+            cards:
+              - !include ../components/thermostat_card.yaml
+              - !include ../components/home_status_card.yaml
+
+      - !include ../components/room_tiles.yaml

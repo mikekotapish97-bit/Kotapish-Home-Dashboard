@@ -1,0 +1,124 @@
+# =============================================================================
+# Page: Energy
+# Powerwall, Solar, Grid, Battery + energy graphs. All entities are
+# PLACEHOLDERS — replace with your real Tesla Powerwall / solar integration.
+# =============================================================================
+
+title: Energy
+path: energy
+icon: mdi:lightning-bolt
+type: custom:grid-layout
+layout:
+  grid-template-columns: var(--kotapish-nav-width) 1fr
+  grid-template-rows: 1fr
+  grid-template-areas: '"nav main"'
+  mediaquery:
+    "(max-width: 900px)":
+      grid-template-columns: 1fr
+      grid-template-areas: '"main"'
+cards:
+  - !include ../components/nav_rail.yaml
+
+  - type: custom:grid-layout
+    view_layout:
+      grid-area: main
+    layout:
+      grid-template-columns: "1fr"
+      grid-template-rows: auto auto auto
+      grid-gap: var(--kotapish-gutter)
+      margin: var(--kotapish-gutter)
+    cards:
+      - type: custom:button-card
+        template: kotapish_glass_base
+        show_name: false
+        show_icon: false
+        styles:
+          card:
+            - padding: 20px 26px
+            - align-items: flex-start
+        name: Energy
+
+      # -----------------------------------------------------------------------
+      # Powerwall / Solar / Grid / Home load summary tiles
+      # -----------------------------------------------------------------------
+      - type: custom:grid-layout
+        layout:
+          grid-template-columns: repeat(4, 1fr)
+          grid-gap: var(--kotapish-gutter)
+          mediaquery:
+            "(max-width: 1100px)":
+              grid-template-columns: repeat(2, 1fr)
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Powerwall
+            secondary: "{{ states('sensor.powerwall_charge_placeholder') }}%" # PLACEHOLDER ENTITY
+            icon: mdi:battery-high
+            card_mod:
+              style: |
+                ha-card { padding: 18px 20px; }
+                mushroom-shape-icon { --icon-color: var(--kotapish-teal); --shape-color: rgba(100,210,255,0.14); }
+
+          - type: custom:mushroom-template-card
+            primary: Solar
+            secondary: "{{ states('sensor.solar_power_placeholder') }} kW" # PLACEHOLDER ENTITY
+            icon: mdi:solar-power
+            card_mod:
+              style: |
+                ha-card { padding: 18px 20px; }
+                mushroom-shape-icon { --icon-color: var(--kotapish-yellow); --shape-color: rgba(255,214,10,0.14); }
+
+          - type: custom:mushroom-template-card
+            primary: Grid
+            secondary: "{{ states('sensor.grid_power_placeholder') }} kW" # PLACEHOLDER ENTITY
+            icon: mdi:transmission-tower
+            card_mod:
+              style: |
+                ha-card { padding: 18px 20px; }
+                mushroom-shape-icon { --icon-color: var(--kotapish-purple); --shape-color: rgba(191,90,242,0.14); }
+
+          - type: custom:mushroom-template-card
+            primary: Home Load
+            secondary: "{{ states('sensor.home_load_power_placeholder') }} kW" # PLACEHOLDER ENTITY
+            icon: mdi:home-lightning-bolt
+            card_mod:
+              style: |
+                ha-card { padding: 18px 20px; }
+                mushroom-shape-icon { --icon-color: var(--kotapish-orange); --shape-color: rgba(255,159,10,0.14); }
+
+      # -----------------------------------------------------------------------
+      # Battery state of charge trend
+      # -----------------------------------------------------------------------
+      - type: custom:mini-graph-card
+        title: Powerwall State of Charge
+        entities:
+          - entity: sensor.powerwall_charge_placeholder # PLACEHOLDER ENTITY
+            name: Charge
+            color: var(--kotapish-teal)
+        hours_to_show: 48
+        points_per_hour: 1
+        line_width: 3
+        show:
+          labels: true
+          legend: false
+
+      # -----------------------------------------------------------------------
+      # Solar / Grid / Home load 24h comparison
+      # -----------------------------------------------------------------------
+      - type: custom:mini-graph-card
+        title: Solar, Grid & Home Load
+        entities:
+          - entity: sensor.solar_power_placeholder # PLACEHOLDER ENTITY
+            name: Solar
+            color: var(--kotapish-yellow)
+          - entity: sensor.grid_power_placeholder # PLACEHOLDER ENTITY
+            name: Grid
+            color: var(--kotapish-purple)
+          - entity: sensor.home_load_power_placeholder # PLACEHOLDER ENTITY
+            name: Home Load
+            color: var(--kotapish-orange)
+        hours_to_show: 24
+        points_per_hour: 4
+        line_width: 2
+        show:
+          labels: true
+          legend: true

@@ -1,0 +1,76 @@
+# =============================================================================
+# Component: Home Status Row
+# Garage / Locks / Alarm / Internet / Powerwall — five glass status chips.
+# All entities below are PLACEHOLDERS except the ones explicitly noted.
+# =============================================================================
+
+type: horizontal-stack
+card_mod:
+  style: |
+    ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+cards:
+  - type: custom:button-card
+    template: kotapish_status_chip
+    entity: cover.garage_door_placeholder # PLACEHOLDER ENTITY
+    icon: mdi:garage
+    name: Garage
+    state_display: |
+      [[[ return (states['cover.garage_door_placeholder'].state === 'closed') ? 'Closed' : 'Open'; ]]]
+    variables:
+      chip_color: |
+        [[[ return (states['cover.garage_door_placeholder'].state === 'closed') ? 'var(--kotapish-green)' : 'var(--kotapish-orange)'; ]]]
+    tap_action:
+      action: more-info
+
+  - type: custom:button-card
+    template: kotapish_status_chip
+    entity: lock.front_door_placeholder # PLACEHOLDER ENTITY
+    icon: mdi:lock
+    name: Locks
+    state_display: |
+      [[[ return (states['lock.front_door_placeholder'].state === 'locked') ? 'Locked' : 'Unlocked'; ]]]
+    variables:
+      chip_color: |
+        [[[ return (states['lock.front_door_placeholder'].state === 'locked') ? 'var(--kotapish-green)' : 'var(--kotapish-red)'; ]]]
+    tap_action:
+      action: more-info
+
+  - type: custom:button-card
+    template: kotapish_status_chip
+    entity: alarm_control_panel.home_alarm_placeholder # PLACEHOLDER ENTITY
+    icon: mdi:shield-home
+    name: Alarm
+    state_display: |
+      [[[ return states['alarm_control_panel.home_alarm_placeholder'].state; ]]]
+    variables:
+      chip_color: |
+        [[[ return (states['alarm_control_panel.home_alarm_placeholder'].state === 'armed_away') ? 'var(--kotapish-green)' : 'var(--kotapish-orange)'; ]]]
+    tap_action:
+      action: more-info
+
+  - type: custom:button-card
+    template: kotapish_status_chip
+    entity: binary_sensor.internet_connection_placeholder # PLACEHOLDER ENTITY
+    icon: mdi:web
+    name: Internet
+    state_display: |
+      [[[ return (states['binary_sensor.internet_connection_placeholder'].state === 'on') ? 'Online' : 'Offline'; ]]]
+    variables:
+      chip_color: |
+        [[[ return (states['binary_sensor.internet_connection_placeholder'].state === 'on') ? 'var(--kotapish-green)' : 'var(--kotapish-red)'; ]]]
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/network
+
+  - type: custom:button-card
+    template: kotapish_status_chip
+    entity: sensor.powerwall_charge_placeholder # PLACEHOLDER ENTITY
+    icon: mdi:battery-high
+    name: Powerwall
+    state_display: |
+      [[[ return states['sensor.powerwall_charge_placeholder'].state + '%'; ]]]
+    variables:
+      chip_color: var(--kotapish-teal)
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/energy

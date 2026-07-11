@@ -1,0 +1,129 @@
+# =============================================================================
+# Component: Live Camera Hero Card
+# Uses State Switch (HACS) keyed on input_select.dashboard_camera to swap the
+# live feed without re-rendering the whole card. Selector pills below change
+# the input_select option. Fullscreen button opens a Browser Mod popup.
+#
+# Real entity: camera.entry_cam
+# Placeholder entities: camera.driveway_cam_placeholder, camera.deck_cam_placeholder
+# Real entity:  input_select.dashboard_camera  (options: Entry, Driveway, Deck)
+# =============================================================================
+
+type: vertical-stack
+card_mod:
+  style: |
+    ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+cards:
+  # ---------------------------------------------------------------------------
+  # Live feed — State Switch swaps the picture-entity card by selector value
+  # ---------------------------------------------------------------------------
+  - type: custom:state-switch
+    entity: input_select.dashboard_camera
+    states:
+      Entry:
+        type: picture-entity
+        entity: camera.entry_cam
+        camera_view: live
+        show_name: false
+        show_state: false
+        aspect_ratio: "16:9"
+        card_mod:
+          style: |
+            ha-card {
+              border-radius: var(--kotapish-radius-xl);
+              overflow: hidden;
+              background: var(--kotapish-glass-surface-strong);
+            }
+      Driveway:
+        type: picture-entity
+        entity: camera.driveway_cam_placeholder # PLACEHOLDER ENTITY
+        camera_view: live
+        show_name: false
+        show_state: false
+        aspect_ratio: "16:9"
+        card_mod:
+          style: |
+            ha-card {
+              border-radius: var(--kotapish-radius-xl);
+              overflow: hidden;
+              background: var(--kotapish-glass-surface-strong);
+            }
+      Deck:
+        type: picture-entity
+        entity: camera.deck_cam_placeholder # PLACEHOLDER ENTITY
+        camera_view: live
+        show_name: false
+        show_state: false
+        aspect_ratio: "16:9"
+        card_mod:
+          style: |
+            ha-card {
+              border-radius: var(--kotapish-radius-xl);
+              overflow: hidden;
+              background: var(--kotapish-glass-surface-strong);
+            }
+
+  # ---------------------------------------------------------------------------
+  # Selector pills + fullscreen button
+  # ---------------------------------------------------------------------------
+  - type: horizontal-stack
+    card_mod:
+      style: |
+        ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+    cards:
+      - type: custom:button-card
+        template: kotapish_camera_pill
+        icon: mdi:door
+        name: Entry
+        variables:
+          selected: "[[[ return states['input_select.dashboard_camera'].state === 'Entry'; ]]]"
+        tap_action:
+          action: call-service
+          service: input_select.select_option
+          service_data:
+            entity_id: input_select.dashboard_camera
+            option: Entry
+
+      - type: custom:button-card
+        template: kotapish_camera_pill
+        icon: mdi:car
+        name: Driveway
+        variables:
+          selected: "[[[ return states['input_select.dashboard_camera'].state === 'Driveway'; ]]]"
+        tap_action:
+          action: call-service
+          service: input_select.select_option
+          service_data:
+            entity_id: input_select.dashboard_camera
+            option: Driveway
+
+      - type: custom:button-card
+        template: kotapish_camera_pill
+        icon: mdi:deck
+        name: Deck
+        variables:
+          selected: "[[[ return states['input_select.dashboard_camera'].state === 'Deck'; ]]]"
+        tap_action:
+          action: call-service
+          service: input_select.select_option
+          service_data:
+            entity_id: input_select.dashboard_camera
+            option: Deck
+
+      - type: custom:button-card
+        template: kotapish_header_icon_button
+        icon: mdi:fullscreen
+        styles:
+          card:
+            - margin-left: auto
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              title: ""
+              size: fullscreen
+              style: |
+                .mdc-dialog__surface { border-radius: 0 !important; background: black; }
+                .mdc-dialog__title, .mdc-dialog__actions { display: none !important; }
+              content: !include ../popups/camera_fullscreen.yaml

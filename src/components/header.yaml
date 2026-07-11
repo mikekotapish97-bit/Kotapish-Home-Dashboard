@@ -1,0 +1,107 @@
+# =============================================================================
+# Component: Top Header
+# Dynamic greeting (Good Morning/Afternoon/Evening) + live clock + date on the
+# left; compact weather chip + notifications bell + fullscreen-safe status
+# pill on the right. Used at the top of pages/home.yaml.
+# =============================================================================
+
+type: horizontal-stack
+card_mod:
+  style: |
+    ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+cards:
+  # ---------------------------------------------------------------------------
+  # Greeting + date + compact "all systems" status pill
+  # ---------------------------------------------------------------------------
+  - type: custom:button-card
+    template: kotapish_glass_base
+    show_name: false
+    show_icon: false
+    styles:
+      card:
+        - flex: "3"
+        - align-items: flex-start
+        - justify-content: center
+        - padding: 22px 28px
+    custom_fields:
+      greeting: |
+        [[[
+          const h = new Date().getHours();
+          const greeting = h < 12 ? 'Good Morning' : (h < 18 ? 'Good Afternoon' : 'Good Evening');
+          return `<div style="font-family: var(--kotapish-font-family); font-size: 30px; font-weight: 700; color: var(--primary-text-color);">${greeting}</div>`;
+        ]]]
+      subline: |
+        [[[
+          const now = new Date();
+          const dateStr = now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+          return `<div style="font-family: var(--kotapish-font-family); font-size: 15px; font-weight: 500; color: var(--secondary-text-color); margin-top: 4px;">${dateStr} · All Systems Normal</div>`;
+        ]]]
+
+  # ---------------------------------------------------------------------------
+  # Live clock — large, monospaced numerals, updates via button-card's own
+  # re-render cycle (driven by any hass state tick)
+  # ---------------------------------------------------------------------------
+  - type: custom:button-card
+    template: kotapish_glass_base
+    show_name: false
+    show_icon: false
+    styles:
+      card:
+        - flex: "1.4"
+        - align-items: center
+        - justify-content: center
+        - padding: 22px
+    custom_fields:
+      clock: |
+        [[[
+          const now = new Date();
+          const time = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+          return `<div style="font-family: var(--kotapish-font-family); font-size: 34px; font-weight: 700; letter-spacing: -1px; color: var(--primary-text-color);">${time}</div>`;
+        ]]]
+
+  # ---------------------------------------------------------------------------
+  # Weather chip — PLACEHOLDER ENTITY: weather.kotapish_home_placeholder
+  # Replace with your real weather integration entity (Met.no / OpenWeather).
+  # ---------------------------------------------------------------------------
+  - type: custom:button-card
+    template: kotapish_glass_base
+    entity: weather.kotapish_home_placeholder # PLACEHOLDER ENTITY
+    show_name: false
+    show_icon: true
+    show_state: true
+    size: 30px
+    styles:
+      card:
+        - flex: "1.2"
+        - align-items: center
+        - justify-content: center
+        - padding: 22px
+      icon:
+        - color: var(--kotapish-blue)
+      state:
+        - font-size: 20px
+        - font-weight: "700"
+        - color: var(--primary-text-color)
+
+  # ---------------------------------------------------------------------------
+  # Notifications bell — opens HA's persistent_notification panel via more-info
+  # ---------------------------------------------------------------------------
+  - type: custom:button-card
+    template: kotapish_header_icon_button
+    icon: mdi:bell-outline
+    styles:
+      card:
+        - flex: "0 0 auto"
+        - margin: 0 8px
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          title: Notifications
+          size: normal
+          content:
+            type: entities
+            entities:
+              - entity: persistent_notification.placeholder # PLACEHOLDER ENTITY
+                name: System Notifications

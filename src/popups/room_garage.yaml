@@ -1,0 +1,44 @@
+# =============================================================================
+# Popup: Garage
+# Opened via Browser Mod from components/room_tiles.yaml. All entities below
+# are PLACEHOLDERS — wire up to your real Garage devices.
+# =============================================================================
+
+type: vertical-stack
+card_mod:
+  style: |
+    ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+cards:
+  - type: custom:mushroom-title-card
+    title: Garage
+    subtitle: Door, lights & occupancy
+
+  - type: custom:mushroom-cover-card
+    entity: cover.garage_door_placeholder # PLACEHOLDER ENTITY
+    show_buttons_control: true
+    show_position_control: false
+    card_mod:
+      style: |
+        ha-card { --mush-control-height: 48px; padding: 16px 18px; }
+        mushroom-shape-icon { --icon-color: var(--kotapish-orange); --shape-color: rgba(255,159,10,0.14); }
+
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      - type: custom:mushroom-light-card
+        entity: light.garage_placeholder # PLACEHOLDER ENTITY
+        show_brightness_control: true
+        card_mod:
+          style: |
+            ha-card { padding: 14px 16px; }
+
+      - type: custom:mushroom-entity-card
+        entity: binary_sensor.garage_occupancy_placeholder # PLACEHOLDER ENTITY
+        primary_info: name
+        secondary_info: state
+        icon: mdi:motion-sensor
+        card_mod:
+          style: |
+            ha-card { padding: 14px 16px; }
+            mushroom-shape-icon { --icon-color: var(--kotapish-purple); --shape-color: rgba(191,90,242,0.14); }

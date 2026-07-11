@@ -1,0 +1,123 @@
+# =============================================================================
+# Page: Security
+# Garage, Locks, Alarm, Smoke, Water, Motion. All entities are PLACEHOLDERS —
+# replace with your real security devices.
+# =============================================================================
+
+title: Security
+path: security
+icon: mdi:shield-home
+type: custom:grid-layout
+layout:
+  grid-template-columns: var(--kotapish-nav-width) 1fr
+  grid-template-rows: 1fr
+  grid-template-areas: '"nav main"'
+  mediaquery:
+    "(max-width: 900px)":
+      grid-template-columns: 1fr
+      grid-template-areas: '"main"'
+cards:
+  - !include ../components/nav_rail.yaml
+
+  - type: custom:grid-layout
+    view_layout:
+      grid-area: main
+    layout:
+      grid-template-columns: "1fr"
+      grid-template-rows: auto auto auto
+      grid-gap: var(--kotapish-gutter)
+      margin: var(--kotapish-gutter)
+    cards:
+      - type: custom:button-card
+        template: kotapish_glass_base
+        show_name: false
+        show_icon: false
+        styles:
+          card:
+            - padding: 20px 26px
+            - align-items: flex-start
+        name: Security
+
+      # -----------------------------------------------------------------------
+      # Alarm panel — full arm/disarm control
+      # -----------------------------------------------------------------------
+      - type: custom:mushroom-alarm-control-panel-card
+        entity: alarm_control_panel.home_alarm_placeholder # PLACEHOLDER ENTITY
+        states:
+          - armed_home
+          - armed_away
+          - disarmed
+        card_mod:
+          style: |
+            ha-card { padding: 20px 24px; }
+
+      # -----------------------------------------------------------------------
+      # Garage + Locks + Smoke + Water + Motion grid
+      # -----------------------------------------------------------------------
+      - type: custom:grid-layout
+        layout:
+          grid-template-columns: repeat(3, 1fr)
+          grid-gap: var(--kotapish-gutter)
+          mediaquery:
+            "(max-width: 1000px)":
+              grid-template-columns: repeat(2, 1fr)
+        cards:
+          - type: custom:mushroom-cover-card
+            entity: cover.garage_door_placeholder # PLACEHOLDER ENTITY
+            name: Garage Door
+            show_buttons_control: true
+
+          - type: custom:mushroom-lock-card
+            entity: lock.front_door_placeholder # PLACEHOLDER ENTITY
+            name: Front Door
+
+          - type: custom:mushroom-lock-card
+            entity: lock.back_door_placeholder # PLACEHOLDER ENTITY
+            name: Back Door
+
+          - type: custom:mushroom-entity-card
+            entity: binary_sensor.smoke_detector_placeholder # PLACEHOLDER ENTITY
+            name: Smoke Detector
+            icon: mdi:smoke-detector
+            card_mod:
+              style: |
+                mushroom-shape-icon { --icon-color: var(--kotapish-red); --shape-color: rgba(255,69,58,0.14); }
+
+          - type: custom:mushroom-entity-card
+            entity: binary_sensor.water_leak_placeholder # PLACEHOLDER ENTITY
+            name: Water Leak
+            icon: mdi:water-alert
+            card_mod:
+              style: |
+                mushroom-shape-icon { --icon-color: var(--kotapish-blue); --shape-color: rgba(10,132,255,0.14); }
+
+          - type: custom:mushroom-entity-card
+            entity: binary_sensor.motion_entry_placeholder # PLACEHOLDER ENTITY
+            name: Motion — Entry
+            icon: mdi:motion-sensor
+            card_mod:
+              style: |
+                mushroom-shape-icon { --icon-color: var(--kotapish-purple); --shape-color: rgba(191,90,242,0.14); }
+
+      # -----------------------------------------------------------------------
+      # Recent security events
+      # -----------------------------------------------------------------------
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Recent Security Events
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: "binary_sensor.motion_*_placeholder"
+              options:
+                secondary_info: last-changed
+            - entity_id: "lock.*_placeholder"
+              options:
+                secondary_info: last-changed
+        sort:
+          method: last_changed
+          reverse: true
+        card_mod:
+          style: |
+            ha-card { padding: 8px 20px; }

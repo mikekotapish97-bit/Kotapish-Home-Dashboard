@@ -1,0 +1,118 @@
+# =============================================================================
+# Component: Room Tiles Grid
+# Living Room / Kitchen / Bedroom / Office / Garage / Patio. Each tile opens a
+# Browser Mod popup (src/popups/room_*.yaml) with room-specific controls.
+# All sensor/light entities are PLACEHOLDERS — see popups for full lists.
+# =============================================================================
+
+type: custom:grid-layout
+layout:
+  grid-template-columns: repeat(6, 1fr)
+  grid-template-rows: 1fr
+  grid-gap: var(--kotapish-gutter)
+  mediaquery:
+    "(max-width: 1100px)":
+      grid-template-columns: repeat(3, 1fr)
+      grid-template-rows: repeat(2, 1fr)
+cards:
+  - type: custom:button-card
+    template: kotapish_room_tile
+    icon: mdi:sofa
+    name: Living Room
+    state_display: |
+      [[[ return states['light.living_room_placeholder'].state === 'on' ? 'Lights On' : 'Lights Off'; ]]] # PLACEHOLDER ENTITY
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          title: Living Room
+          size: wide
+          style: |
+            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+          content: !include ../popups/room_living_room.yaml
+
+  - type: custom:button-card
+    template: kotapish_room_tile
+    icon: mdi:silverware-fork-knife
+    name: Kitchen
+    state_display: |
+      [[[ return states['light.kitchen_placeholder'].state === 'on' ? 'Lights On' : 'Lights Off'; ]]] # PLACEHOLDER ENTITY
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          title: Kitchen
+          size: wide
+          style: |
+            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+          content: !include ../popups/room_kitchen.yaml
+
+  - type: custom:button-card
+    template: kotapish_room_tile
+    icon: mdi:bed
+    name: Bedroom
+    state_display: |
+      [[[ return states['light.bedroom_placeholder'].state === 'on' ? 'Lights On' : 'Lights Off'; ]]] # PLACEHOLDER ENTITY
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          title: Bedroom
+          size: wide
+          style: |
+            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+          content: !include ../popups/room_bedroom.yaml
+
+  - type: custom:button-card
+    template: kotapish_room_tile
+    icon: mdi:desk
+    name: Office
+    state_display: |
+      [[[ return states['light.office_placeholder'].state === 'on' ? 'Lights On' : 'Lights Off'; ]]] # PLACEHOLDER ENTITY
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          title: Office
+          size: wide
+          style: |
+            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+          content: !include ../popups/room_office.yaml
+
+  - type: custom:button-card
+    template: kotapish_room_tile
+    icon: mdi:garage
+    name: Garage
+    state_display: |
+      [[[ return states['cover.garage_door_placeholder'].state === 'closed' ? 'Closed' : 'Open'; ]]] # PLACEHOLDER ENTITY
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          title: Garage
+          size: wide
+          style: |
+            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+          content: !include ../popups/room_garage.yaml
+
+  - type: custom:button-card
+    template: kotapish_room_tile
+    icon: mdi:tree
+    name: Patio
+    state_display: |
+      [[[ return states['sensor.patio_temp_placeholder'].state + '°'; ]]] # PLACEHOLDER ENTITY
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          title: Patio
+          size: wide
+          style: |
+            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+          content: !include ../popups/room_patio.yaml

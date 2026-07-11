@@ -1,0 +1,77 @@
+# =============================================================================
+# Kotapish Home Dashboard — Card Mod Reference Snippets
+#
+# The global glass look (blur/radius/border/shadow) is already injected into
+# every ha-card by the theme's `card-mod-card` key (theme/kotapish_glass.yaml)
+# — that is the single source of truth and must never be duplicated here.
+#
+# This file only holds NAMED, COPY-PASTE reference snippets for one-off
+# structural tweaks (hiding a header, animating a press, styling a dialog)
+# that cannot live in the theme because they target a specific card type.
+# Card Mod has no cross-file include mechanism, so each snippet below is
+# applied locally via a card's own `card_mod:` key when needed.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# kotapish_hide_header — removes a card's built-in title bar (used when a
+# component provides its own header, e.g. the camera hero card)
+# -----------------------------------------------------------------------------
+# card_mod:
+#   style: |
+#     .card-header { display: none; }
+
+# -----------------------------------------------------------------------------
+# kotapish_press_feedback — subtle scale-down on tap, iOS-style
+# -----------------------------------------------------------------------------
+# card_mod:
+#   style: |
+#     ha-card {
+#       transition: transform var(--kotapish-transition-fast), var(--kotapish-transition-smooth);
+#     }
+#     ha-card:active {
+#       transform: scale(0.97);
+#     }
+
+# -----------------------------------------------------------------------------
+# kotapish_no_scrollbar — hides overflow scrollbars inside stacks/popups while
+# preserving scroll behavior (used in Browser Mod popups and long list cards)
+# -----------------------------------------------------------------------------
+# card_mod:
+#   style: |
+#     ha-card::-webkit-scrollbar { width: 0px; background: transparent; }
+#     ha-card { scrollbar-width: none; }
+
+# -----------------------------------------------------------------------------
+# kotapish_graph_card_mod — mini-graph-card / history-graph legend + line tuning
+# -----------------------------------------------------------------------------
+# card_mod:
+#   style: |
+#     ha-card {
+#       --primary-text-color: var(--primary-text-color);
+#       padding-bottom: 4px;
+#     }
+#     .info { font-family: var(--kotapish-font-family) !important; }
+
+# -----------------------------------------------------------------------------
+# kotapish_glass_strong — stronger opacity surface for hero cards (camera,
+# clock-weather) that sit directly over busy live video/imagery
+# -----------------------------------------------------------------------------
+# card_mod:
+#   style: |
+#     ha-card {
+#       background: var(--kotapish-glass-surface-strong) !important;
+#     }
+
+# -----------------------------------------------------------------------------
+# kotapish_flat_row — used for auto-entities list rows: strips card chrome so
+# rows read as a plain list inside an outer glass container
+# -----------------------------------------------------------------------------
+# card_mod:
+#   style: |
+#     ha-card {
+#       background: transparent !important;
+#       box-shadow: none !important;
+#       border: none !important;
+#       backdrop-filter: none !important;
+#       border-radius: 0 !important;
+#     }

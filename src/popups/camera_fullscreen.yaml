@@ -1,0 +1,58 @@
+# =============================================================================
+# Popup: Camera Fullscreen
+# Opened via Browser Mod's fullscreen popup size from components/camera_card.yaml.
+# Mirrors the same State Switch selection so the fullscreen view always shows
+# whichever camera was active on the Home/Cameras page.
+# =============================================================================
+
+type: custom:state-switch
+entity: input_select.dashboard_camera
+states:
+  Entry:
+    type: picture-entity
+    entity: camera.entry_cam
+    camera_view: live
+    show_name: false
+    show_state: false
+    card_mod:
+      style: |
+        ha-card {
+          border-radius: 0;
+          border: none;
+          box-shadow: none;
+          background: black;
+          height: 100vh;
+        }
+        img { height: 100vh !important; object-fit: contain !important; }
+  Driveway:
+    type: picture-entity
+    entity: camera.driveway_cam_placeholder # PLACEHOLDER ENTITY
+    camera_view: live
+    show_name: false
+    show_state: false
+    card_mod:
+      style: |
+        ha-card {
+          border-radius: 0;
+          border: none;
+          box-shadow: none;
+          background: black;
+          height: 100vh;
+        }
+        img { height: 100vh !important; object-fit: contain !important; }
+  Deck:
+    type: picture-entity
+    entity: camera.deck_cam_placeholder # PLACEHOLDER ENTITY
+    camera_view: live
+    show_name: false
+    show_state: false
+    card_mod:
+      style: |
+        ha-card {
+          border-radius: 0;
+          border: none;
+          box-shadow: none;
+          background: black;
+          height: 100vh;
+        }
+        img { height: 100vh !important; object-fit: contain !important; }

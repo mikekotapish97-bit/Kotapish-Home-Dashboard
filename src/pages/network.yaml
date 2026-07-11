@@ -1,0 +1,122 @@
+# =============================================================================
+# Page: Network
+# UniFi, Internet, Ping, VPN, WiFi, Bandwidth. All entities are PLACEHOLDERS —
+# replace with your real UniFi Network integration sensors.
+# =============================================================================
+
+title: Network
+path: network
+icon: mdi:router-wireless
+type: custom:grid-layout
+layout:
+  grid-template-columns: var(--kotapish-nav-width) 1fr
+  grid-template-rows: 1fr
+  grid-template-areas: '"nav main"'
+  mediaquery:
+    "(max-width: 900px)":
+      grid-template-columns: 1fr
+      grid-template-areas: '"main"'
+cards:
+  - !include ../components/nav_rail.yaml
+
+  - type: custom:grid-layout
+    view_layout:
+      grid-area: main
+    layout:
+      grid-template-columns: "1fr"
+      grid-template-rows: auto auto auto
+      grid-gap: var(--kotapish-gutter)
+      margin: var(--kotapish-gutter)
+    cards:
+      - type: custom:button-card
+        template: kotapish_glass_base
+        show_name: false
+        show_icon: false
+        styles:
+          card:
+            - padding: 20px 26px
+            - align-items: flex-start
+        name: Network
+
+      # -----------------------------------------------------------------------
+      # Status tiles: Internet, Ping, VPN, WiFi Clients
+      # -----------------------------------------------------------------------
+      - type: custom:grid-layout
+        layout:
+          grid-template-columns: repeat(4, 1fr)
+          grid-gap: var(--kotapish-gutter)
+          mediaquery:
+            "(max-width: 1100px)":
+              grid-template-columns: repeat(2, 1fr)
+        cards:
+          - type: custom:mushroom-template-card
+            primary: Internet
+            secondary: >-
+              {{ 'Online' if states('binary_sensor.internet_connection_placeholder') == 'on' else 'Offline' }}
+            icon: mdi:web
+            card_mod:
+              style: |
+                ha-card { padding: 18px 20px; }
+                mushroom-shape-icon { --icon-color: var(--kotapish-green); --shape-color: rgba(48,209,88,0.14); }
+
+          - type: custom:mushroom-template-card
+            primary: Ping
+            secondary: "{{ states('sensor.internet_ping_placeholder') }} ms" # PLACEHOLDER ENTITY
+            icon: mdi:speedometer
+            card_mod:
+              style: |
+                ha-card { padding: 18px 20px; }
+                mushroom-shape-icon { --icon-color: var(--kotapish-blue); --shape-color: rgba(10,132,255,0.14); }
+
+          - type: custom:mushroom-template-card
+            primary: VPN
+            secondary: >-
+              {{ 'Connected' if states('binary_sensor.vpn_connected_placeholder') == 'on' else 'Disconnected' }}
+            icon: mdi:vpn
+            card_mod:
+              style: |
+                ha-card { padding: 18px 20px; }
+                mushroom-shape-icon { --icon-color: var(--kotapish-purple); --shape-color: rgba(191,90,242,0.14); }
+
+          - type: custom:mushroom-template-card
+            primary: WiFi Clients
+            secondary: "{{ states('sensor.wifi_clients_placeholder') }} connected" # PLACEHOLDER ENTITY
+            icon: mdi:wifi
+            card_mod:
+              style: |
+                ha-card { padding: 18px 20px; }
+                mushroom-shape-icon { --icon-color: var(--kotapish-teal); --shape-color: rgba(100,210,255,0.14); }
+
+      # -----------------------------------------------------------------------
+      # Bandwidth trend — WAN download/upload
+      # -----------------------------------------------------------------------
+      - type: custom:mini-graph-card
+        title: WAN Bandwidth
+        entities:
+          - entity: sensor.unifi_wan_download_placeholder # PLACEHOLDER ENTITY
+            name: Download
+            color: var(--kotapish-blue)
+          - entity: sensor.unifi_wan_upload_placeholder # PLACEHOLDER ENTITY
+            name: Upload
+            color: var(--kotapish-purple)
+        hours_to_show: 12
+        points_per_hour: 6
+        line_width: 2
+        show:
+          labels: true
+          legend: true
+
+      # -----------------------------------------------------------------------
+      # UniFi device list
+      # -----------------------------------------------------------------------
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: UniFi Devices
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: "binary_sensor.unifi_*_placeholder"
+        card_mod:
+          style: |
+            ha-card { padding: 8px 20px; }

@@ -1,0 +1,61 @@
+# =============================================================================
+# Popup: Living Room
+# Opened via Browser Mod from components/room_tiles.yaml. All entities below
+# are PLACEHOLDERS — wire up to your real Living Room devices.
+# =============================================================================
+
+type: vertical-stack
+card_mod:
+  style: |
+    ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+cards:
+  - type: custom:mushroom-title-card
+    title: Living Room
+    subtitle: Lights, climate & media
+
+  - type: custom:mushroom-light-card
+    entity: light.living_room_placeholder # PLACEHOLDER ENTITY
+    show_brightness_control: true
+    show_color_control: true
+    use_light_color: true
+    collapsible_controls: false
+    card_mod:
+      style: |
+        ha-card { --mush-control-height: 48px; padding: 16px 18px; }
+
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      - type: custom:mushroom-template-card
+        primary: Temperature
+        secondary: "{{ states('sensor.living_room_temp_placeholder') }}°" # PLACEHOLDER ENTITY
+        icon: mdi:thermometer
+        card_mod:
+          style: |
+            ha-card { padding: 14px 16px; }
+            mushroom-shape-icon { --icon-color: var(--kotapish-orange); --shape-color: rgba(255,159,10,0.14); }
+
+      - type: custom:mushroom-template-card
+        primary: Media
+        secondary: "{{ states('media_player.living_room_speaker_placeholder') }}" # PLACEHOLDER ENTITY
+        icon: mdi:speaker
+        tap_action:
+          action: navigate
+          navigation_path: /kotapish-home/media
+        card_mod:
+          style: |
+            ha-card { padding: 14px 16px; }
+            mushroom-shape-icon { --icon-color: var(--kotapish-purple); --shape-color: rgba(191,90,242,0.14); }
+
+  - type: custom:mini-graph-card
+    entities:
+      - entity: sensor.living_room_temp_placeholder # PLACEHOLDER ENTITY
+        name: Temperature
+        color: var(--kotapish-orange)
+    hours_to_show: 24
+    points_per_hour: 1
+    line_width: 3
+    show:
+      labels: true
+      legend: false

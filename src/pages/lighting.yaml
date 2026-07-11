@@ -1,0 +1,144 @@
+# =============================================================================
+# Page: Lighting
+# Room-by-room light control grid + scene shortcuts. All light entities are
+# PLACEHOLDERS — replace with your real light/group entities.
+# =============================================================================
+
+title: Lighting
+path: lighting
+icon: mdi:lightbulb
+type: custom:grid-layout
+layout:
+  grid-template-columns: var(--kotapish-nav-width) 1fr
+  grid-template-rows: 1fr
+  grid-template-areas: '"nav main"'
+  mediaquery:
+    "(max-width: 900px)":
+      grid-template-columns: 1fr
+      grid-template-areas: '"main"'
+cards:
+  - !include ../components/nav_rail.yaml
+
+  - type: custom:grid-layout
+    view_layout:
+      grid-area: main
+    layout:
+      grid-template-columns: "1fr"
+      grid-template-rows: auto auto auto
+      grid-gap: var(--kotapish-gutter)
+      margin: var(--kotapish-gutter)
+    cards:
+      - type: custom:button-card
+        template: kotapish_glass_base
+        show_name: false
+        show_icon: false
+        styles:
+          card:
+            - padding: 20px 26px
+            - align-items: flex-start
+        name: Lighting
+
+      # -----------------------------------------------------------------------
+      # Scenes — quick whole-home moods
+      # -----------------------------------------------------------------------
+      - type: custom:grid-layout
+        layout:
+          grid-template-columns: repeat(4, 1fr)
+          grid-gap: var(--kotapish-gutter)
+          mediaquery:
+            "(max-width: 1000px)":
+              grid-template-columns: repeat(2, 1fr)
+        cards:
+          - type: custom:button-card
+            template: kotapish_glass_base
+            icon: mdi:weather-sunny
+            name: Bright
+            size: 28px
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              service_data:
+                entity_id: scene.lighting_bright_placeholder # PLACEHOLDER ENTITY
+
+          - type: custom:button-card
+            template: kotapish_glass_base
+            icon: mdi:weather-night
+            name: Relax
+            size: 28px
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              service_data:
+                entity_id: scene.lighting_relax_placeholder # PLACEHOLDER ENTITY
+
+          - type: custom:button-card
+            template: kotapish_glass_base
+            icon: mdi:movie-open
+            name: Movie
+            size: 28px
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              service_data:
+                entity_id: scene.lighting_movie_placeholder # PLACEHOLDER ENTITY
+
+          - type: custom:button-card
+            template: kotapish_glass_base
+            icon: mdi:power
+            name: All Off
+            size: 28px
+            tap_action:
+              action: call-service
+              service: light.turn_off
+              service_data:
+                entity_id: all
+
+      # -----------------------------------------------------------------------
+      # Room-by-room light control
+      # -----------------------------------------------------------------------
+      - type: custom:grid-layout
+        layout:
+          grid-template-columns: 1fr 1fr
+          grid-gap: var(--kotapish-gutter)
+          mediaquery:
+            "(max-width: 1000px)":
+              grid-template-columns: 1fr
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.living_room_placeholder # PLACEHOLDER ENTITY
+            name: Living Room
+            show_brightness_control: true
+            show_color_control: true
+            use_light_color: true
+
+          - type: custom:mushroom-light-card
+            entity: light.kitchen_placeholder # PLACEHOLDER ENTITY
+            name: Kitchen
+            show_brightness_control: true
+            show_color_control: true
+            use_light_color: true
+
+          - type: custom:mushroom-light-card
+            entity: light.bedroom_placeholder # PLACEHOLDER ENTITY
+            name: Bedroom
+            show_brightness_control: true
+            show_color_control: true
+            use_light_color: true
+
+          - type: custom:mushroom-light-card
+            entity: light.office_placeholder # PLACEHOLDER ENTITY
+            name: Office
+            show_brightness_control: true
+            show_color_control: true
+            use_light_color: true
+
+          - type: custom:mushroom-light-card
+            entity: light.garage_placeholder # PLACEHOLDER ENTITY
+            name: Garage
+            show_brightness_control: true
+
+          - type: custom:mushroom-light-card
+            entity: light.patio_placeholder # PLACEHOLDER ENTITY
+            name: Patio
+            show_brightness_control: true
+            use_light_color: true

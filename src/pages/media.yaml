@@ -1,0 +1,154 @@
+# =============================================================================
+# Page: Media
+# Apple TV, Music, Speakers, Now Playing. All entities are PLACEHOLDERS —
+# replace with your real media_player entities.
+# =============================================================================
+
+title: Media
+path: media
+icon: mdi:play-circle
+type: custom:grid-layout
+layout:
+  grid-template-columns: var(--kotapish-nav-width) 1fr
+  grid-template-rows: 1fr
+  grid-template-areas: '"nav main"'
+  mediaquery:
+    "(max-width: 900px)":
+      grid-template-columns: 1fr
+      grid-template-areas: '"main"'
+cards:
+  - !include ../components/nav_rail.yaml
+
+  - type: custom:grid-layout
+    view_layout:
+      grid-area: main
+    layout:
+      grid-template-columns: "1fr"
+      grid-template-rows: auto auto
+      grid-gap: var(--kotapish-gutter)
+      margin: var(--kotapish-gutter)
+    cards:
+      - type: custom:button-card
+        template: kotapish_glass_base
+        show_name: false
+        show_icon: false
+        styles:
+          card:
+            - padding: 20px 26px
+            - align-items: flex-start
+        name: Media
+
+      - type: custom:grid-layout
+        layout:
+          grid-template-columns: 1.4fr 1fr
+          grid-gap: var(--kotapish-gutter)
+          mediaquery:
+            "(max-width: 1100px)":
+              grid-template-columns: 1fr
+        cards:
+          # ------------------------------------------------------------------
+          # Now Playing hero — Apple TV
+          # ------------------------------------------------------------------
+          - type: custom:mushroom-media-player-card
+            entity: media_player.apple_tv_placeholder # PLACEHOLDER ENTITY
+            name: Apple TV
+            use_media_info: true
+            show_volume_level: true
+            media_controls:
+              - play_pause_stop
+              - next
+              - previous
+            volume_controls:
+              - volume_mute
+              - volume_set
+              - volume_buttons
+            card_mod:
+              style: |
+                ha-card { padding: 22px 24px; }
+                mushroom-shape-icon { --icon-color: var(--kotapish-purple); --shape-color: rgba(191,90,242,0.14); }
+
+          # ------------------------------------------------------------------
+          # Speakers list
+          # ------------------------------------------------------------------
+          - type: vertical-stack
+            card_mod:
+              style: |
+                ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+            cards:
+              - type: custom:mushroom-media-player-card
+                entity: media_player.living_room_speaker_placeholder # PLACEHOLDER ENTITY
+                name: Living Room
+                use_media_info: true
+                show_volume_level: true
+                media_controls:
+                  - play_pause_stop
+                volume_controls:
+                  - volume_set
+
+              - type: custom:mushroom-media-player-card
+                entity: media_player.kitchen_speaker_placeholder # PLACEHOLDER ENTITY
+                name: Kitchen
+                use_media_info: true
+                show_volume_level: true
+                media_controls:
+                  - play_pause_stop
+                volume_controls:
+                  - volume_set
+
+      # -----------------------------------------------------------------------
+      # Quick source shortcuts
+      # -----------------------------------------------------------------------
+      - type: custom:grid-layout
+        layout:
+          grid-template-columns: repeat(4, 1fr)
+          grid-gap: var(--kotapish-gutter)
+          mediaquery:
+            "(max-width: 1000px)":
+              grid-template-columns: repeat(2, 1fr)
+        cards:
+          - type: custom:button-card
+            template: kotapish_glass_base
+            icon: mdi:music
+            name: Music
+            size: 26px
+            tap_action:
+              action: call-service
+              service: media_player.select_source
+              service_data:
+                entity_id: media_player.apple_tv_placeholder # PLACEHOLDER ENTITY
+                source: Music
+
+          - type: custom:button-card
+            template: kotapish_glass_base
+            icon: mdi:television-classic
+            name: TV
+            size: 26px
+            tap_action:
+              action: call-service
+              service: media_player.select_source
+              service_data:
+                entity_id: media_player.apple_tv_placeholder # PLACEHOLDER ENTITY
+                source: TV
+
+          - type: custom:button-card
+            template: kotapish_glass_base
+            icon: mdi:movie
+            name: Movies
+            size: 26px
+            tap_action:
+              action: call-service
+              service: media_player.select_source
+              service_data:
+                entity_id: media_player.apple_tv_placeholder # PLACEHOLDER ENTITY
+                source: Movies
+
+          - type: custom:button-card
+            template: kotapish_glass_base
+            icon: mdi:power
+            name: All Off
+            size: 26px
+            tap_action:
+              action: call-service
+              service: media_player.turn_off
+              service_data:
+                entity_id: all
