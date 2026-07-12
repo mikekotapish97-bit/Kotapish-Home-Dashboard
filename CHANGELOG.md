@@ -3,6 +3,42 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.2.3] - 2026-07-11
+
+### Fixed
+
+- **Camera fullscreen popup had no visible close button.** The popup's
+  style explicitly hid `.mdc-dialog__title` and `.mdc-dialog__actions` for
+  a clean edge-to-edge look — which also hid the dialog's close (X)
+  button. On an iPad there's no Escape key and no address bar/back gesture
+  in a home-screen web app, so this left no way to dismiss it.
+  `components/camera_card.yaml` now keeps the title bar (styled as a slim
+  dark strip) so its close button stays visible, and
+  `popups/camera_fullscreen.yaml` adds a `tap_action` on the video itself
+  that closes the popup (`browser_mod.close_popup`) as a second, redundant
+  way back.
+- **Home page temperature graph still not loading, while the identical
+  entity's graph on the Climate page works fine.** Two independent causes:
+  - `components/thermostat_card.yaml`'s mini-graph-card also graphed the
+    `temperature` (setpoint) attribute, which doesn't exist while a
+    climate entity is in heat_cool/auto mode (it reports
+    `target_temp_low`/`target_temp_high` instead) — an all-null series
+    can break the whole card. Dropped it in favor of `current_temperature`
+    alone, which is always present; the full current+humidity breakdown
+    (attributes already confirmed to always exist) stays on the Climate
+    page.
+  - The Home page nested this graph one level deeper than the working
+    Climate page graph (`horizontal-stack > vertical-stack >
+    thermostat_card's-own-vertical-stack > mini-graph-card` vs. Climate's
+    `horizontal-stack > vertical-stack > mini-graph-card`) — extra
+    flex-container nesting is a known trigger for chart cards computing a
+    collapsed/zero width before layout settles. Flattened this by folding
+    `components/home_status_card.yaml` into `components/thermostat_card.yaml`
+    as its own last card, so `pages/home.yaml` now includes
+    `thermostat_card.yaml` directly as a `horizontal-stack` sibling of the
+    camera card, with no extra wrapping `vertical-stack` — matching the
+    Climate page's nesting depth exactly.
+
 ## [1.2.2] - 2026-07-11
 
 ### Fixed

@@ -29,13 +29,6 @@ cards:
             ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
         cards:
           - !include ../components/camera_card.yaml
-
-          - type: vertical-stack
-            card_mod:
-              style: |
-                ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
-            cards:
-              - !include ../components/thermostat_card.yaml
-              - !include ../components/home_status_card.yaml
+          - !include ../components/thermostat_card.yaml
 
       - !include ../components/room_tiles.yaml

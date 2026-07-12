@@ -130,7 +130,20 @@ cards:
             data:
               title: ""
               size: fullscreen
+              # NOTE: an earlier version also hid `.mdc-dialog__title` here,
+              # which removed the dialog's own close (X) button along with
+              # it — on an iPad there's no Escape key and no browser back
+              # gesture in a home-screen web app, so that left no way to
+              # dismiss the popup at all. The title bar is kept (styled as
+              # a slim dark strip) specifically so its close button stays
+              # visible; tapping the video itself also closes the popup as
+              # a second, redundant way back (see popups/camera_fullscreen.yaml).
               style: |
                 .mdc-dialog__surface { border-radius: 0 !important; background: black; }
-                .mdc-dialog__title, .mdc-dialog__actions { display: none !important; }
+                .mdc-dialog__title {
+                  min-height: 0 !important;
+                  padding: 8px !important;
+                  background: rgba(0, 0, 0, 0.5) !important;
+                }
+                .mdc-dialog__actions { display: none !important; }
               content: !include ../popups/camera_fullscreen.yaml
