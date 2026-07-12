@@ -122,7 +122,49 @@ data. The only entities guaranteed to exist out of the box are:
 - `camera.entry_cam`
 - `input_select.dashboard_camera` (must have options: `Entry`, `Driveway`, `Deck`)
 
-## 8. Verify
+## 8. Set up live weather for Ranson, WV (National Weather Service)
+
+Two cards need a real weather entity: the compact weather chip in the
+header, `components/weather_forecast_card.yaml` (current conditions +
+daily/weekly forecast on the Home page), and `components/weather_card.yaml`
+(the Climate page's weather hero). All three currently point at the
+placeholder `weather.ranson_wv_nws`.
+
+This project uses the **National Weather Service (NWS)** integration —
+free, no account/signup, built into Home Assistant core, and it's the
+official US government forecast source, which tends to be more locally
+accurate for a specific US town than a global provider.
+
+1. **Settings → Devices & Services → Add Integration**, search for
+   **"National Weather Service (NWS)"**.
+2. When prompted for an API key: despite the name, NWS's API doesn't
+   require a real registered key — HA just wants an identifying string so
+   NWS can see who's calling their API. Enter something like
+   `kotapish-dashboard (youremail@example.com)`, including your email as
+   NWS's own usage policy requests (for them to contact you if their API
+   ever needs to reach out about usage — not for any account/signup on
+   your end).
+3. Enter Ranson, WV's coordinates (or let it use your Home Assistant
+   instance's configured Home Zone location, if that's already set to
+   Ranson, WV) — leave the station field blank to let HA pick the nearest
+   METAR station automatically.
+4. Complete setup, then find the entity it created: **Developer Tools →
+   States**, filter for `weather.`, and look for the new NWS entity (the
+   exact `entity_id` HA assigns depends on the station/location name it
+   picked, so it won't necessarily be `weather.ranson_wv_nws`).
+5. Either note that real `entity_id` and replace every
+   `weather.ranson_wv_nws` placeholder with it (search the project for
+   that string), **or** rename the entity itself to match: **Settings →
+   Devices & Services → Entities**, find it, gear icon → **Settings →
+   Advanced → Entity ID**, and set it to `weather.ranson_wv_nws` — this
+   avoids editing multiple files.
+6. NWS forecasts (both daily and hourly) are served through Home
+   Assistant's modern `weather.get_forecasts` mechanism rather than the
+   old deprecated forecast attribute — Clock Weather Card (the card
+   behind all three of the cards above) supports this natively, so no
+   special config is needed beyond the `entity:` reference.
+
+## 9. Verify
 
 Open each of the 10 views from the nav rail and confirm no
 `custom-element-not-found` or YAML parse errors appear. See

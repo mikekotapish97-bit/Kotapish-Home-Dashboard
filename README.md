@@ -42,7 +42,8 @@ kotapish-home-dashboard/
     │   ├── thermostat_card.yaml # Honeywell T6 Pro
     │   ├── home_status_card.yaml # Garage/Locks/Alarm/Internet/Powerwall
     │   ├── room_tiles.yaml       # 6-room tile grid -> Browser Mod popups
-    │   └── weather_card.yaml     # Clock Weather Card hero
+    │   ├── weather_card.yaml     # Clock Weather Card hero (Climate page)
+    │   └── weather_forecast_card.yaml # Clock-less forecast card (Home page)
     ├── popups/
     │   ├── room_living_room.yaml
     │   ├── room_kitchen.yaml
@@ -98,7 +99,7 @@ non-iPad/kiosk deployment wants it back.
 
 | Page | Path | Highlights |
 |---|---|---|
-| Home | `/home` | Greeting header, live camera hero, T6 Pro thermostat, Home Status row, 6 room tiles |
+| Home | `/home` | Greeting header, live camera hero, Home Status row, Ranson WV weather forecast, T6 Pro thermostat, 6 room tiles |
 | Cameras | `/cameras` | Large feed, thumbnail selector, fullscreen, recent motion |
 | Climate | `/climate` | Full thermostat, temp/humidity graphs, outside weather |
 | Lighting | `/lighting` | Whole-home scenes + per-room light control |
@@ -132,6 +133,13 @@ Only three entities are assumed to exist in a bare install:
 - `climate.t6_pro` — Honeywell T6 Pro thermostat
 - `camera.entry_cam` — Entry camera
 - `input_select.dashboard_camera` — camera selector (options: `Entry`, `Driveway`, `Deck`)
+
+One additional entity has a full setup guide because it's backed by a
+specific integration choice rather than being a stand-in for "whatever
+you have": `weather.ranson_wv_nws`, the National Weather Service entity
+for Ranson, WV, used by the header's weather chip, the Home page's
+weather forecast card, and the Climate page's weather hero. See
+`INSTALLATION.md` step 8.
 
 Every other entity referenced in this project is a clearly marked
 placeholder (`# PLACEHOLDER ENTITY` comment on the same line) meant to be

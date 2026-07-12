@@ -1,17 +1,15 @@
 # =============================================================================
-# Component: Honeywell T6 Pro Thermostat + Home Status
+# Component: Honeywell T6 Pro Thermostat
 # Real entity: climate.t6_pro
 # Mushroom climate card for the compact Home-page placement; the full
 # thermostat dial + graphs live on pages/climate.yaml.
 #
-# Bundles the Home Status row (components/home_status_card.yaml) as its
-# last card so pages/home.yaml can include this ONE component directly as
-# a horizontal-stack sibling of the camera card, with no extra wrapping
-# vertical-stack in between. That extra nesting level (horizontal-stack >
-# vertical-stack > this-file's-own-vertical-stack > mini-graph-card) was
-# one level deeper than the working graphs on pages/climate.yaml, which is
-# a known trigger for chart cards computing a collapsed/zero width before
-# a nested flex layout has finished settling.
+# Included directly as a top-level card in pages/home.yaml's own outer
+# vertical-stack (not nested inside a horizontal-stack alongside another
+# card) — that shallow nesting matters for the mini-graph-card below: an
+# earlier layout nested it one level deeper than the working graphs on
+# pages/climate.yaml, a known trigger for chart cards computing a
+# collapsed/zero width before a nested flex layout finishes settling.
 # =============================================================================
 
 type: vertical-stack
@@ -72,5 +70,3 @@ cards:
     card_mod:
       style: |
         ha-card { padding: 8px 16px 12px 16px; }
-
-  - !include ../components/home_status_card.yaml

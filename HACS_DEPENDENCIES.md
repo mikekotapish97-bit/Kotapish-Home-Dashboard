@@ -20,7 +20,7 @@ repository URL, unless HACS reports it isn't found in your version.
 | **Mushroom** | Climate, light, lock, cover, media-player, alarm-panel, template cards |
 | **Bubble Card** | Optional pop-up/header/separator styling — bundled for future pages (Settings quick-toggles) |
 | **card-mod** | Global glass styling hook (`card-mod-card` in the theme), popup dialog styling |
-| **clock-weather-card** | Full weather hero on the Climate page |
+| **clock-weather-card** | Compact weather chip (header), full weather + daily/weekly forecast (Home page), weather hero (Climate page) |
 | **State Switch** | Camera hero card + fullscreen popup camera switching |
 | **Mini Graph Card** | All temperature/humidity/energy/BAS trend graphs |
 | **auto-entities** | Recent motion events, security events, UniFi device lists |
@@ -45,6 +45,10 @@ not required.
 - `browser_mod` popups depend on the Browser Mod integration being loaded,
   not just the Lovelace resource — add it under **Settings → Devices &
   Services → Add Integration → Browser Mod** as well.
+- **National Weather Service (NWS)** — core HA integration (not HACS),
+  free, no signup. Powers the live Ranson, WV weather data behind the
+  header's weather chip, the Home page forecast card, and the Climate
+  page's weather hero. See `INSTALLATION.md` step 8.
 
 ## After installing
 

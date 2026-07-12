@@ -3,6 +3,35 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.3.0] - 2026-07-11
+
+### Added
+
+- **Live weather for Ranson, WV** via the National Weather Service (NWS)
+  integration — free, no signup, built into Home Assistant core, and more
+  locally accurate for a specific US town than a global provider. All
+  weather cards now point at `weather.ranson_wv_nws` (a placeholder until
+  the real NWS entity is set up — see `INSTALLATION.md` step 8, new).
+- **New Home page weather forecast card**
+  (`components/weather_forecast_card.yaml`) — Clock Weather Card
+  configured with `hide_clock: true` (the header already has its own
+  clock, so this shows current conditions plus the full daily/weekly
+  forecast list — `forecast_rows: 7`, `hourly_forecast: false` — without
+  duplicating the time).
+- Bumped the Climate page's weather hero (`components/weather_card.yaml`)
+  from a 5-row to a full 7-row (weekly) forecast.
+
+### Changed
+
+- **Reworked the Home page into a single full-width column** instead of a
+  camera+thermostat side-by-side split: Header → Camera hero → Home Status
+  row → Weather forecast card → Thermostat → Room tiles. This was a
+  deliberate layout request, not a bug fix.
+- Un-bundled `components/home_status_card.yaml` from
+  `components/thermostat_card.yaml` (they were merged in 1.2.3 purely to
+  work around a graph-nesting bug) now that both are top-level cards in
+  the new single-column layout.
+
 ## [1.2.3] - 2026-07-11
 
 ### Fixed

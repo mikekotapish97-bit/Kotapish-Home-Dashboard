@@ -87,7 +87,7 @@ cards:
             cards:
               - type: custom:mushroom-template-card
                 primary: Outside Temperature
-                secondary: "{{ states('weather.kotapish_home_placeholder') }}" # PLACEHOLDER ENTITY
+                secondary: "{{ states('weather.ranson_wv_nws') }}" # PLACEHOLDER ENTITY
                 icon: mdi:thermometer
                 card_mod:
                   style: |
@@ -100,7 +100,7 @@ cards:
                 cache: false
                 title: Outdoor Temperature Trend
                 entities:
-                  - entity: weather.kotapish_home_placeholder # PLACEHOLDER ENTITY
+                  - entity: weather.ranson_wv_nws # PLACEHOLDER ENTITY
                     attribute: temperature
                     name: Outside
                     color: var(--kotapish-blue)

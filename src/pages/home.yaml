@@ -1,9 +1,12 @@
 # =============================================================================
 # Page: Home
-# Layout:
-#   1. Header (greeting, clock, date, weather, notifications)
-#   2. Camera hero (left, 2/3) + Thermostat & Home Status (right, 1/3)
-#   3. Room tiles (Living Room, Kitchen, Bedroom, Office, Garage, Patio)
+# Layout (single column, top to bottom):
+#   1. Header (greeting, clock, date, weather chip, notifications)
+#   2. Camera hero (full width)
+#   3. Home Status row (Garage/Locks/Alarm/Internet/Powerwall)
+#   4. Weather forecast card (Ranson, WV — current conditions + daily/weekly)
+#   5. Thermostat (Honeywell T6 Pro)
+#   6. Room tiles (Living Room, Kitchen, Bedroom, Office, Garage, Patio)
 #
 # Navigation is HA's native sidebar + the automatic view-tabs strip — this
 # project no longer ships a custom nav rail (see components/nav_rail.yaml
@@ -22,13 +25,8 @@ cards:
         ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
     cards:
       - !include ../components/header.yaml
-
-      - type: horizontal-stack
-        card_mod:
-          style: |
-            ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
-        cards:
-          - !include ../components/camera_card.yaml
-          - !include ../components/thermostat_card.yaml
-
+      - !include ../components/camera_card.yaml
+      - !include ../components/home_status_card.yaml
+      - !include ../components/weather_forecast_card.yaml
+      - !include ../components/thermostat_card.yaml
       - !include ../components/room_tiles.yaml

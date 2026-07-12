@@ -64,12 +64,16 @@ cards:
         ]]]
 
   # ---------------------------------------------------------------------------
-  # Weather chip — PLACEHOLDER ENTITY: weather.kotapish_home_placeholder
-  # Replace with your real weather integration entity (Met.no / OpenWeather).
+  # Weather chip — PLACEHOLDER ENTITY: weather.ranson_wv_nws
+  # Set up Settings → Devices & Services → Add Integration → "National
+  # Weather Service (NWS)" for Ranson, WV, then replace this with the
+  # entity_id it creates (check Developer Tools → States, or rename it to
+  # match via the entity's Settings → Advanced → Entity ID). See
+  # INSTALLATION.md step 8 for the full walkthrough.
   # ---------------------------------------------------------------------------
   - type: custom:button-card
     template: kotapish_glass_base
-    entity: weather.kotapish_home_placeholder # PLACEHOLDER ENTITY
+    entity: weather.ranson_wv_nws # PLACEHOLDER ENTITY
     show_name: false
     show_icon: true
     show_state: true
