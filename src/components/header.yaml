@@ -1,16 +1,18 @@
 # =============================================================================
 # Component: Top Bar
-# Rebuilt to match the reference dashboard's actual top row: small status
-# pills on the left, a big clock (with a small seconds readout) on the
-# right of them, and a circular icon on the far right. The reference's own
-# pills are personal-life trackers (baby sleep monitor, washing machine,
-# work meeting status, 3D printer) this project has no equivalent for —
-# repurposed here with Garage/Locks/Alarm/Internet status instead, in the
-# exact same pill shape/size. Its "avatar" pair (person-tracker photos) has
-# no equivalent either — replaced with the notifications bell, since this
-# project has no person-tracking entities.
+# Ported from the reference dashboard's actual top row: 4 personal-life
+# status pills, a big clock with a live seconds readout, then a
+# person-avatar pair, then a notifications bell. This project has no
+# equivalent devices for the reference's own pills (a baby-monitor sleep
+# tracker, a washing machine sensor, a work-meeting calendar sync, a 3D
+# printer) or its person-tracker avatars — per explicit instruction, these
+# are kept with the reference's exact pill/avatar code and sizing, pointed
+# at clearly marked placeholder entities, ready to wire up if/when
+# equivalent devices exist. Garage/Locks/Alarm/Internet status (this
+# project's own earlier stand-ins for this row) moved off the top bar —
+# they're still reachable via Shortcuts (Garage) and the Security page.
 #
-# All entities below are PLACEHOLDERS except noted.
+# All entities below are PLACEHOLDERS.
 # =============================================================================
 
 type: horizontal-stack
@@ -22,87 +24,99 @@ card_mod:
 cards:
   - type: custom:button-card
     template: kotapish_top_pill
-    icon: mdi:garage
-    name: Garage
-    # PLACEHOLDER ENTITY
+    icon: mdi:sleep
+    name: |
+      [[[
+        const s = states['input_boolean.person_asleep_placeholder'];
+        return (s && s.state === 'on') ? 'Asleep' : 'Awake';
+      ]]]
+    # PLACEHOLDER ENTITIES: input_boolean.person_asleep_placeholder, sensor.person_asleep_or_awake_since_placeholder
     label: |
       [[[
-        const s = states['cover.garage_door_placeholder'];
-        return (s && s.state === 'closed') ? 'Closed' : 'Open';
+        const since = states['sensor.person_asleep_or_awake_since_placeholder'];
+        return since ? `Since ${since.state}` : 'Unknown';
       ]]]
     variables:
       badge_color: |
         [[[
-          const s = states['cover.garage_door_placeholder'];
-          return (s && s.state === 'closed') ? 'var(--kotapish-green)' : 'var(--kotapish-orange)';
+          const s = states['input_boolean.person_asleep_placeholder'];
+          return (s && s.state === 'on') ? 'var(--kotapish-green)' : 'var(--kotapish-blue)';
         ]]]
     tap_action:
       action: more-info
-      entity: cover.garage_door_placeholder
+      entity: input_boolean.person_asleep_placeholder
 
   - type: custom:button-card
     template: kotapish_top_pill
-    icon: mdi:lock
-    name: Locks
-    # PLACEHOLDER ENTITY
+    icon: mdi:washing-machine
+    name: Washing Machine
+    # PLACEHOLDER ENTITY: sensor.washing_machine_placeholder
     label: |
       [[[
-        const s = states['lock.front_door_placeholder'];
-        return (s && s.state === 'locked') ? 'Locked' : 'Unlocked';
+        const s = states['sensor.washing_machine_placeholder'];
+        return s ? s.state : 'Unknown';
       ]]]
     variables:
       badge_color: |
         [[[
-          const s = states['lock.front_door_placeholder'];
-          return (s && s.state === 'locked') ? 'var(--kotapish-green)' : 'var(--kotapish-red)';
+          const s = states['sensor.washing_machine_placeholder'];
+          return (s && s.state === 'Finished') ? 'var(--kotapish-red)' : 'var(--kotapish-blue)';
         ]]]
     tap_action:
       action: more-info
-      entity: lock.front_door_placeholder
+      entity: sensor.washing_machine_placeholder
 
   - type: custom:button-card
     template: kotapish_top_pill
-    icon: mdi:shield-home
-    name: Alarm
-    # PLACEHOLDER ENTITY
+    icon: mdi:calendar-account
+    name: |
+      [[[
+        const s = states['sensor.person_meeting_status_placeholder'];
+        return (s && s.state === 'on') ? 'In Meeting' : 'Free';
+      ]]]
+    # PLACEHOLDER ENTITY: sensor.person_meeting_status_placeholder
     label: |
       [[[
-        const s = states['alarm_control_panel.home_alarm_placeholder'];
-        return s ? s.state.replace('_', ' ') : 'Unknown';
+        const s = states['sensor.person_meeting_status_placeholder'];
+        return (s && s.attributes && s.attributes.location) ? s.attributes.location : '';
       ]]]
     variables:
       badge_color: |
         [[[
-          const s = states['alarm_control_panel.home_alarm_placeholder'];
-          return (s && s.state === 'armed_away') ? 'var(--kotapish-green)' : 'var(--kotapish-orange)';
+          const s = states['sensor.person_meeting_status_placeholder'];
+          return (s && s.state === 'on') ? 'var(--kotapish-orange)' : 'var(--kotapish-green)';
         ]]]
     tap_action:
       action: more-info
-      entity: alarm_control_panel.home_alarm_placeholder
+      entity: sensor.person_meeting_status_placeholder
 
   - type: custom:button-card
     template: kotapish_top_pill
-    icon: mdi:web
-    name: Internet
-    # PLACEHOLDER ENTITY
+    icon: mdi:printer-3d
+    name: |
+      [[[
+        const s = states['sensor.printer_status_placeholder'];
+        return s ? s.state : 'Printer';
+      ]]]
+    # PLACEHOLDER ENTITIES: sensor.printer_status_placeholder, sensor.printer_progress_placeholder
     label: |
       [[[
-        const s = states['binary_sensor.internet_connection_placeholder'];
-        return (s && s.state === 'on') ? 'Online' : 'Offline';
+        const p = states['sensor.printer_progress_placeholder'];
+        return p ? `${p.state}% remaining` : '';
       ]]]
     variables:
       badge_color: |
         [[[
-          const s = states['binary_sensor.internet_connection_placeholder'];
-          return (s && s.state === 'on') ? 'var(--kotapish-green)' : 'var(--kotapish-red)';
+          const s = states['sensor.printer_status_placeholder'];
+          return (s && s.state === 'Printing') ? 'var(--kotapish-green)' : 'var(--kotapish-blue)';
         ]]]
     tap_action:
-      action: navigate
-      navigation_path: /kotapish-home/network
+      action: more-info
+      entity: sensor.printer_status_placeholder
 
   # ---------------------------------------------------------------------------
-  # Spacer — pushes the clock + bell to the right, matching the reference's
-  # pills-left / clock-and-avatars-right arrangement
+  # Spacer — pushes the clock + avatars + bell to the right, matching the
+  # reference's pills-left / clock-and-avatars-right arrangement
   # ---------------------------------------------------------------------------
   - type: custom:button-card
     template: kotapish_glass_base
@@ -147,9 +161,66 @@ cards:
         ]]]
 
   # ---------------------------------------------------------------------------
-  # Notifications bell — stands in for the reference's person-avatar pair
-  # (this project has no person-tracking entities). Opens HA's
-  # persistent_notification panel via more-info.
+  # Person avatar pair — ported from the reference's own avatar+location-badge
+  # pattern (a circular profile photo with a small colored location-icon
+  # badge overlapping its corner). This project has no person-tracking
+  # entities configured yet; PLACEHOLDER ENTITIES throughout.
+  # ---------------------------------------------------------------------------
+  - type: horizontal-stack
+    styles:
+      card:
+        - background: transparent
+        - box-shadow: none
+        - border: none
+        - backdrop-filter: none
+        - width: auto
+    cards:
+      - type: custom:button-card
+        entity: person.resident_one_placeholder # PLACEHOLDER ENTITY
+        show_entity_picture: true
+        show_name: false
+        show_state: false
+        styles:
+          card:
+            - width: 35px
+            - height: 35px
+            - border-radius: "50%"
+            - overflow: hidden
+            - padding: 0
+            - border: none
+            - background: transparent
+            - box-shadow: none
+          entity_picture:
+            - width: 100%
+            - height: 100%
+            - margin: 0
+
+      - type: custom:button-card
+        icon: mdi:map-marker
+        # PLACEHOLDER ENTITY: sensor.resident_one_location_colour_placeholder
+        show_name: false
+        show_state: false
+        show_icon: true
+        styles:
+          card:
+            - width: 15px
+            - height: 15px
+            - border-radius: "50%"
+            - margin-left: "-14px"
+            - margin-top: 20px
+            - border: none
+            - background: |
+                [[[
+                  const s = states['sensor.resident_one_location_colour_placeholder'];
+                  return s ? s.state : 'var(--kotapish-green)';
+                ]]]
+            - box-shadow: none
+          icon:
+            - width: "80%"
+            - color: white
+
+  # ---------------------------------------------------------------------------
+  # Notifications bell — opens HA's persistent_notification panel via more-info
   # ---------------------------------------------------------------------------
   - type: custom:button-card
     template: kotapish_header_icon_button

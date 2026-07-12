@@ -37,7 +37,8 @@ kotapish-home-dashboard/
     ├── components/
     │   ├── nav_rail.yaml         # Custom nav rail — kept for reference,
     │   │                          # not included by any page (see below)
-    │   ├── header.yaml           # Top bar: status pills + clock (Home page)
+    │   ├── header.yaml           # Top bar: personal-tracker pills + clock
+    │   │                          # + avatars (Home page, ported from reference)
     │   ├── camera_card.yaml      # State Switch live camera hero
     │   ├── thermostat_card.yaml # Honeywell T6 Pro (native circular dial
     │   │                          # + HVAC mode row)
@@ -48,7 +49,7 @@ kotapish-home-dashboard/
     │   ├── shortcuts_card.yaml   # Quick device toggles (Home page)
     │   ├── room_tiles.yaml       # 6-room tile grid — kept for reference,
     │   │                          # superseded by rooms_list.yaml (see below)
-    │   ├── calendar_card.yaml    # Native calendar card (Home page)
+    │   ├── calendar_card.yaml    # Today Card + Atomic Calendar Revive (Home page)
     │   ├── status_bar.yaml       # Bottom status bar + Assist button (Home page)
     │   ├── weather_card.yaml     # Clock Weather Card hero (Climate page)
     │   └── weather_forecast_card.yaml # Native weather-forecast card (Home page)
@@ -111,22 +112,36 @@ grid-based dashboard layout — rather than a hand-rolled stack of
 horizontal-stacks, matching the structure of the reference dashboard this
 project was modeled on:
 
-- Header (full width): status pills (Garage/Locks/Alarm/Internet) + a
-  live clock + notifications bell — matching the reference's own
-  pill-row top bar, not a greeting/date banner
+- Header (full width): 4 personal-status pills (sleep tracker, washing
+  machine, meeting status, 3D printer — ported directly from the
+  reference, all placeholders since this project has no equivalent
+  devices) + a live clock with seconds + a person-avatar pair
+  (placeholders) + notifications bell
 - Main row: Camera hero | Weather (native `weather-forecast` card, not
   Clock Weather Card — see `components/weather_forecast_card.yaml` for
   why) | Thermostat (native circular dial via HA's built-in `type:
   thermostat` card, plus a 4-button HVAC mode row below it)
-- Middle row: Rooms list (browse/info) | Shortcuts (quick device
-  toggles) | Calendar
+- Middle row: Rooms list (browse/info) | Shortcuts (real device toggles:
+  garage, TV, 4 room lights) | Calendar (Today Card + Atomic Calendar
+  Revive, both ported directly from the reference — new HACS
+  dependencies, see `HACS_DEPENDENCIES.md`)
 - Bottom status bar (full width): lights/climate/media/garage pills +
   a native Assist voice button
 
-`components/home_status_card.yaml` (the previous Garage/Locks/Alarm/
-Internet/Powerwall tile grid) is no longer used on the Home page — its
-Garage/Locks/Alarm/Internet content moved into the header's pills, and
-Shortcuts took its old grid slot in the middle row instead.
+This is a direct, literal port of the reference dashboard's actual
+templates and card choices (not a reinterpretation) — including its own
+personal-life-tracker pills and calendar cards — with entity IDs adjusted
+to this project's real/placeholder entities. Two exceptions, explained in
+`HACS_DEPENDENCIES.md`: the camera and thermostat keep this project's
+existing working cards (State Switch, native `type: thermostat`) rather
+than the reference's Scrypted-NVR iframe (a whole separate NVR server
+this project doesn't run) — everything else matches. Its `input_select`-
+driven swipeable-column customization system (letting the reference's
+owner rearrange columns via a settings picker) was not ported — that's
+invisible configuration plumbing, not something visible in the dashboard
+itself, and would need dozens of new helper entities for no visual
+difference. `components/home_status_card.yaml` (an earlier, different
+take on this row) is kept unreferenced, same pattern as `nav_rail.yaml`.
 
 The visual language (30px card radius, layered glass highlight/shadow,
 "SF Pro Rounded" font) was adapted directly from the reference
@@ -177,9 +192,12 @@ Only three entities are assumed to exist in a bare install:
 One additional entity has a full setup guide because it's backed by a
 specific integration choice rather than being a stand-in for "whatever
 you have": `weather.ranson_wv_nws`, the National Weather Service entity
-for Ranson, WV, used by the header's weather chip, the Home page's
-weather forecast card, and the Climate page's weather hero. See
-`INSTALLATION.md` step 8.
+for Ranson, WV, used by the Home page's weather forecast card and the
+Climate page's weather hero. See `INSTALLATION.md` step 8. (The Home
+page's weather card also needs a few placeholder sensors — see
+`components/weather_forecast_card.yaml` — since NWS/HA's modern weather
+entities don't expose daily high/low as plain attributes; those are
+covered by the general placeholder convention below.)
 
 Every other entity referenced in this project is a clearly marked
 placeholder (`# PLACEHOLDER ENTITY` comment on the same line) meant to be

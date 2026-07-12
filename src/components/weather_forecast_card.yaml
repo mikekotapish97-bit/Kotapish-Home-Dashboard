@@ -1,54 +1,81 @@
 # =============================================================================
-# Component: Weather Forecast Card (Home page, compact)
+# Component: Weather Forecast Card (Home page)
 #
-# Rebuilt on Home Assistant's native `type: weather-forecast` card instead
-# of Clock Weather Card, to match the reference dashboard's own weather
-# widget structure (built from primitives: icon+temp, condition+hi/lo, a
-# forecast strip) rather than a single all-in-one HACS card. This
-# supersedes an earlier explicit request to use Clock Weather Card here —
-# noted so the change is visible, not silently swapped. The reference's
-# own icon/temp/condition come from custom Australian BOM sensors this
-# project has no equivalent for; `weather.ranson_wv_nws` (NWS) provides
-# the same information through HA's standard weather entity model, so
-# native cards are the reliable way to display it (NWS also serves
-# forecasts through the modern `weather.get_forecasts` mechanism, which
-# `weather-forecast` handles correctly without extra config).
+# Ported from the reference dashboard's actual weather widget structure:
+# icon + big temperature side by side, condition + high/low below that,
+# then a 4-day forecast strip. The reference pulls icon/temp/condition/
+# hi-lo from individual Australian BOM sensor entities (not the weather
+# entity's own attributes) — kept the same per-sensor structure here,
+# pointed at placeholder sensors, since NWS/HA's modern weather entities
+# don't expose daily high/low as plain attributes either (that data comes
+# through the `weather.get_forecasts` service, which only cards built to
+# call it — like the native `weather-forecast` card below — can use
+# directly; a button-card JS template can't call a service).
 #
-# One of three equal-width cards in pages/home.yaml's main section row
-# (camera | weather | thermostat), sized to fit a single 12.9" iPad screen
-# with no scrolling — the full 7-day forecast lives on pages/climate.yaml's
-# weather hero (components/weather_card.yaml), which has the room for it.
+# The 4-day forecast strip uses the real weather.ranson_wv_nws entity via
+# HA's native `type: weather-forecast` card (same as the reference), since
+# that part maps cleanly to this project's actual NWS integration.
 #
-# PLACEHOLDER ENTITY: weather.ranson_wv_nws
-# Set up Settings → Devices & Services → Add Integration → "National
-# Weather Service (NWS)" for Ranson, WV, then replace this with the real
-# entity_id it creates (check Developer Tools → States, or rename it to
-# match via the entity's Settings → Advanced → Entity ID). See
-# INSTALLATION.md step 8 for the full walkthrough.
+# PLACEHOLDER ENTITIES: sensor.ranson_wv_temp_placeholder,
+# sensor.ranson_wv_condition_placeholder, sensor.ranson_wv_temp_max_placeholder,
+# sensor.ranson_wv_temp_min_placeholder
+# Real entity (once set up — see INSTALLATION.md step 8): weather.ranson_wv_nws
 # =============================================================================
 
-# The outer vertical-stack keeps its default glass background (from the
-# theme's global card-mod-card hook) as the ONE visual container; both
-# inner cards below are made transparent so they read as two sections of
-# a single glass card, not two separate floating cards.
-type: vertical-stack
+type: custom:button-card
 grid_options:
   columns: full
-cards:
-  - type: weather-forecast
-    entity: weather.ranson_wv_nws # PLACEHOLDER ENTITY
-    show_current: true
-    show_forecast: false
-    card_mod:
-      style: |
-        ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; padding: 16px 20px 4px 20px; font-family: var(--kotapish-font-family); }
-        .name, .state { font-family: var(--kotapish-font-family) !important; }
-
-  - type: weather-forecast
-    entity: weather.ranson_wv_nws # PLACEHOLDER ENTITY
-    show_current: false
-    show_forecast: true
-    forecast_type: daily
-    card_mod:
-      style: |
-        ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; padding: 0 20px 16px 20px; font-family: var(--kotapish-font-family); }
+show_name: false
+show_icon: false
+show_state: false
+styles:
+  grid:
+    - grid-template-areas: '"current" "forecast" "strip"'
+  card:
+    - padding: 16px 20px 8px 20px
+custom_fields:
+  current: |
+    [[[
+      // Maps the condition text to an icon rather than expecting a sensor
+      // to literally store an icon name (non-standard) — condition strings
+      // like "Cloudy"/"Sunny"/"Rain" are what a real weather sensor
+      // actually reports.
+      const iconMap = {
+        clear: 'mdi:weather-sunny', sunny: 'mdi:weather-sunny',
+        cloudy: 'mdi:weather-cloudy', 'partly-cloudy': 'mdi:weather-partly-cloudy',
+        rainy: 'mdi:weather-rainy', rain: 'mdi:weather-rainy',
+        snowy: 'mdi:weather-snowy', snow: 'mdi:weather-snowy',
+        fog: 'mdi:weather-fog', windy: 'mdi:weather-windy',
+        thunderstorm: 'mdi:weather-lightning'
+      };
+      const cond = states['sensor.ranson_wv_condition_placeholder'];
+      const condKey = cond ? cond.state.toLowerCase() : '';
+      const icon = iconMap[condKey] || 'mdi:weather-cloudy';
+      const temp = states['sensor.ranson_wv_temp_placeholder'];
+      return `<div style="display:flex; align-items:center; justify-content:space-between; font-family: var(--kotapish-font-family);">
+        <ha-icon icon="${icon}" style="width:50px; height:50px; color: var(--kotapish-blue);"></ha-icon>
+        <span style="font-size:55px; font-weight:500; color: var(--primary-text-color); font-family: var(--kotapish-font-family);">${temp ? Math.round(temp.state) : '--'}°</span>
+      </div>`;
+    ]]]
+  forecast: |
+    [[[
+      const cond = states['sensor.ranson_wv_condition_placeholder'];
+      const hi = states['sensor.ranson_wv_temp_max_placeholder'];
+      const lo = states['sensor.ranson_wv_temp_min_placeholder'];
+      return `<div style="text-align:center; font-family: var(--kotapish-font-family); margin: 8px 0;">
+        <div style="font-size:22px; font-weight:550; color: var(--primary-text-color);">${cond ? cond.state : 'Unknown'}.</div>
+        <div style="font-size:15px; font-weight:450; color: var(--secondary-text-color); text-transform:uppercase; margin-top:6px;">
+          HIGH ${hi ? Math.round(hi.state) : '--'}°  LOW ${lo ? Math.round(lo.state) : '--'}°
+        </div>
+      </div>`;
+    ]]]
+  strip:
+    card:
+      type: weather-forecast
+      entity: weather.ranson_wv_nws # PLACEHOLDER ENTITY (set up NWS — see INSTALLATION.md step 8)
+      show_current: false
+      show_forecast: true
+      forecast_type: daily
+      card_mod:
+        style: |
+          ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; padding: 0; font-family: var(--kotapish-font-family); }

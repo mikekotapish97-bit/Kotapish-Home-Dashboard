@@ -24,6 +24,18 @@ repository URL, unless HACS reports it isn't found in your version.
 | **State Switch** | Camera hero card + fullscreen popup camera switching |
 | **Mini Graph Card** | All temperature/humidity/energy/BAS trend graphs |
 | **auto-entities** | Recent motion events, security events, UniFi device lists |
+| **Today Card** (`todo/today-card` or similar — search "Today Card" in HACS Frontend) | Home page calendar's today/tomorrow agenda list, ported directly from the reference dashboard's exact calendar structure |
+| **Atomic Calendar Revive** | Home page calendar's interactive month/agenda view, ported directly from the reference dashboard's exact calendar structure |
+
+**Camera and thermostat stay on this project's existing cards, not the
+reference's exact ones.** The reference's camera feed is a plain `iframe`
+pointed at a self-hosted Scrypted NVR server — that's an entire separate
+NVR application, not a HACS card, and embedding an iframe with nowhere
+real to point it would just show a blank frame. This project keeps its
+working State Switch + `camera.entry_cam` setup instead. Likewise the
+reference's thermostat dial is HA's native `type: thermostat` card, which
+this project already uses (see `components/thermostat_card.yaml`) — no
+gauge-specific HACS card was ever needed there.
 
 **Not used: Kiosk Mode.** This project intentionally does not hide the HA
 sidebar/header via the Kiosk Mode HACS resource — its role-based hiding
@@ -51,11 +63,13 @@ not required.
   page's weather hero. See `INSTALLATION.md` step 8.
 - The Home page's thermostat widget (`components/thermostat_card.yaml`)
   is HA's built-in `type: thermostat` card — no HACS component involved.
-- The Home page's calendar (`components/calendar_card.yaml`) is HA's
-  built-in `type: calendar` card, pointed at the placeholder
-  `calendar.kotapish_family_placeholder` — replace it with any real
-  calendar integration (Google Calendar, CalDAV, iCloud via CalDAV, etc.)
-  added under **Settings → Devices & Services**. No HACS card needed.
+- The Home page's calendar (`components/calendar_card.yaml`) points its
+  placeholder entities (`calendar.family_placeholder`,
+  `calendar.work_placeholder`, `calendar.kids_activities_placeholder`) at
+  any real calendar integration (Google Calendar, CalDAV, iCloud via
+  CalDAV, etc.) added under **Settings → Devices & Services** — the two
+  HACS cards displaying them (Today Card, Atomic Calendar Revive) work
+  with any calendar entity regardless of which integration backs it.
 
 ## After installing
 

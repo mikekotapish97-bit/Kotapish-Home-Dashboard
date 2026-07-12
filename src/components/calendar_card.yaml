@@ -1,22 +1,79 @@
 # =============================================================================
 # Component: Calendar (Home page)
-# Native Home Assistant calendar card, compact agenda view — fills the
-# reference dashboard's calendar slot without needing a HACS calendar card
-# (their `custom:atomic-calendar-revive` isn't required for a reasonable
-# result, and this project has no calendar integration in scope otherwise).
-# Already inherits the glass background/blur/radius from the theme's
-# global card-mod hook, same as every other card in this project.
 #
-# PLACEHOLDER ENTITY: calendar.kotapish_family_placeholder
-# Point this at any real calendar integration (Google Calendar, CalDAV,
-# Apple/iCloud via CalDAV, etc.) via Settings → Devices & Services — HA's
-# native calendar card works with any of them without further config.
+# Ported from the reference dashboard's actual calendar widget: a
+# today/tomorrow agenda list (Today Card) alongside an interactive
+# month/agenda calendar (Atomic Calendar Revive) — both new HACS
+# dependencies added specifically to match the reference exactly (see
+# HACS_DEPENDENCIES.md). Point the placeholder calendar entities below at
+# any real calendar integration (Google Calendar, CalDAV, iCloud via
+# CalDAV, etc.) added under Settings → Devices & Services.
+#
+# PLACEHOLDER ENTITIES: calendar.family_placeholder, calendar.work_placeholder,
+# calendar.kids_activities_placeholder
 # =============================================================================
 
-type: calendar
+type: horizontal-stack
 grid_options:
   columns: full
-entities:
-  - calendar.kotapish_family_placeholder # PLACEHOLDER ENTITY
-initial_view: listWeek
-title: Calendar
+card_mod:
+  style: |
+    ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+cards:
+  - type: vertical-stack
+    card_mod:
+      style: |
+        ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+    cards:
+      - type: custom:button-card
+        template: kotapish_glass_base
+        show_name: false
+        show_icon: false
+        styles:
+          card:
+            - padding: 4px 4px 0 4px
+            - align-items: flex-start
+        custom_fields:
+          heading: |
+            [[[
+              const d = new Date();
+              const dateStr = d.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+              return `<div style="font-family: var(--kotapish-font-family); font-size: 18px; font-weight: 700;">${dateStr}</div>`;
+            ]]]
+
+      - type: custom:today-card
+        advance: 0
+        time_format: h:mm a
+        show_all_day_events: true
+        entities:
+          - entity: calendar.family_placeholder # PLACEHOLDER ENTITY
+            color: deep-orange
+          - entity: calendar.work_placeholder # PLACEHOLDER ENTITY
+            color: light-blue
+          - entity: calendar.kids_activities_placeholder # PLACEHOLDER ENTITY
+            color: amber
+
+  - type: custom:atomic-calendar-revive
+    entities:
+      - entity: calendar.family_placeholder # PLACEHOLDER ENTITY
+        name: Family
+      - entity: calendar.work_placeholder # PLACEHOLDER ENTITY
+        name: Work
+      - entity: calendar.kids_activities_placeholder # PLACEHOLDER ENTITY
+        name: Kids
+    defaultMode: Calendar
+    enableModeChange: true
+    showAllDayEvents: false
+    showDate: false
+    card_mod:
+      style: |
+        ha-card {
+          text-align: left;
+          background: transparent;
+          box-shadow: none;
+          border: none;
+          backdrop-filter: none;
+          height: 375px;
+          overflow-y: auto !important;
+          font-family: var(--kotapish-font-family);
+        }

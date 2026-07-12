@@ -3,6 +3,62 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.7.0] - 2026-07-12
+
+### Changed — direct port of the reference dashboard
+
+Following explicit direction to port the reference dashboard's actual
+code (not a reinterpretation), keeping its personal-life-tracker features
+as placeholders and adding its exact HACS card choices where they're real
+HACS cards:
+
+- **Header rebuilt around the reference's real top-bar pills**: sleep
+  tracker, washing machine, meeting status, and 3D printer (all
+  placeholders — this project has no baby monitor, washing machine
+  sensor, work-calendar sync, or 3D printer), plus a ported person-avatar
+  pair (circular photo + colored location badge, placeholders) alongside
+  the clock and bell. The previous Garage/Locks/Alarm/Internet pills
+  (this project's earlier stand-in content) moved off the top bar —
+  Garage is still a Shortcuts tile, and Locks/Alarm are on the Security
+  page.
+- **Weather card rebuilt to match the reference's exact structure**: icon
+  + big 55px temperature side by side, condition + high/low below,
+  then a native `weather-forecast` daily strip. The reference reads
+  icon/temp/condition/hi-lo from individual Australian BOM sensors rather
+  than the weather entity's own attributes — kept that same per-sensor
+  structure, pointed at placeholder sensors, since modern weather
+  entities (NWS included) don't expose daily high/low as plain attributes
+  either; that data only reaches cards built to call the
+  `weather.get_forecasts` service.
+- **Calendar rebuilt on the reference's exact two-card structure**: Today
+  Card (today/tomorrow agenda list) alongside Atomic Calendar Revive
+  (interactive month/agenda view) — both newly added HACS dependencies,
+  replacing the native `type: calendar` card used previously.
+
+### Added
+
+- **Today Card** and **Atomic Calendar Revive** added to
+  `HACS_DEPENDENCIES.md` as new required HACS cards, ported directly from
+  the reference dashboard.
+
+### Note — what wasn't ported, and why
+
+- **Camera and thermostat** keep this project's existing working cards
+  (State Switch + `camera.entry_cam`; native `type: thermostat`) rather
+  than the reference's exact choices. Its camera feed is a plain `iframe`
+  pointed at a self-hosted Scrypted NVR server — a whole separate NVR
+  application, not a HACS card — and there's no NVR server for it to
+  point to here; its thermostat dial is HA's native `type: thermostat`
+  card, which this project already used, so nothing changed there.
+- **The reference's `input_select`-driven swipeable-column customization
+  system** (letting its owner rearrange dashboard columns via a settings
+  picker) was not ported. It's invisible configuration plumbing, not
+  something visible in the dashboard itself, and would require dozens of
+  new helper entities for zero visual difference.
+- `components/home_status_card.yaml` (this project's own earlier take on
+  a status row, since replaced twice) remains kept, unreferenced, same
+  pattern as `nav_rail.yaml`.
+
 ## [1.6.0] - 2026-07-12
 
 ### Changed
