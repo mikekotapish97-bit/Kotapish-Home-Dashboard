@@ -83,39 +83,40 @@ kotapish_nav_icon:
 
 # -----------------------------------------------------------------------------
 # Large room tile (Home page bottom grid) — icon, name, live state, color wash
+#
+# Deliberately uses normal document flow (no position: absolute) — an
+# earlier version pinned the icon to the top and the name/state to the
+# bottom by fixed pixel offsets, which only avoided overlap if the card's
+# actual rendered height matched the assumed `aspect-ratio`. Safari/iPadOS
+# handles `aspect-ratio` inconsistently on flex containers, so the card
+# sometimes rendered shorter than assumed and the bottom-pinned text landed
+# on top of the icon. Stacking icon/name/state in normal flow can't overlap
+# regardless of the card's actual height.
 # -----------------------------------------------------------------------------
 kotapish_room_tile:
   template: kotapish_glass_base
   show_name: true
   show_state: true
   show_icon: true
-  size: 34%
+  size: 32px
   styles:
     card:
-      - aspect-ratio: "1.6"
-      - justify-content: flex-end
+      - justify-content: flex-start
       - align-items: flex-start
       - padding: 18px
-      - position: relative
-      - overflow: hidden
+      - min-height: 120px
+      - gap: 6px
     icon:
-      - position: absolute
-      - top: 16px
-      - left: 16px
       - color: var(--kotapish-blue)
-      - width: 26px
+      - width: 32px
     name:
-      - position: absolute
-      - bottom: 44px
-      - left: 18px
       - font-size: 17px
       - font-weight: "700"
+      - text-align: left
     state:
-      - position: absolute
-      - bottom: 18px
-      - left: 18px
       - font-size: 13px
       - color: var(--secondary-text-color)
+      - text-align: left
 
 # -----------------------------------------------------------------------------
 # Status chip — small pill used in the Home Status row (garage/locks/alarm/etc)

@@ -15,10 +15,17 @@ card_mod:
     ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
 cards:
   # ---------------------------------------------------------------------------
-  # Live feed — State Switch swaps the picture-entity card by selector value
+  # Live feed — State Switch swaps the picture-entity card by selector value.
+  # `default: Entry` matters: if input_select.dashboard_camera's actual
+  # current state doesn't exactly match one of the keys below (e.g. it was
+  # never initialized, or its options differ from what's assumed here),
+  # State Switch renders NOTHING at all with no fallback — this is why the
+  # camera hero could show blank. Falling back to Entry guarantees a real
+  # camera always shows regardless of the helper's current state.
   # ---------------------------------------------------------------------------
   - type: custom:state-switch
     entity: input_select.dashboard_camera
+    default: Entry
     states:
       Entry:
         type: picture-entity

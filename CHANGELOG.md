@@ -3,6 +3,33 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.2.1] - 2026-07-11
+
+### Fixed
+
+- **Room tile text overlapping/hidden behind the icon.** The
+  `kotapish_room_tile` button-card template pinned the icon to the top and
+  the name/state to the bottom using fixed pixel offsets
+  (`position: absolute`), which only avoids overlap if the card's actual
+  rendered height matches the `aspect-ratio: 1.6` the offsets assumed.
+  Safari/iPadOS is known to handle `aspect-ratio` inconsistently on flex
+  containers, so the card could render shorter than assumed, landing the
+  bottom-pinned text directly on top of the icon. Rebuilt the template
+  using normal document flow (icon, then name, then state, stacked with
+  `gap`) instead — this can't overlap regardless of the card's actual
+  height, at the cost of the icon no longer floating over a background
+  wash.
+- **Camera hero showing no camera view at all.** The `custom:state-switch`
+  card has no built-in fallback: if `input_select.dashboard_camera`'s
+  actual current state doesn't exactly match one of "Entry"/"Driveway"/
+  "Deck" (e.g. it was never initialized after creating the helper, or its
+  options differ from what this project assumes), it renders nothing, with
+  no error. Added `default: Entry` to both `components/camera_card.yaml`
+  and `popups/camera_fullscreen.yaml` so a real camera always shows
+  regardless of the helper's current state. If this doesn't fully resolve
+  it, check Developer Tools → States for `input_select.dashboard_camera`'s
+  actual current value and options.
+
 ## [1.2.0] - 2026-07-11
 
 ### Fixed

@@ -7,6 +7,7 @@
 
 type: custom:state-switch
 entity: input_select.dashboard_camera
+default: Entry
 states:
   Entry:
     type: picture-entity
