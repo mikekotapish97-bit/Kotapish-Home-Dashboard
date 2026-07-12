@@ -1,0 +1,22 @@
+# =============================================================================
+# Component: Calendar (Home page)
+# Native Home Assistant calendar card, compact agenda view — fills the
+# reference dashboard's calendar slot without needing a HACS calendar card
+# (their `custom:atomic-calendar-revive` isn't required for a reasonable
+# result, and this project has no calendar integration in scope otherwise).
+# Already inherits the glass background/blur/radius from the theme's
+# global card-mod hook, same as every other card in this project.
+#
+# PLACEHOLDER ENTITY: calendar.kotapish_family_placeholder
+# Point this at any real calendar integration (Google Calendar, CalDAV,
+# Apple/iCloud via CalDAV, etc.) via Settings → Devices & Services — HA's
+# native calendar card works with any of them without further config.
+# =============================================================================
+
+type: calendar
+grid_options:
+  columns: full
+entities:
+  - calendar.kotapish_family_placeholder # PLACEHOLDER ENTITY
+initial_view: listWeek
+title: Calendar

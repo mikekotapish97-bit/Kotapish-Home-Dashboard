@@ -1,0 +1,160 @@
+# =============================================================================
+# Component: Rooms List (Home page)
+# Compact list matching the reference dashboard's "Rooms" card: icon, room
+# name, and a combined lights/temperature status per row. Tapping a row
+# opens the same Browser Mod room popups already built in
+# src/popups/room_*.yaml — this replaces components/room_tiles.yaml's grid
+# on the Home page with a denser list shape; room_tiles.yaml itself is kept
+# unreferenced (see its header comment) in case a future layout wants tiles
+# back instead of a list.
+#
+# Uses the kotapish_list_row template (a standalone glass row, normal
+# document flow — see templates/button_card_templates.yaml for why it's
+# built that way). All light/temperature entities are PLACEHOLDERS — see
+# the popups for full lists.
+# =============================================================================
+
+type: vertical-stack
+grid_options:
+  columns: full
+card_mod:
+  style: |
+    ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+cards:
+  - type: custom:button-card
+    template: kotapish_glass_base
+    show_name: false
+    show_icon: false
+    styles:
+      card:
+        - padding: 4px 4px 0 4px
+        - align-items: flex-start
+    name: Rooms
+
+  - type: custom:button-card
+    template: kotapish_list_row
+    icon: mdi:sofa
+    name: Living Room
+    state_display: |
+      [[[
+        const light = states['light.living_room_placeholder'];
+        const temp = states['sensor.living_room_temp_placeholder'];
+        const lightText = (light && light.state === 'on') ? 'Lights on' : 'Lights off';
+        return temp ? `${lightText} · ${temp.state}°` : lightText;
+      ]]]
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          title: Living Room
+          size: wide
+          style: |
+            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+          content: !include ../popups/room_living_room.yaml
+
+  - type: custom:button-card
+    template: kotapish_list_row
+    icon: mdi:silverware-fork-knife
+    name: Kitchen
+    state_display: |
+      [[[
+        const light = states['light.kitchen_placeholder'];
+        const temp = states['sensor.kitchen_temp_placeholder'];
+        const lightText = (light && light.state === 'on') ? 'Lights on' : 'Lights off';
+        return temp ? `${lightText} · ${temp.state}°` : lightText;
+      ]]]
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          title: Kitchen
+          size: wide
+          style: |
+            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+          content: !include ../popups/room_kitchen.yaml
+
+  - type: custom:button-card
+    template: kotapish_list_row
+    icon: mdi:bed
+    name: Bedroom
+    state_display: |
+      [[[
+        const light = states['light.bedroom_placeholder'];
+        const temp = states['sensor.bedroom_temp_placeholder'];
+        const lightText = (light && light.state === 'on') ? 'Lights on' : 'Lights off';
+        return temp ? `${lightText} · ${temp.state}°` : lightText;
+      ]]]
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          title: Bedroom
+          size: wide
+          style: |
+            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+          content: !include ../popups/room_bedroom.yaml
+
+  - type: custom:button-card
+    template: kotapish_list_row
+    icon: mdi:desk
+    name: Office
+    state_display: |
+      [[[
+        const light = states['light.office_placeholder'];
+        const temp = states['sensor.office_temp_placeholder'];
+        const lightText = (light && light.state === 'on') ? 'Lights on' : 'Lights off';
+        return temp ? `${lightText} · ${temp.state}°` : lightText;
+      ]]]
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          title: Office
+          size: wide
+          style: |
+            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+          content: !include ../popups/room_office.yaml
+
+  - type: custom:button-card
+    template: kotapish_list_row
+    icon: mdi:garage
+    name: Garage
+    state_display: |
+      [[[
+        const door = states['cover.garage_door_placeholder'];
+        return (door && door.state === 'closed') ? 'Closed' : 'Open';
+      ]]]
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          title: Garage
+          size: wide
+          style: |
+            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+          content: !include ../popups/room_garage.yaml
+
+  - type: custom:button-card
+    template: kotapish_list_row
+    icon: mdi:tree
+    name: Patio
+    state_display: |
+      [[[
+        const temp = states['sensor.patio_temp_placeholder'];
+        return temp ? `${temp.state}°` : '--';
+      ]]]
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          title: Patio
+          size: wide
+          style: |
+            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+          content: !include ../popups/room_patio.yaml

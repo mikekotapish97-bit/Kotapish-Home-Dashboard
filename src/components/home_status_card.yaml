@@ -1,15 +1,18 @@
 # =============================================================================
-# Component: Home Status Row
-# Garage / Locks / Alarm / Internet / Powerwall — five glass status chips.
-# All entities below are PLACEHOLDERS except the ones explicitly noted.
+# Component: Home Status Tiles
+# Garage / Locks / Alarm / Internet / Powerwall — five compact status tiles,
+# styled like the "Shortcuts" tile grid in the reference dashboard (icon in
+# a colored circular badge, name/state below). All entities below are
+# PLACEHOLDERS except the ones explicitly noted.
 #
-# Uses a wrapping `grid` (2 columns) rather than a `horizontal-stack`: this
-# card renders inside a half-width column (next to the thermostat), and a
-# horizontal-stack forces all 5 chips onto one non-wrapping row, which is
-# what was pushing content past the right edge of the iPad viewport.
+# Uses a wrapping `grid` (2 columns), not a `horizontal-stack`: this card
+# shares its section with siblings on the Home page, and a horizontal-stack
+# would force all 5 tiles onto one non-wrapping row.
 # =============================================================================
 
 type: grid
+grid_options:
+  columns: full
 columns: 2
 square: false
 cards:

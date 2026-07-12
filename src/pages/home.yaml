@@ -1,49 +1,63 @@
 # =============================================================================
 # Page: Home
-# Dense single-screen layout — everything visible on one 12.9" iPad Pro
-# screen with no scrolling, not a tall stack of full-width sections:
-#   1. Header (greeting, clock, date, weather chip, notifications)
-#   2. Main row, 3 equal columns: Camera hero | Weather forecast | Thermostat
-#   3. Bottom row, 2 columns: Home Status chips | Room tiles
+# Uses Home Assistant's native `type: sections` view (not a hand-rolled
+# vertical-stack of horizontal-stacks) — the same modern grid-based layout
+# the reference dashboard is built on. HA handles the responsive column
+# fitting natively here, which is more robust than manual flex nesting.
 #
-# Each card in rows 2-3 was deliberately trimmed for this compact layout
-# (no thermostat history graph, 4-day forecast instead of 7, 3-column room
-# tile grid instead of 6) — see the comments in each component file. If
-# this still doesn't fit your iPad without scrolling, the next things to
-# trim are room_tiles.yaml's tile height/count or weather_forecast_card's
-# forecast_rows.
+# max_columns: 12 gives fine-grained width control per section via
+# column_span. Layout, top to bottom:
+#   1. Header section (full width, column_span: 12)
+#   2. Main row (column_span 5/4/3 = 12): Camera | Weather | Thermostat
+#   3. Bottom row (column_span 4/4/4 = 12): Rooms | Home Status | Calendar
+#
+# Each component file carries its own `grid_options: {columns: full}` at
+# its top level (not added here) so it fills its section's width instead
+# of a narrow default slot — verified against a real working `sections`
+# config, since HA's public schema docs don't fully spell this out.
 #
 # Navigation is HA's native sidebar + the automatic view-tabs strip — this
 # project no longer ships a custom nav rail (see components/nav_rail.yaml
-# for why). `panel: true` gives this view's single card the full content
-# width with no HA-imposed max-width/masonry column splitting.
+# for why).
 # =============================================================================
 
 title: Home
 path: home
 icon: mdi:home
-panel: true
-cards:
-  - type: vertical-stack
-    card_mod:
-      style: |
-        ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+type: sections
+max_columns: 12
+sections:
+  - type: grid
+    column_span: 12
     cards:
       - !include ../components/header.yaml
 
-      - type: horizontal-stack
-        card_mod:
-          style: |
-            ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
-        cards:
-          - !include ../components/camera_card.yaml
-          - !include ../components/weather_forecast_card.yaml
-          - !include ../components/thermostat_card.yaml
+  - type: grid
+    column_span: 5
+    cards:
+      - !include ../components/camera_card.yaml
 
-      - type: horizontal-stack
-        card_mod:
-          style: |
-            ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
-        cards:
-          - !include ../components/home_status_card.yaml
-          - !include ../components/room_tiles.yaml
+  - type: grid
+    column_span: 4
+    cards:
+      - !include ../components/weather_forecast_card.yaml
+
+  - type: grid
+    column_span: 3
+    cards:
+      - !include ../components/thermostat_card.yaml
+
+  - type: grid
+    column_span: 4
+    cards:
+      - !include ../components/rooms_list.yaml
+
+  - type: grid
+    column_span: 4
+    cards:
+      - !include ../components/home_status_card.yaml
+
+  - type: grid
+    column_span: 4
+    cards:
+      - !include ../components/calendar_card.yaml

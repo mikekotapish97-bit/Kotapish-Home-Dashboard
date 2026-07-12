@@ -3,6 +3,52 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.4.0] - 2026-07-11
+
+### Changed
+
+- **Rebuilt the Home page on Home Assistant's native `type: sections` view**
+  instead of a hand-rolled `panel: true` + nested vertical-stack/
+  horizontal-stack tree. This is the same modern grid layout a reference
+  dashboard the user is modeling this project on is built on, and it lets
+  HA handle responsive column-fitting natively rather than manual flex
+  nesting — `max_columns: 12` with per-card `grid_options: {columns: full}`
+  (verified against a real working `sections` config, since HA's public
+  schema docs don't fully spell out card-level span behavior).
+- **Home page thermostat now uses HA's native `type: thermostat` card**
+  (the circular rotary-dial control) instead of Mushroom's climate card —
+  this is what actually produces the circular dial look in the reference
+  dashboard, not a HACS gauge component.
+- **New Rooms list** (`components/rooms_list.yaml`) replaces the room
+  tile grid on the Home page: a compact list (icon, name, combined
+  lights/temperature status) matching the reference dashboard's "Rooms"
+  card, opening the same Browser Mod popups `room_tiles.yaml` already
+  used. `room_tiles.yaml` is kept, unreferenced, same pattern as
+  `nav_rail.yaml`.
+- **Home Status restyled as compact tiles** (icon in a colored circular
+  badge, name/state below) instead of horizontal pill rows, matching the
+  reference dashboard's "Shortcuts" tile look.
+
+### Added
+
+- **New Calendar card** (`components/calendar_card.yaml`) — HA's native
+  `type: calendar` card in compact agenda view, filling the reference
+  dashboard's calendar slot without needing a HACS calendar card. Points
+  at a placeholder `calendar.kotapish_family_placeholder` — wire up any
+  real calendar integration (Google Calendar, CalDAV, iCloud via CalDAV)
+  to replace it.
+
+### Note
+
+This was built by reverse-engineering the actual YAML of a reference
+dashboard (not just its screenshot) to identify exactly which native vs.
+HACS components produce each visual element, so choices like "native
+thermostat card, not a HACS gauge" and "sections view, not Layout Card"
+are verified against real working config rather than guessed from the
+picture alone. Card-level width/height fit on an actual 12.9" iPad still
+hasn't been visually confirmed — please test and report back anything
+that still doesn't fit.
+
 ## [1.3.1] - 2026-07-11
 
 ### Changed

@@ -17,6 +17,8 @@
 # =============================================================================
 
 type: custom:clock-weather-card
+grid_options:
+  columns: full
 entity: weather.ranson_wv_nws # PLACEHOLDER ENTITY
 sun_entity: sun.sun
 hide_clock: true

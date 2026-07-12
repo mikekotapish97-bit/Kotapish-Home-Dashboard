@@ -39,9 +39,12 @@ kotapish-home-dashboard/
     │   │                          # not included by any page (see below)
     │   ├── header.yaml           # Greeting, clock, date, weather, bell
     │   ├── camera_card.yaml      # State Switch live camera hero
-    │   ├── thermostat_card.yaml # Honeywell T6 Pro
-    │   ├── home_status_card.yaml # Garage/Locks/Alarm/Internet/Powerwall
-    │   ├── room_tiles.yaml       # 6-room tile grid -> Browser Mod popups
+    │   ├── thermostat_card.yaml # Honeywell T6 Pro (native circular dial)
+    │   ├── home_status_card.yaml # Garage/Locks/Alarm/Internet/Powerwall tiles
+    │   ├── rooms_list.yaml       # Rooms list -> Browser Mod popups (Home page)
+    │   ├── room_tiles.yaml       # 6-room tile grid — kept for reference,
+    │   │                          # superseded by rooms_list.yaml (see below)
+    │   ├── calendar_card.yaml    # Native calendar card (Home page)
     │   ├── weather_card.yaml     # Clock Weather Card hero (Climate page)
     │   └── weather_forecast_card.yaml # Clock-less forecast card (Home page)
     ├── popups/
@@ -89,17 +92,34 @@ This dashboard has no custom nav rail. Once Kiosk Mode was removed (see
 below), Home Assistant's native sidebar and its automatic view-tabs strip
 (generated from each page's `title`/`icon`) became the only navigation —
 adding a third, custom rail alongside those two pushed content past the
-iPad's viewport width and forced horizontal scrolling. Each page is
+iPad's viewport width and forced horizontal scrolling. Most pages are
 `panel: true` with a single top-level card, using the full content width
-Home Assistant already gives a panel view. The original rail design is
-kept, unreferenced, at `components/nav_rail.yaml` in case a future
-non-iPad/kiosk deployment wants it back.
+Home Assistant already gives a panel view; the Home page uses a `type:
+sections` view instead (see below). The original rail design is kept,
+unreferenced, at `components/nav_rail.yaml` in case a future non-iPad/
+kiosk deployment wants it back.
+
+## Home page layout
+
+The Home page is a `type: sections` view — Home Assistant's native
+grid-based dashboard layout — rather than a hand-rolled stack of
+horizontal-stacks, matching the structure of the reference dashboard this
+project was modeled on:
+
+- Header (full width): greeting, clock, date, weather chip, notifications
+- Main row: Camera hero | Weather forecast | Thermostat (native circular
+  dial via HA's built-in `type: thermostat` card)
+- Bottom row: Rooms list | Home Status tiles | Calendar
+
+Everything is sized to fit one 12.9" iPad Pro screen with no scrolling —
+see the comments in `pages/home.yaml` and each component file for how
+each card was trimmed to fit.
 
 ## Pages
 
 | Page | Path | Highlights |
 |---|---|---|
-| Home | `/home` | Single-screen grid: header, camera/weather/thermostat row, status/room-tiles row — no scrolling on a 12.9" iPad |
+| Home | `/home` | Dense `sections`-view grid: header, camera/weather/thermostat row, rooms/status/calendar row — no scrolling on a 12.9" iPad |
 | Cameras | `/cameras` | Large feed, thumbnail selector, fullscreen, recent motion |
 | Climate | `/climate` | Full thermostat, temp/humidity graphs, outside weather |
 | Lighting | `/lighting` | Whole-home scenes + per-room light control |

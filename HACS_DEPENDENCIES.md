@@ -49,6 +49,13 @@ not required.
   free, no signup. Powers the live Ranson, WV weather data behind the
   header's weather chip, the Home page forecast card, and the Climate
   page's weather hero. See `INSTALLATION.md` step 8.
+- The Home page's thermostat widget (`components/thermostat_card.yaml`)
+  is HA's built-in `type: thermostat` card — no HACS component involved.
+- The Home page's calendar (`components/calendar_card.yaml`) is HA's
+  built-in `type: calendar` card, pointed at the placeholder
+  `calendar.kotapish_family_placeholder` — replace it with any real
+  calendar integration (Google Calendar, CalDAV, iCloud via CalDAV, etc.)
+  added under **Settings → Devices & Services**. No HACS card needed.
 
 ## After installing
 

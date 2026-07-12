@@ -119,33 +119,39 @@ kotapish_room_tile:
       - text-align: left
 
 # -----------------------------------------------------------------------------
-# Status chip — small pill used in the Home Status row (garage/locks/alarm/etc)
+# Status tile — compact vertical tile used in the Home Status grid
+# (garage/locks/alarm/etc). Icon sits in a colored circular badge with the
+# name/state stacked below in normal flow (no absolute positioning — see
+# the note on kotapish_room_tile above for why that matters).
 # -----------------------------------------------------------------------------
 kotapish_status_chip:
   template: kotapish_glass_base
   show_name: true
   show_state: true
   show_icon: true
-  layout: icon_name_state2nd
-  size: 22px
+  size: 24px
   styles:
     card:
-      - flex-direction: row
-      - justify-content: flex-start
+      - justify-content: center
       - align-items: center
-      - padding: 14px 16px
-      - gap: 12px
+      - padding: 12px
+      - min-height: 92px
+      - gap: 6px
     icon:
-      - width: 22px
-      - color: |
+      - width: 24px
+      - color: white
+      - background: |
           [[[ return variables.chip_color || 'var(--kotapish-blue)'; ]]]
+      - border-radius: "50%"
+      - padding: 9px
     name:
-      - font-size: 14px
+      - font-size: 13px
       - font-weight: "600"
-      - justify-self: start
+      - text-align: center
     state:
-      - font-size: 12px
+      - font-size: 11px
       - color: var(--secondary-text-color)
+      - text-align: center
 
 # -----------------------------------------------------------------------------
 # Camera selector pill (Entry / Driveway / Deck)
