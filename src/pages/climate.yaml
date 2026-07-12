@@ -58,6 +58,7 @@ cards:
                     mushroom-shape-icon { --icon-color: var(--kotapish-teal); --shape-color: rgba(100,210,255,0.14); }
 
               - type: custom:mini-graph-card
+                cache: false
                 title: Indoor Temperature & Humidity
                 entities:
                   - entity: climate.t6_pro
@@ -96,6 +97,7 @@ cards:
               - !include ../components/weather_card.yaml
 
               - type: custom:mini-graph-card
+                cache: false
                 title: Outdoor Temperature Trend
                 entities:
                   - entity: weather.kotapish_home_placeholder # PLACEHOLDER ENTITY

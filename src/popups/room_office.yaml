@@ -49,6 +49,7 @@ cards:
             mushroom-shape-icon { --icon-color: var(--kotapish-blue); --shape-color: rgba(10,132,255,0.14); }
 
   - type: custom:mini-graph-card
+    cache: false
     entities:
       - entity: sensor.office_temp_placeholder # PLACEHOLDER ENTITY
         name: Temperature

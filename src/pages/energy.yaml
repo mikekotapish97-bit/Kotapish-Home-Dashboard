@@ -71,6 +71,7 @@ cards:
       # Battery state of charge trend
       # -----------------------------------------------------------------------
       - type: custom:mini-graph-card
+        cache: false
         title: Powerwall State of Charge
         entities:
           - entity: sensor.powerwall_charge_placeholder # PLACEHOLDER ENTITY
@@ -87,6 +88,7 @@ cards:
       # Solar / Grid / Home load 24h comparison
       # -----------------------------------------------------------------------
       - type: custom:mini-graph-card
+        cache: false
         title: Solar, Grid & Home Load
         entities:
           - entity: sensor.solar_power_placeholder # PLACEHOLDER ENTITY

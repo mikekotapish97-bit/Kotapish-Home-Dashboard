@@ -37,6 +37,7 @@ cards:
         }
 
   - type: custom:mini-graph-card
+    cache: false
     entities:
       - entity: climate.t6_pro
         attribute: current_temperature

@@ -73,6 +73,7 @@ cards:
       # Bandwidth trend — WAN download/upload
       # -----------------------------------------------------------------------
       - type: custom:mini-graph-card
+        cache: false
         title: WAN Bandwidth
         entities:
           - entity: sensor.unifi_wan_download_placeholder # PLACEHOLDER ENTITY

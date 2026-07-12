@@ -248,6 +248,7 @@ cards:
       # Trends — cross-equipment supply air temperature comparison
       # -----------------------------------------------------------------------
       - type: custom:mini-graph-card
+        cache: false
         title: Supply Air Trends — AHU-1 vs RTU-1
         entities:
           - entity: sensor.ahu_1_supply_air_temp_placeholder # PLACEHOLDER ENTITY

@@ -3,6 +3,22 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.2.2] - 2026-07-11
+
+### Fixed
+
+- **Temperature history graph on the Home page never loading.** Mini
+  Graph Card caches fetched history client-side by default (`cache: true`)
+  and its own documentation names stale/corrupt cached history as a known
+  failure mode ("if you have issues after updating the card, try clearing
+  your browser cache"). Added `cache: false` to every `custom:mini-graph-card`
+  in the project (thermostat history on Home, indoor/outdoor graphs on
+  Climate, room popups, Energy, Network, Commercial HVAC trends) so each
+  always fetches fresh history instead of risking a stuck/stale cached
+  result. If the Home page graph still doesn't populate after this, check
+  Developer Tools → History for `climate.t6_pro` directly to confirm the
+  recorder actually has data for it over the last 24 hours.
+
 ## [1.2.1] - 2026-07-11
 
 ### Fixed
