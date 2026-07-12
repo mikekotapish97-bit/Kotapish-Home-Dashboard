@@ -1,13 +1,24 @@
 # =============================================================================
-# Component: Left Navigation Rail
-# 80px fixed-width, full height, glass surface. Included, verbatim, as the
-# first card in every page's `cards:` list. Self-highlights the active page
-# via the kotapish_nav_icon template (see templates/button_card_templates.yaml).
+# Component: Left Navigation Rail — NOT CURRENTLY USED BY ANY PAGE
+#
+# This was the original 80px custom nav rail. Once Kiosk Mode was removed
+# (see the note in dashboard.yaml) and Home Assistant's native sidebar plus
+# its automatic view-tabs strip became the only navigation, running this
+# rail alongside them meant THREE navigation surfaces at once — native
+# sidebar, this rail, and the top tab strip — which pushed content past the
+# iPad's viewport width and forced horizontal scrolling. It was dropped from
+# every page's `cards:` list for that reason (see CHANGELOG).
+#
+# Kept here, unreferenced, in case a future non-iPad/kiosk deployment wants
+# it back — it still self-highlights the active page via the
+# kotapish_nav_icon template (see templates/button_card_templates.yaml).
+# To re-enable: add `- !include ../components/nav_rail.yaml` back as the
+# first card in a page's `cards:` list, restore `view_layout: grid-area:
+# nav`, and reintroduce a two-column view-level `custom:grid-layout` (nav +
+# main) instead of `panel: true`.
 # =============================================================================
 
 type: vertical-stack
-view_layout:
-  grid-area: nav
 card_mod:
   style: |
     ha-card {

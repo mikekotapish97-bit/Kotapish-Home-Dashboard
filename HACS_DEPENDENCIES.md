@@ -16,11 +16,10 @@ repository URL, unless HACS reports it isn't found in your version.
 
 | Name | Used for |
 |---|---|
-| **button-card** | All templated glass tiles, nav rail, BAS equipment/point tiles |
+| **button-card** | All templated glass tiles, BAS equipment/point tiles |
 | **Mushroom** | Climate, light, lock, cover, media-player, alarm-panel, template cards |
 | **Bubble Card** | Optional pop-up/header/separator styling — bundled for future pages (Settings quick-toggles) |
 | **card-mod** | Global glass styling hook (`card-mod-card` in the theme), popup dialog styling |
-| **Layout Card** | `custom:grid-layout` — nav rail + main content grid on every page |
 | **clock-weather-card** | Full weather hero on the Climate page |
 | **State Switch** | Camera hero card + fullscreen popup camera switching |
 | **Mini Graph Card** | All temperature/humidity/energy/BAS trend graphs |
@@ -32,6 +31,13 @@ repeatedly failed to reliably keep the sidebar reachable, and the
 underlying project has been archived/unmaintained since 2022. The wall
 iPad's kiosk feel comes from iPadOS's own Guided Access instead — see
 `INSTALLATION.md` step 6. Do not install Kiosk Mode for this dashboard.
+
+**Not used: Layout Card.** Every page previously used `custom:grid-layout`
+(from Layout Card) to split the view into a nav-rail column and a content
+column. Once the custom nav rail was dropped in favor of HA's native
+sidebar (see `README.md`), no page needs a custom grid layout anymore —
+each view is just `panel: true` with one top-level card. Layout Card is
+not required.
 
 ## Home Assistant Core (no HACS needed)
 

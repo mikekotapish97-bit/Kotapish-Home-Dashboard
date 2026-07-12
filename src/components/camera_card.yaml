@@ -76,7 +76,7 @@ cards:
         icon: mdi:door
         name: Entry
         variables:
-          selected: "[[[ return states['input_select.dashboard_camera'].state === 'Entry'; ]]]"
+          selected: "[[[ return (states['input_select.dashboard_camera'] && states['input_select.dashboard_camera'].state) === 'Entry'; ]]]"
         tap_action:
           action: call-service
           service: input_select.select_option
@@ -89,7 +89,7 @@ cards:
         icon: mdi:car
         name: Driveway
         variables:
-          selected: "[[[ return states['input_select.dashboard_camera'].state === 'Driveway'; ]]]"
+          selected: "[[[ return (states['input_select.dashboard_camera'] && states['input_select.dashboard_camera'].state) === 'Driveway'; ]]]"
         tap_action:
           action: call-service
           service: input_select.select_option
@@ -102,7 +102,7 @@ cards:
         icon: mdi:deck
         name: Deck
         variables:
-          selected: "[[[ return states['input_select.dashboard_camera'].state === 'Deck'; ]]]"
+          selected: "[[[ return (states['input_select.dashboard_camera'] && states['input_select.dashboard_camera'].state) === 'Deck'; ]]]"
         tap_action:
           action: call-service
           service: input_select.select_option

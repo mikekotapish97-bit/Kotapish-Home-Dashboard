@@ -35,7 +35,8 @@ kotapish-home-dashboard/
     │   ├── card_mod_templates.yaml      # One-off Card Mod snippets
     │   └── popup_templates.yaml         # Browser Mod popup conventions
     ├── components/
-    │   ├── nav_rail.yaml         # 80px left navigation rail (all pages)
+    │   ├── nav_rail.yaml         # Custom nav rail — kept for reference,
+    │   │                          # not included by any page (see below)
     │   ├── header.yaml           # Greeting, clock, date, weather, bell
     │   ├── camera_card.yaml      # State Switch live camera hero
     │   ├── thermostat_card.yaml # Honeywell T6 Pro
@@ -72,14 +73,26 @@ kotapish-home-dashboard/
 - **Glass surfaces** — every card is a translucent, blurred sheet via a
   single global Card Mod hook (`card-mod-card` in the theme). No page or
   component file redeclares blur/radius/shadow.
-- **28px rounded corners**, generous whitespace, 80px nav rail, large
-  touch targets sized for a wall-mounted tablet viewed from a few feet away.
+- **28px rounded corners**, generous whitespace, large touch targets sized
+  for a wall-mounted tablet viewed from a few feet away.
 - **Typography** — system font stack that resolves to true San Francisco
   on iPadOS/Safari, no bundled font files.
 - **One design language, reused everywhere** — button-card templates
   (`templates/button_card_templates.yaml`) are the single source for tile
   geometry/typography; Mushroom and Card Mod snippets are documented once
   and copied consistently rather than redefined per page.
+
+## Navigation
+
+This dashboard has no custom nav rail. Once Kiosk Mode was removed (see
+below), Home Assistant's native sidebar and its automatic view-tabs strip
+(generated from each page's `title`/`icon`) became the only navigation —
+adding a third, custom rail alongside those two pushed content past the
+iPad's viewport width and forced horizontal scrolling. Each page is
+`panel: true` with a single top-level card, using the full content width
+Home Assistant already gives a panel view. The original rail design is
+kept, unreferenced, at `components/nav_rail.yaml` in case a future
+non-iPad/kiosk deployment wants it back.
 
 ## Pages
 
@@ -98,14 +111,19 @@ kotapish-home-dashboard/
 
 ## Required HACS components
 
-Button Card, Mushroom, Bubble Card, Browser Mod, Layout Card, Card Mod,
-Clock Weather Card, State Switch, Mini Graph Card, Auto Entities. Full
-detail in [`HACS_DEPENDENCIES.md`](HACS_DEPENDENCIES.md).
+Button Card, Mushroom, Bubble Card, Browser Mod, Card Mod, Clock Weather
+Card, State Switch, Mini Graph Card, Auto Entities. Full detail in
+[`HACS_DEPENDENCIES.md`](HACS_DEPENDENCIES.md).
 
 **Not used: Kiosk Mode.** The HA sidebar/header are left always visible;
 the wall-mounted feel comes from iPadOS's own Guided Access instead (see
 `INSTALLATION.md` step 6) — Kiosk Mode's role-based hiding repeatedly
 failed to reliably guarantee a way back into Settings.
+
+**Not used: Layout Card.** Every page previously used `custom:grid-layout`
+to split the view into a nav-rail column and a content column. With the
+custom nav rail dropped (see Navigation, above), no page needs a custom
+grid layout anymore — each view is just `panel: true` with one card.
 
 ## Entities
 

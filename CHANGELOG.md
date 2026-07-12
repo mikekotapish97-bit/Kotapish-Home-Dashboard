@@ -3,6 +3,57 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.2.0] - 2026-07-11
+
+### Fixed
+
+- **"ButtonCardJSTemplateError" on camera pills, status chips, and BAS
+  points.** Every `[[[ ]]]` template that read `states['some.entity'].state`
+  did so with no guard for the entity not existing. Since this project
+  ships with placeholder entities that genuinely don't exist until you map
+  them to real ones — and `input_select.dashboard_camera` may not be set
+  up in a fresh install either — that lookup throws `Cannot read
+  properties of undefined`, which button-card surfaces as this error card.
+  Every occurrence across `home_status_card.yaml`, `camera_card.yaml`,
+  `room_tiles.yaml`, and `commercial_hvac.yaml` now guards with
+  `(states['x'] && states['x'].state)`.
+- **Room tiles showing raw, unrendered template text** (e.g. literally
+  `[[[ return states[...] ]]]` as the tile's subtitle). The trailing
+  `# PLACEHOLDER ENTITY` comment sat on the same line as the closing `]]]`
+  *inside* a `|` block scalar, so YAML treated it as literal string
+  content rather than a comment — button-card no longer recognized the
+  value as a template at all. Converted these to quoted single-line
+  strings (matching the safe pattern already used in `camera_card.yaml`),
+  where a trailing `#` comment is unambiguous.
+- **"Good Evening" overlapping the date/weather line underneath it** in
+  the header. Button-card doesn't automatically stack multiple
+  `custom_fields` into separate rows — without an explicit
+  `grid-template-areas`, they default to the same grid cell. Added one to
+  `components/header.yaml`.
+- **Status chip row (Garage/Locks/Alarm/Internet/Powerwall) pushing
+  content off the right edge of the iPad, forcing horizontal scroll.**
+  `home_status_card.yaml` used a `horizontal-stack`, which forces all 5
+  chips onto one non-wrapping row — inside a column that's only half the
+  page width (shared with the camera card), that's far too narrow.
+  Switched to a wrapping `grid` (2 columns).
+
+### Changed
+
+- **Removed the custom 80px nav rail from every page.** Once Kiosk Mode
+  was removed (1.1.0), Home Assistant's native sidebar and its own
+  automatic view-tabs strip became visible again — running our nav rail
+  as a *third* navigation surface alongside those two pushed page content
+  past the iPad's viewport width, forcing horizontal scrolling on every
+  page. Each page is now `panel: true` with a single top-level card (no
+  `custom:grid-layout` nav+main split); navigation is entirely HA's native
+  sidebar plus the auto-generated view tabs. The original rail design is
+  kept, unreferenced, at `components/nav_rail.yaml` for any future
+  non-iPad/kiosk deployment that wants it back.
+- **Layout Card is no longer a required HACS dependency.** It was only
+  ever used for the nav+main view split now removed above.
+- Re-validated the whole project with a loader that catches duplicate
+  YAML mapping keys, not just syntax errors.
+
 ## [1.1.1] - 2026-07-11
 
 ### Fixed

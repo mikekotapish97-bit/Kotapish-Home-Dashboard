@@ -9,26 +9,9 @@
 title: Commercial HVAC
 path: commercial-hvac
 icon: mdi:hvac
-type: custom:grid-layout
-layout:
-  grid-template-columns: var(--kotapish-nav-width) 1fr
-  grid-template-rows: 1fr
-  grid-template-areas: '"nav main"'
-  mediaquery:
-    "(max-width: 900px)":
-      grid-template-columns: 1fr
-      grid-template-areas: '"main"'
+panel: true
 cards:
-  - !include ../components/nav_rail.yaml
-
-  # ---------------------------------------------------------------------------
-  # Main content — a plain vertical-stack (not a nested layout-card: layout-card
-  # only renders correctly as a VIEW's own type, not as a card nested inside
-  # a `cards:` list) assigned to the "main" grid-area of the view above.
-  # ---------------------------------------------------------------------------
   - type: vertical-stack
-    view_layout:
-      grid-area: main
     card_mod:
       style: |
         ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
@@ -55,21 +38,21 @@ cards:
             entity: binary_sensor.bacnet_gateway_status_placeholder # PLACEHOLDER ENTITY
             icon: mdi:server-network
             name: BACnet Gateway
-            state_display: "[[[ return states['binary_sensor.bacnet_gateway_status_placeholder'].state === 'on' ? 'Online' : 'Offline'; ]]]"
+            state_display: "[[[ return (states['binary_sensor.bacnet_gateway_status_placeholder'] && states['binary_sensor.bacnet_gateway_status_placeholder'].state) === 'on' ? 'Online' : 'Offline'; ]]]"
 
           - type: custom:button-card
             template: kotapish_bas_equipment_header
             entity: binary_sensor.niagara_status_placeholder # PLACEHOLDER ENTITY
             icon: mdi:sitemap
             name: Niagara Framework
-            state_display: "[[[ return states['binary_sensor.niagara_status_placeholder'].state === 'on' ? 'Online' : 'Offline'; ]]]"
+            state_display: "[[[ return (states['binary_sensor.niagara_status_placeholder'] && states['binary_sensor.niagara_status_placeholder'].state) === 'on' ? 'Online' : 'Offline'; ]]]"
 
           - type: custom:button-card
             template: kotapish_bas_equipment_header
             entity: binary_sensor.jace_status_placeholder # PLACEHOLDER ENTITY
             icon: mdi:chip
             name: JACE Controller
-            state_display: "[[[ return states['binary_sensor.jace_status_placeholder'].state === 'on' ? 'Online' : 'Offline'; ]]]"
+            state_display: "[[[ return (states['binary_sensor.jace_status_placeholder'] && states['binary_sensor.jace_status_placeholder'].state) === 'on' ? 'Online' : 'Offline'; ]]]"
 
       # -----------------------------------------------------------------------
       # AHU-1 — Air Handling Unit
@@ -79,7 +62,7 @@ cards:
         entity: binary_sensor.ahu_1_fan_status_placeholder # PLACEHOLDER ENTITY
         icon: mdi:fan
         name: AHU-1 — Air Handling Unit
-        state_display: "[[[ return states['binary_sensor.ahu_1_fan_status_placeholder'].state === 'on' ? 'Running' : 'Stopped'; ]]]"
+        state_display: "[[[ return (states['binary_sensor.ahu_1_fan_status_placeholder'] && states['binary_sensor.ahu_1_fan_status_placeholder'].state) === 'on' ? 'Running' : 'Stopped'; ]]]"
 
       - type: grid
         columns: 6
@@ -90,42 +73,42 @@ cards:
             entity: sensor.ahu_1_supply_air_temp_placeholder # PLACEHOLDER ENTITY
             icon: mdi:thermometer
             name: Supply Air
-            state_display: "[[[ return states['sensor.ahu_1_supply_air_temp_placeholder'].state + '°F'; ]]]"
+            state_display: "[[[ return (states['sensor.ahu_1_supply_air_temp_placeholder'] && states['sensor.ahu_1_supply_air_temp_placeholder'].state) + '°F'; ]]]"
 
           - type: custom:button-card
             template: kotapish_bas_point
             entity: sensor.ahu_1_return_air_temp_placeholder # PLACEHOLDER ENTITY
             icon: mdi:thermometer
             name: Return Air
-            state_display: "[[[ return states['sensor.ahu_1_return_air_temp_placeholder'].state + '°F'; ]]]"
+            state_display: "[[[ return (states['sensor.ahu_1_return_air_temp_placeholder'] && states['sensor.ahu_1_return_air_temp_placeholder'].state) + '°F'; ]]]"
 
           - type: custom:button-card
             template: kotapish_bas_point
             entity: sensor.ahu_1_mixed_air_temp_placeholder # PLACEHOLDER ENTITY
             icon: mdi:thermometer-lines
             name: Mixed Air
-            state_display: "[[[ return states['sensor.ahu_1_mixed_air_temp_placeholder'].state + '°F'; ]]]"
+            state_display: "[[[ return (states['sensor.ahu_1_mixed_air_temp_placeholder'] && states['sensor.ahu_1_mixed_air_temp_placeholder'].state) + '°F'; ]]]"
 
           - type: custom:button-card
             template: kotapish_bas_point
             entity: sensor.ahu_1_static_pressure_placeholder # PLACEHOLDER ENTITY
             icon: mdi:gauge
             name: Static Pressure
-            state_display: "[[[ return states['sensor.ahu_1_static_pressure_placeholder'].state + ' in.wc'; ]]]"
+            state_display: "[[[ return (states['sensor.ahu_1_static_pressure_placeholder'] && states['sensor.ahu_1_static_pressure_placeholder'].state) + ' in.wc'; ]]]"
 
           - type: custom:button-card
             template: kotapish_bas_point
             entity: sensor.ahu_1_damper_position_placeholder # PLACEHOLDER ENTITY
             icon: mdi:valve
             name: Damper Position
-            state_display: "[[[ return states['sensor.ahu_1_damper_position_placeholder'].state + '%'; ]]]"
+            state_display: "[[[ return (states['sensor.ahu_1_damper_position_placeholder'] && states['sensor.ahu_1_damper_position_placeholder'].state) + '%'; ]]]"
 
           - type: custom:button-card
             template: kotapish_bas_point
             entity: binary_sensor.zone_1_occupancy_placeholder # PLACEHOLDER ENTITY
             icon: mdi:account-check
             name: Occupancy
-            state_display: "[[[ return states['binary_sensor.zone_1_occupancy_placeholder'].state === 'on' ? 'Occupied' : 'Unoccupied'; ]]]"
+            state_display: "[[[ return (states['binary_sensor.zone_1_occupancy_placeholder'] && states['binary_sensor.zone_1_occupancy_placeholder'].state) === 'on' ? 'Occupied' : 'Unoccupied'; ]]]"
 
       # -----------------------------------------------------------------------
       # RTU-1 — Rooftop Unit
@@ -135,7 +118,7 @@ cards:
         entity: binary_sensor.rtu_1_fan_status_placeholder # PLACEHOLDER ENTITY
         icon: mdi:fan
         name: RTU-1 — Rooftop Unit
-        state_display: "[[[ return states['binary_sensor.rtu_1_fan_status_placeholder'].state === 'on' ? 'Running' : 'Stopped'; ]]]"
+        state_display: "[[[ return (states['binary_sensor.rtu_1_fan_status_placeholder'] && states['binary_sensor.rtu_1_fan_status_placeholder'].state) === 'on' ? 'Running' : 'Stopped'; ]]]"
 
       - type: grid
         columns: 6
@@ -146,42 +129,42 @@ cards:
             entity: sensor.rtu_1_supply_air_temp_placeholder # PLACEHOLDER ENTITY
             icon: mdi:thermometer
             name: Supply Air
-            state_display: "[[[ return states['sensor.rtu_1_supply_air_temp_placeholder'].state + '°F'; ]]]"
+            state_display: "[[[ return (states['sensor.rtu_1_supply_air_temp_placeholder'] && states['sensor.rtu_1_supply_air_temp_placeholder'].state) + '°F'; ]]]"
 
           - type: custom:button-card
             template: kotapish_bas_point
             entity: sensor.rtu_1_return_air_temp_placeholder # PLACEHOLDER ENTITY
             icon: mdi:thermometer
             name: Return Air
-            state_display: "[[[ return states['sensor.rtu_1_return_air_temp_placeholder'].state + '°F'; ]]]"
+            state_display: "[[[ return (states['sensor.rtu_1_return_air_temp_placeholder'] && states['sensor.rtu_1_return_air_temp_placeholder'].state) + '°F'; ]]]"
 
           - type: custom:button-card
             template: kotapish_bas_point
             entity: sensor.rtu_1_economizer_damper_placeholder # PLACEHOLDER ENTITY
             icon: mdi:valve
             name: Economizer Damper
-            state_display: "[[[ return states['sensor.rtu_1_economizer_damper_placeholder'].state + '%'; ]]]"
+            state_display: "[[[ return (states['sensor.rtu_1_economizer_damper_placeholder'] && states['sensor.rtu_1_economizer_damper_placeholder'].state) + '%'; ]]]"
 
           - type: custom:button-card
             template: kotapish_bas_point
             entity: sensor.rtu_1_cooling_valve_placeholder # PLACEHOLDER ENTITY
             icon: mdi:pipe-valve
             name: Cooling Valve
-            state_display: "[[[ return states['sensor.rtu_1_cooling_valve_placeholder'].state + '%'; ]]]"
+            state_display: "[[[ return (states['sensor.rtu_1_cooling_valve_placeholder'] && states['sensor.rtu_1_cooling_valve_placeholder'].state) + '%'; ]]]"
 
           - type: custom:button-card
             template: kotapish_bas_point
             entity: sensor.vfd_1_speed_placeholder # PLACEHOLDER ENTITY
             icon: mdi:speedometer
             name: VFD-1 Speed
-            state_display: "[[[ return states['sensor.vfd_1_speed_placeholder'].state + '%'; ]]]"
+            state_display: "[[[ return (states['sensor.vfd_1_speed_placeholder'] && states['sensor.vfd_1_speed_placeholder'].state) + '%'; ]]]"
 
           - type: custom:button-card
             template: kotapish_bas_point
             entity: sensor.vfd_1_current_placeholder # PLACEHOLDER ENTITY
             icon: mdi:current-ac
             name: VFD-1 Current
-            state_display: "[[[ return states['sensor.vfd_1_current_placeholder'].state + ' A'; ]]]"
+            state_display: "[[[ return (states['sensor.vfd_1_current_placeholder'] && states['sensor.vfd_1_current_placeholder'].state) + ' A'; ]]]"
 
       # -----------------------------------------------------------------------
       # Boiler-1 & Chiller-1
@@ -198,7 +181,7 @@ cards:
                 entity: binary_sensor.boiler_1_run_status_placeholder # PLACEHOLDER ENTITY
                 icon: mdi:water-boiler
                 name: Boiler-1
-                state_display: "[[[ return states['binary_sensor.boiler_1_run_status_placeholder'].state === 'on' ? 'Firing' : 'Standby'; ]]]"
+                state_display: "[[[ return (states['binary_sensor.boiler_1_run_status_placeholder'] && states['binary_sensor.boiler_1_run_status_placeholder'].state) === 'on' ? 'Firing' : 'Standby'; ]]]"
               - type: grid
                 columns: 2
                 square: false
@@ -208,13 +191,13 @@ cards:
                     entity: sensor.boiler_1_supply_water_temp_placeholder # PLACEHOLDER ENTITY
                     icon: mdi:thermometer
                     name: Supply Water
-                    state_display: "[[[ return states['sensor.boiler_1_supply_water_temp_placeholder'].state + '°F'; ]]]"
+                    state_display: "[[[ return (states['sensor.boiler_1_supply_water_temp_placeholder'] && states['sensor.boiler_1_supply_water_temp_placeholder'].state) + '°F'; ]]]"
                   - type: custom:button-card
                     template: kotapish_bas_point
                     entity: sensor.boiler_1_return_water_temp_placeholder # PLACEHOLDER ENTITY
                     icon: mdi:thermometer
                     name: Return Water
-                    state_display: "[[[ return states['sensor.boiler_1_return_water_temp_placeholder'].state + '°F'; ]]]"
+                    state_display: "[[[ return (states['sensor.boiler_1_return_water_temp_placeholder'] && states['sensor.boiler_1_return_water_temp_placeholder'].state) + '°F'; ]]]"
 
           - type: vertical-stack
             card_mod:
@@ -226,7 +209,7 @@ cards:
                 entity: binary_sensor.chiller_1_run_status_placeholder # PLACEHOLDER ENTITY
                 icon: mdi:snowflake
                 name: Chiller-1
-                state_display: "[[[ return states['binary_sensor.chiller_1_run_status_placeholder'].state === 'on' ? 'Running' : 'Standby'; ]]]"
+                state_display: "[[[ return (states['binary_sensor.chiller_1_run_status_placeholder'] && states['binary_sensor.chiller_1_run_status_placeholder'].state) === 'on' ? 'Running' : 'Standby'; ]]]"
               - type: grid
                 columns: 2
                 square: false
@@ -236,13 +219,13 @@ cards:
                     entity: sensor.chiller_1_chw_supply_temp_placeholder # PLACEHOLDER ENTITY
                     icon: mdi:thermometer
                     name: CHW Supply
-                    state_display: "[[[ return states['sensor.chiller_1_chw_supply_temp_placeholder'].state + '°F'; ]]]"
+                    state_display: "[[[ return (states['sensor.chiller_1_chw_supply_temp_placeholder'] && states['sensor.chiller_1_chw_supply_temp_placeholder'].state) + '°F'; ]]]"
                   - type: custom:button-card
                     template: kotapish_bas_point
                     entity: sensor.chiller_1_chw_return_temp_placeholder # PLACEHOLDER ENTITY
                     icon: mdi:thermometer
                     name: CHW Return
-                    state_display: "[[[ return states['sensor.chiller_1_chw_return_temp_placeholder'].state + '°F'; ]]]"
+                    state_display: "[[[ return (states['sensor.chiller_1_chw_return_temp_placeholder'] && states['sensor.chiller_1_chw_return_temp_placeholder'].state) + '°F'; ]]]"
 
       # -----------------------------------------------------------------------
       # Schedules — occupancy schedule helpers

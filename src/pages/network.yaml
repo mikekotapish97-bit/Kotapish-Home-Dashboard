@@ -7,21 +7,9 @@
 title: Network
 path: network
 icon: mdi:router-wireless
-type: custom:grid-layout
-layout:
-  grid-template-columns: var(--kotapish-nav-width) 1fr
-  grid-template-rows: 1fr
-  grid-template-areas: '"nav main"'
-  mediaquery:
-    "(max-width: 900px)":
-      grid-template-columns: 1fr
-      grid-template-areas: '"main"'
+panel: true
 cards:
-  - !include ../components/nav_rail.yaml
-
   - type: vertical-stack
-    view_layout:
-      grid-area: main
     card_mod:
       style: |
         ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }

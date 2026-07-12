@@ -2,12 +2,16 @@
 # Component: Home Status Row
 # Garage / Locks / Alarm / Internet / Powerwall — five glass status chips.
 # All entities below are PLACEHOLDERS except the ones explicitly noted.
+#
+# Uses a wrapping `grid` (2 columns) rather than a `horizontal-stack`: this
+# card renders inside a half-width column (next to the thermostat), and a
+# horizontal-stack forces all 5 chips onto one non-wrapping row, which is
+# what was pushing content past the right edge of the iPad viewport.
 # =============================================================================
 
-type: horizontal-stack
-card_mod:
-  style: |
-    ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+type: grid
+columns: 2
+square: false
 cards:
   - type: custom:button-card
     template: kotapish_status_chip
@@ -15,10 +19,10 @@ cards:
     icon: mdi:garage
     name: Garage
     state_display: |
-      [[[ return (states['cover.garage_door_placeholder'].state === 'closed') ? 'Closed' : 'Open'; ]]]
+      [[[ return ((states['cover.garage_door_placeholder'] && states['cover.garage_door_placeholder'].state) === 'closed') ? 'Closed' : 'Open'; ]]]
     variables:
       chip_color: |
-        [[[ return (states['cover.garage_door_placeholder'].state === 'closed') ? 'var(--kotapish-green)' : 'var(--kotapish-orange)'; ]]]
+        [[[ return ((states['cover.garage_door_placeholder'] && states['cover.garage_door_placeholder'].state) === 'closed') ? 'var(--kotapish-green)' : 'var(--kotapish-orange)'; ]]]
     tap_action:
       action: more-info
 
@@ -28,10 +32,10 @@ cards:
     icon: mdi:lock
     name: Locks
     state_display: |
-      [[[ return (states['lock.front_door_placeholder'].state === 'locked') ? 'Locked' : 'Unlocked'; ]]]
+      [[[ return ((states['lock.front_door_placeholder'] && states['lock.front_door_placeholder'].state) === 'locked') ? 'Locked' : 'Unlocked'; ]]]
     variables:
       chip_color: |
-        [[[ return (states['lock.front_door_placeholder'].state === 'locked') ? 'var(--kotapish-green)' : 'var(--kotapish-red)'; ]]]
+        [[[ return ((states['lock.front_door_placeholder'] && states['lock.front_door_placeholder'].state) === 'locked') ? 'var(--kotapish-green)' : 'var(--kotapish-red)'; ]]]
     tap_action:
       action: more-info
 
@@ -41,10 +45,10 @@ cards:
     icon: mdi:shield-home
     name: Alarm
     state_display: |
-      [[[ return states['alarm_control_panel.home_alarm_placeholder'].state; ]]]
+      [[[ return (states['alarm_control_panel.home_alarm_placeholder'] && states['alarm_control_panel.home_alarm_placeholder'].state); ]]]
     variables:
       chip_color: |
-        [[[ return (states['alarm_control_panel.home_alarm_placeholder'].state === 'armed_away') ? 'var(--kotapish-green)' : 'var(--kotapish-orange)'; ]]]
+        [[[ return ((states['alarm_control_panel.home_alarm_placeholder'] && states['alarm_control_panel.home_alarm_placeholder'].state) === 'armed_away') ? 'var(--kotapish-green)' : 'var(--kotapish-orange)'; ]]]
     tap_action:
       action: more-info
 
@@ -54,10 +58,10 @@ cards:
     icon: mdi:web
     name: Internet
     state_display: |
-      [[[ return (states['binary_sensor.internet_connection_placeholder'].state === 'on') ? 'Online' : 'Offline'; ]]]
+      [[[ return ((states['binary_sensor.internet_connection_placeholder'] && states['binary_sensor.internet_connection_placeholder'].state) === 'on') ? 'Online' : 'Offline'; ]]]
     variables:
       chip_color: |
-        [[[ return (states['binary_sensor.internet_connection_placeholder'].state === 'on') ? 'var(--kotapish-green)' : 'var(--kotapish-red)'; ]]]
+        [[[ return ((states['binary_sensor.internet_connection_placeholder'] && states['binary_sensor.internet_connection_placeholder'].state) === 'on') ? 'var(--kotapish-green)' : 'var(--kotapish-red)'; ]]]
     tap_action:
       action: navigate
       navigation_path: /kotapish-home/network
@@ -68,7 +72,7 @@ cards:
     icon: mdi:battery-high
     name: Powerwall
     state_display: |
-      [[[ return states['sensor.powerwall_charge_placeholder'].state + '%'; ]]]
+      [[[ return (states['sensor.powerwall_charge_placeholder'] && states['sensor.powerwall_charge_placeholder'].state) + '%'; ]]]
     variables:
       chip_color: var(--kotapish-teal)
     tap_action:

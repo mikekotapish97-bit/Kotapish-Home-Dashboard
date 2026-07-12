@@ -46,9 +46,10 @@ button_card_templates: !include templates/button_card_templates.yaml
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-# Views — one per nav rail destination. Order here MUST match the icon order
-# in components/nav_rail.yaml (Home, Cameras, Climate, Lighting, Security,
-# Energy, Media, Network, Commercial HVAC, Settings).
+# Views. Navigation is Home Assistant's native sidebar plus its automatic
+# view-tabs strip (rendered from each view's `title`/`icon` below) — there
+# is no custom nav rail (see components/nav_rail.yaml for why). Order here
+# only controls the order of those tabs.
 # -----------------------------------------------------------------------------
 views:
   - !include pages/home.yaml

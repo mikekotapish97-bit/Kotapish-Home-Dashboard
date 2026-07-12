@@ -1,34 +1,22 @@
 # =============================================================================
 # Page: Home
-# Layout: 80px nav rail | main content (Layout Card grid)
+# Layout:
 #   1. Header (greeting, clock, date, weather, notifications)
 #   2. Camera hero (left, 2/3) + Thermostat & Home Status (right, 1/3)
 #   3. Room tiles (Living Room, Kitchen, Bedroom, Office, Garage, Patio)
+#
+# Navigation is HA's native sidebar + the automatic view-tabs strip — this
+# project no longer ships a custom nav rail (see components/nav_rail.yaml
+# for why). `panel: true` gives this view's single card the full content
+# width with no HA-imposed max-width/masonry column splitting.
 # =============================================================================
 
 title: Home
 path: home
 icon: mdi:home
-type: custom:grid-layout
-layout:
-  grid-template-columns: var(--kotapish-nav-width) 1fr
-  grid-template-rows: 1fr
-  grid-template-areas: '"nav main"'
-  mediaquery:
-    "(max-width: 900px)":
-      grid-template-columns: 1fr
-      grid-template-areas: '"main"'
+panel: true
 cards:
-  - !include ../components/nav_rail.yaml
-
-  # ---------------------------------------------------------------------------
-  # Main content — a plain vertical-stack (not a nested layout-card: layout-card
-  # only renders correctly as a VIEW's own type, not as a card nested inside
-  # a `cards:` list) assigned to the "main" grid-area of the view above.
-  # ---------------------------------------------------------------------------
   - type: vertical-stack
-    view_layout:
-      grid-area: main
     card_mod:
       style: |
         ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
