@@ -3,6 +3,60 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.5.0] - 2026-07-11
+
+### Changed
+
+- **Much closer visual match to the reference dashboard**, built from its
+  actual CSS/dimensions (re-examined the reference YAML directly rather
+  than working from the screenshot alone):
+  - Global glass look (`theme/kotapish_glass.yaml`'s `card-mod-card` hook)
+    now uses 30px radius (was 28px), a layered box-shadow (inset top
+    highlight + inset bottom shadow + outer drop shadow) standing in for
+    the reference's pseudo-element gradient-border technique, and
+    `backdrop-filter: blur(...) saturate(140%)` — adapted to this
+    project's proven `ha-card`-scoped theme mechanism rather than an
+    unverified switch to the reference's `:host`-based selectors.
+  - Font stack now leads with `"SF Pro Rounded"` (the reference's own
+    primary font), matching `kotapish-radius-l`/`-m` to the reference's
+    20px/15px tile and pill radii.
+  - Status tiles (`kotapish_status_chip`) resized to 88px and now flip to
+    a lighter background tint when the underlying entity is in an
+    attention-worthy state, matching the reference's Shortcuts tiles.
+  - Camera selector pills resized to 105×55px / 15px radius, matching the
+    reference's own camera-list pill exactly.
+  - Rooms list rows (`kotapish_list_row`) now show their icon in a small
+    colored square badge (5px radius) instead of a plain icon, matching
+    the reference's room-row `img_cell` styling; each room has a distinct
+    badge color.
+
+### Added
+
+- **Thermostat HVAC mode row** — 4 buttons (Off/Heat/Cool/Auto) below the
+  circular dial, matching the reference's row of mode buttons under its
+  own thermostat. Built on `climate.set_hvac_mode` rather than
+  `climate.set_preset_mode`/named presets, since every climate entity
+  supports hvac_mode universally while preset support and preset names
+  vary by integration and can't be assumed for `climate.t6_pro`.
+- **New bottom status bar** (`components/status_bar.yaml`) — lights-on
+  count, climate mode, now-playing media, and garage door pills, plus a
+  circular **Assist** button using HA's native voice-assistant tap action
+  (`action: assist`, no HACS component needed) — matching the reference
+  dashboard's bottom row.
+- Optional wallpaper background support documented (commented out by
+  default) in `pages/home.yaml`'s `sections` view — the reference runs a
+  photo behind its glass cards; this project doesn't ship a placeholder
+  image URL, since fabricating one didn't seem appropriate, but the exact
+  config shape is there ready to uncomment.
+
+### Fixed
+
+- Caught and fixed a repeat of an earlier bug while writing
+  `status_bar.yaml`: three `# PLACEHOLDER ENTITY` comments were placed on
+  the same line as a closing `]]]` inside a `|` block scalar, which
+  silently becomes literal string content rather than a real YAML
+  comment. Moved all three to their own line above the affected key.
+
 ## [1.4.0] - 2026-07-11
 
 ### Changed

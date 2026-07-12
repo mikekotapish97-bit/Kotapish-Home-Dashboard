@@ -120,9 +120,13 @@ kotapish_room_tile:
 
 # -----------------------------------------------------------------------------
 # Status tile — compact vertical tile used in the Home Status grid
-# (garage/locks/alarm/etc). Icon sits in a colored circular badge with the
-# name/state stacked below in normal flow (no absolute positioning — see
-# the note on kotapish_room_tile above for why that matters).
+# (garage/locks/alarm/etc), sized to match the reference dashboard's
+# Shortcuts tiles (88px). Icon sits in a colored circular badge; the whole
+# card background flips to a lighter, attention-drawing tint when the
+# entity is in a state worth noticing (anything not "green"/normal) —
+# matching the reference's tile-flips-color-when-active behavior. Icon,
+# name and state stack in normal flow (no absolute positioning — see the
+# note on kotapish_room_tile above for why that matters).
 # -----------------------------------------------------------------------------
 kotapish_status_chip:
   template: kotapish_glass_base
@@ -134,9 +138,15 @@ kotapish_status_chip:
     card:
       - justify-content: center
       - align-items: center
-      - padding: 12px
-      - min-height: 92px
+      - padding: 10px
+      - height: 88px
       - gap: 6px
+      - border-radius: var(--kotapish-radius-l)
+      - background: |
+          [[[
+            return (variables.chip_color && variables.chip_color !== 'var(--kotapish-green)')
+              ? 'rgba(255, 255, 255, 0.14)' : 'var(--kotapish-glass-surface)';
+          ]]]
     icon:
       - width: 24px
       - color: white
@@ -154,30 +164,36 @@ kotapish_status_chip:
       - text-align: center
 
 # -----------------------------------------------------------------------------
-# Camera selector pill (Entry / Driveway / Deck)
+# Camera selector pill (Entry / Driveway / Deck) — sized to match the
+# reference dashboard's own camera_list pill (105x55px, 15px radius).
 # -----------------------------------------------------------------------------
 kotapish_camera_pill:
   template: kotapish_glass_base
   show_icon: true
   show_name: true
   show_state: false
-  size: 18px
+  size: 16px
   styles:
     card:
       - flex-direction: row
-      - padding: 10px 18px
-      - border-radius: var(--kotapish-radius-xl)
+      - justify-content: center
+      - align-items: center
+      - width: 105px
+      - height: 55px
+      - padding: 0 10px
+      - gap: 6px
+      - border-radius: var(--kotapish-radius-m)
       - background: |
           [[[
             return variables.selected ? 'var(--kotapish-blue)' : 'var(--kotapish-glass-surface)';
           ]]]
     name:
-      - font-size: 14px
+      - font-size: 13px
       - font-weight: "600"
       - color: |
           [[[ return variables.selected ? 'white' : 'var(--primary-text-color)'; ]]]
     icon:
-      - width: 18px
+      - width: 16px
       - color: |
           [[[ return variables.selected ? 'white' : 'var(--kotapish-blue)'; ]]]
 
@@ -260,11 +276,17 @@ kotapish_bas_equipment_header:
 
 # -----------------------------------------------------------------------------
 # Ghost / list-row button — a standalone glass card in a horizontal row
-# layout, used for Settings-style info rows. Stack several of these inside
-# a plain `vertical-stack` — do NOT nest custom:button-card inside a core
-# `type: entities` card's `entities:` list; that list only accepts simple
-# entity-row configs (entity/name/icon/...), not full nested card configs,
-# and Home Assistant will reject the whole dashboard config if you do.
+# layout, used for the Rooms list and Settings-style info rows. Stack
+# several of these inside a plain `vertical-stack` — do NOT nest
+# custom:button-card inside a core `type: entities` card's `entities:`
+# list; that list only accepts simple entity-row configs
+# (entity/name/icon/...), not full nested card configs, and Home Assistant
+# will reject the whole dashboard config if you do.
+#
+# Icon sits in a small colored square badge (5px radius) — matches the
+# reference dashboard's own room-row `img_cell` badge treatment. Pass
+# `variables: {badge_color: ...}` per card to set its color; defaults to
+# blue when omitted (e.g. the Settings page's info rows, which don't set one).
 # -----------------------------------------------------------------------------
 kotapish_list_row:
   template: kotapish_glass_base
@@ -272,7 +294,7 @@ kotapish_list_row:
   show_state: true
   show_icon: true
   layout: icon_name_state2nd
-  size: 20px
+  size: 15px
   styles:
     card:
       - flex-direction: row
@@ -285,5 +307,77 @@ kotapish_list_row:
       - font-size: 13px
       - color: var(--secondary-text-color)
     icon:
-      - color: var(--kotapish-blue)
+      - width: 15px
+      - color: white
+      - background: |
+          [[[ return variables.badge_color || 'var(--kotapish-blue)'; ]]]
+      - border-radius: "5px"
+      - padding: 4px
+
+# -----------------------------------------------------------------------------
+# Bottom status bar pill — horizontal, fully-rounded row used in the Home
+# page's bottom status bar (lights/climate/media/garage). Matches the
+# reference dashboard's own bottom-bar pill: 60px tall, radius 50px, icon
+# in a colored circular badge on the left, name/state stacked to its right.
+# -----------------------------------------------------------------------------
+kotapish_bottom_bar_pill:
+  template: kotapish_glass_base
+  show_name: true
+  show_state: true
+  show_icon: true
+  layout: icon_name_state2nd
+  size: 20px
+  styles:
+    card:
+      - flex-direction: row
+      - justify-content: flex-start
+      - align-items: center
+      - height: 60px
+      - padding: 0 18px
+      - gap: 12px
+      - border-radius: var(--kotapish-radius-pill)
+    name:
+      - font-size: 14px
+      - font-weight: "600"
+      - justify-self: start
+    state:
+      - font-size: 12px
+      - color: var(--secondary-text-color)
+    icon:
       - width: 20px
+      - color: white
+      - background: |
+          [[[ return variables.badge_color || 'var(--kotapish-blue)'; ]]]
+      - border-radius: "50%"
+      - padding: 10px
+
+# -----------------------------------------------------------------------------
+# Assist voice button — circular pill matching the reference dashboard's
+# bottom-bar microphone button. Uses HA's native Assist tap_action (built
+# into core Home Assistant, no HACS component needed).
+# -----------------------------------------------------------------------------
+kotapish_assist_button:
+  template: kotapish_glass_base
+  show_name: true
+  show_state: false
+  layout: icon_name_state2nd
+  size: 20px
+  styles:
+    card:
+      - flex-direction: row
+      - justify-content: center
+      - align-items: center
+      - height: 60px
+      - width: 150px
+      - padding: 0 18px
+      - gap: 12px
+      - border-radius: var(--kotapish-radius-pill)
+    name:
+      - font-size: 14px
+      - font-weight: "600"
+    icon:
+      - width: 20px
+      - color: white
+      - background: var(--kotapish-blue)
+      - border-radius: "50%"
+      - padding: 10px

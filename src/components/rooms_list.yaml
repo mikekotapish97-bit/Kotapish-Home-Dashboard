@@ -35,6 +35,8 @@ cards:
     template: kotapish_list_row
     icon: mdi:sofa
     name: Living Room
+    variables:
+      badge_color: var(--kotapish-blue)
     state_display: |
       [[[
         const light = states['light.living_room_placeholder'];
@@ -57,6 +59,8 @@ cards:
     template: kotapish_list_row
     icon: mdi:silverware-fork-knife
     name: Kitchen
+    variables:
+      badge_color: var(--kotapish-orange)
     state_display: |
       [[[
         const light = states['light.kitchen_placeholder'];
@@ -79,6 +83,8 @@ cards:
     template: kotapish_list_row
     icon: mdi:bed
     name: Bedroom
+    variables:
+      badge_color: var(--kotapish-purple)
     state_display: |
       [[[
         const light = states['light.bedroom_placeholder'];
@@ -101,6 +107,8 @@ cards:
     template: kotapish_list_row
     icon: mdi:desk
     name: Office
+    variables:
+      badge_color: var(--kotapish-teal)
     state_display: |
       [[[
         const light = states['light.office_placeholder'];
@@ -123,6 +131,8 @@ cards:
     template: kotapish_list_row
     icon: mdi:garage
     name: Garage
+    variables:
+      badge_color: var(--kotapish-red)
     state_display: |
       [[[
         const door = states['cover.garage_door_placeholder'];
@@ -143,6 +153,8 @@ cards:
     template: kotapish_list_row
     icon: mdi:tree
     name: Patio
+    variables:
+      badge_color: var(--kotapish-green)
     state_display: |
       [[[
         const temp = states['sensor.patio_temp_placeholder'];

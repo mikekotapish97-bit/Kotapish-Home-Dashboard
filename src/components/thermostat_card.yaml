@@ -4,10 +4,12 @@
 #
 # Uses Home Assistant's native `type: thermostat` card — the circular
 # rotary-dial temperature control — instead of Mushroom's climate card, to
-# match the reference dashboard's thermostat widget. It already inherits
-# the glass background/blur/radius from the theme's global card-mod hook
-# (theme/kotapish_glass.yaml), same as every other card in this project —
-# no extra styling needed here.
+# match the reference dashboard's thermostat widget. Below it, a 4-button
+# HVAC mode row (Off/Heat/Cool/Auto) matches the reference's row of preset
+# buttons under its thermostat dial — built on `climate.set_hvac_mode`
+# rather than `climate.set_preset_mode`/named presets, since every climate
+# entity supports hvac_mode universally, while preset support and preset
+# names vary by integration and can't be assumed for climate.t6_pro.
 #
 # One of three equal-width cards in pages/home.yaml's main section row
 # (camera | weather | thermostat), sized to fit a single 12.9" iPad screen
@@ -15,8 +17,121 @@
 # on pages/climate.yaml, which has the vertical room for them.
 # =============================================================================
 
-type: thermostat
+type: vertical-stack
 grid_options:
   columns: full
-entity: climate.t6_pro
-name: Thermostat
+card_mod:
+  style: |
+    ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+cards:
+  - type: thermostat
+    entity: climate.t6_pro
+    name: Thermostat
+
+  - type: grid
+    columns: 4
+    square: false
+    cards:
+      - type: custom:button-card
+        template: kotapish_glass_base
+        icon: mdi:power
+        show_name: false
+        size: 20px
+        styles:
+          card:
+            - padding: 10px
+            - background: |
+                [[[
+                  const s = states['climate.t6_pro'];
+                  return (s && s.state === 'off') ? 'var(--kotapish-blue)' : 'var(--kotapish-glass-surface)';
+                ]]]
+          icon:
+            - color: |
+                [[[
+                  const s = states['climate.t6_pro'];
+                  return (s && s.state === 'off') ? 'white' : 'var(--primary-text-color)';
+                ]]]
+        tap_action:
+          action: call-service
+          service: climate.set_hvac_mode
+          service_data:
+            entity_id: climate.t6_pro
+            hvac_mode: "off"
+
+      - type: custom:button-card
+        template: kotapish_glass_base
+        icon: mdi:fire
+        show_name: false
+        size: 20px
+        styles:
+          card:
+            - padding: 10px
+            - background: |
+                [[[
+                  const s = states['climate.t6_pro'];
+                  return (s && s.state === 'heat') ? 'var(--kotapish-orange)' : 'var(--kotapish-glass-surface)';
+                ]]]
+          icon:
+            - color: |
+                [[[
+                  const s = states['climate.t6_pro'];
+                  return (s && s.state === 'heat') ? 'white' : 'var(--primary-text-color)';
+                ]]]
+        tap_action:
+          action: call-service
+          service: climate.set_hvac_mode
+          service_data:
+            entity_id: climate.t6_pro
+            hvac_mode: heat
+
+      - type: custom:button-card
+        template: kotapish_glass_base
+        icon: mdi:snowflake
+        show_name: false
+        size: 20px
+        styles:
+          card:
+            - padding: 10px
+            - background: |
+                [[[
+                  const s = states['climate.t6_pro'];
+                  return (s && s.state === 'cool') ? 'var(--kotapish-blue)' : 'var(--kotapish-glass-surface)';
+                ]]]
+          icon:
+            - color: |
+                [[[
+                  const s = states['climate.t6_pro'];
+                  return (s && s.state === 'cool') ? 'white' : 'var(--primary-text-color)';
+                ]]]
+        tap_action:
+          action: call-service
+          service: climate.set_hvac_mode
+          service_data:
+            entity_id: climate.t6_pro
+            hvac_mode: cool
+
+      - type: custom:button-card
+        template: kotapish_glass_base
+        icon: mdi:autorenew
+        show_name: false
+        size: 20px
+        styles:
+          card:
+            - padding: 10px
+            - background: |
+                [[[
+                  const s = states['climate.t6_pro'];
+                  return (s && s.state === 'heat_cool') ? 'var(--kotapish-teal)' : 'var(--kotapish-glass-surface)';
+                ]]]
+          icon:
+            - color: |
+                [[[
+                  const s = states['climate.t6_pro'];
+                  return (s && s.state === 'heat_cool') ? 'white' : 'var(--primary-text-color)';
+                ]]]
+        tap_action:
+          action: call-service
+          service: climate.set_hvac_mode
+          service_data:
+            entity_id: climate.t6_pro
+            hvac_mode: heat_cool

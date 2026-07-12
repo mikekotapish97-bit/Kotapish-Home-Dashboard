@@ -9,7 +9,8 @@
 # column_span. Layout, top to bottom:
 #   1. Header section (full width, column_span: 12)
 #   2. Main row (column_span 5/4/3 = 12): Camera | Weather | Thermostat
-#   3. Bottom row (column_span 4/4/4 = 12): Rooms | Home Status | Calendar
+#   3. Middle row (column_span 4/4/4 = 12): Rooms | Home Status | Calendar
+#   4. Status bar (full width, column_span: 12): quick-glance pills + Assist
 #
 # Each component file carries its own `grid_options: {columns: full}` at
 # its top level (not added here) so it fills its section's width instead
@@ -26,6 +27,21 @@ path: home
 icon: mdi:home
 type: sections
 max_columns: 12
+# -----------------------------------------------------------------------------
+# Optional wallpaper background (the reference dashboard runs a photo behind
+# its glass cards). Left off by default — the theme's own gradient
+# (--kotapish-page-background) is used instead, which is guaranteed to
+# render without needing an image file. To add your own photo, place it in
+# config/www/ (served at /local/...) and uncomment:
+#
+# background:
+#   image: /local/wallpaper.jpg
+#   opacity: 60
+#   alignment: center center
+#   size: cover
+#   repeat: no-repeat
+#   attachment: fixed
+# -----------------------------------------------------------------------------
 sections:
   - type: grid
     column_span: 12
@@ -61,3 +77,8 @@ sections:
     column_span: 4
     cards:
       - !include ../components/calendar_card.yaml
+
+  - type: grid
+    column_span: 12
+    cards:
+      - !include ../components/status_bar.yaml

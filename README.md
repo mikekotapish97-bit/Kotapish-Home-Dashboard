@@ -45,6 +45,7 @@ kotapish-home-dashboard/
     │   ├── room_tiles.yaml       # 6-room tile grid — kept for reference,
     │   │                          # superseded by rooms_list.yaml (see below)
     │   ├── calendar_card.yaml    # Native calendar card (Home page)
+    │   ├── status_bar.yaml       # Bottom status bar + Assist button (Home page)
     │   ├── weather_card.yaml     # Clock Weather Card hero (Climate page)
     │   └── weather_forecast_card.yaml # Clock-less forecast card (Home page)
     ├── popups/
@@ -108,18 +109,24 @@ project was modeled on:
 
 - Header (full width): greeting, clock, date, weather chip, notifications
 - Main row: Camera hero | Weather forecast | Thermostat (native circular
-  dial via HA's built-in `type: thermostat` card)
-- Bottom row: Rooms list | Home Status tiles | Calendar
+  dial via HA's built-in `type: thermostat` card, plus a 4-button HVAC
+  mode row below it)
+- Middle row: Rooms list | Home Status tiles | Calendar
+- Bottom status bar (full width): lights/climate/media/garage pills +
+  a native Assist voice button
 
-Everything is sized to fit one 12.9" iPad Pro screen with no scrolling —
-see the comments in `pages/home.yaml` and each component file for how
-each card was trimmed to fit.
+The visual language (30px card radius, layered glass highlight/shadow,
+"SF Pro Rounded" font) was adapted directly from the reference
+dashboard's own CSS — see `theme/kotapish_glass.yaml`'s `card-mod-card`
+hook. Everything is sized to fit one 12.9" iPad Pro screen with no
+scrolling — see the comments in `pages/home.yaml` and each component file
+for how each card was trimmed to fit.
 
 ## Pages
 
 | Page | Path | Highlights |
 |---|---|---|
-| Home | `/home` | Dense `sections`-view grid: header, camera/weather/thermostat row, rooms/status/calendar row — no scrolling on a 12.9" iPad |
+| Home | `/home` | Dense `sections`-view grid: header, camera/weather/thermostat row, rooms/status/calendar row, bottom status bar + Assist — no scrolling on a 12.9" iPad |
 | Cameras | `/cameras` | Large feed, thumbnail selector, fullscreen, recent motion |
 | Climate | `/climate` | Full thermostat, temp/humidity graphs, outside weather |
 | Lighting | `/lighting` | Whole-home scenes + per-room light control |

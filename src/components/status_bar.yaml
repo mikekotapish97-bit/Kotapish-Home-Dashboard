@@ -1,0 +1,109 @@
+# =============================================================================
+# Component: Bottom Status Bar (Home page)
+# Matches the reference dashboard's bottom row: a few glance-status pills
+# on the left (lights on count, climate mode, now-playing media, garage
+# door) and a circular Assist voice button on the right.
+# All entities below are PLACEHOLDERS except climate.t6_pro.
+# =============================================================================
+
+type: horizontal-stack
+grid_options:
+  columns: full
+card_mod:
+  style: |
+    ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+cards:
+  - type: custom:button-card
+    template: kotapish_bottom_bar_pill
+    icon: mdi:lightbulb-on
+    # PLACEHOLDER ENTITIES — the 6 room lights referenced below
+    name: |
+      [[[
+        const ids = [
+          'light.living_room_placeholder', 'light.kitchen_placeholder',
+          'light.bedroom_placeholder', 'light.office_placeholder',
+          'light.garage_placeholder', 'light.patio_placeholder'
+        ];
+        const on = ids.filter(id => states[id] && states[id].state === 'on').length;
+        return on === 0 ? 'No Lights On' : (on === 1 ? '1 Light On' : `${on} Lights On`);
+      ]]]
+    show_state: false
+    variables:
+      badge_color: var(--kotapish-orange)
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/lighting
+
+  - type: custom:button-card
+    template: kotapish_bottom_bar_pill
+    icon: mdi:thermostat
+    name: |
+      [[[
+        const s = states['climate.t6_pro'];
+        if (!s) return 'Climate Unknown';
+        if (s.state === 'off') return 'Climate Systems Off';
+        return (s.state.charAt(0).toUpperCase() + s.state.slice(1)) + 'ing';
+      ]]]
+    state_display: |
+      [[[
+        const s = states['climate.t6_pro'];
+        return (s && s.attributes && s.attributes.current_temperature != null)
+          ? `${s.attributes.current_temperature}° Average` : '';
+      ]]]
+    variables:
+      badge_color: var(--kotapish-teal)
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/climate
+
+  - type: custom:button-card
+    template: kotapish_bottom_bar_pill
+    icon: mdi:apple
+    # PLACEHOLDER ENTITY: media_player.apple_tv_placeholder
+    name: |
+      [[[
+        const s = states['media_player.apple_tv_placeholder'];
+        return (s && s.attributes && s.attributes.media_title) ? s.attributes.media_title : 'Apple TV';
+      ]]]
+    state_display: |
+      [[[
+        const s = states['media_player.apple_tv_placeholder'];
+        return (s && s.state === 'playing') ? 'Now Playing' : 'Idle';
+      ]]]
+    variables:
+      badge_color: var(--kotapish-purple)
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/media
+
+  - type: custom:button-card
+    template: kotapish_bottom_bar_pill
+    icon: mdi:garage
+    name: Garage Door
+    # PLACEHOLDER ENTITY: cover.garage_door_placeholder
+    state_display: |
+      [[[
+        const s = states['cover.garage_door_placeholder'];
+        return (s && s.state === 'closed') ? 'Closed' : 'Open';
+      ]]]
+    variables:
+      badge_color: |
+        [[[
+          const s = states['cover.garage_door_placeholder'];
+          return (s && s.state === 'closed') ? 'var(--kotapish-green)' : 'var(--kotapish-red)';
+        ]]]
+    tap_action:
+      action: more-info
+      entity: cover.garage_door_placeholder
+
+  - type: custom:button-card
+    template: kotapish_assist_button
+    icon: mdi:microphone
+    name: Assist
+    styles:
+      card:
+        - margin-left: auto
+    tap_action:
+      action: assist
+      start_listening: true
+      pipeline_id: preferred
