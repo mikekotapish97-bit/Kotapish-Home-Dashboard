@@ -1,10 +1,12 @@
 # =============================================================================
-# Component: Weather Forecast Card (Home page)
+# Component: Weather Forecast Card (Home page, compact)
 # Clock Weather Card, configured WITHOUT its own clock (`hide_clock: true`)
 # since the Home page's header (components/header.yaml) already has one —
-# this card exists purely to show current conditions + the full daily/
-# weekly forecast list. The Climate page's components/weather_card.yaml is
-# a separate instance that DOES show its own clock (no conflict there).
+# current conditions + a compact 4-day glance. This is one of three
+# equal-width columns in pages/home.yaml's main row (camera | weather |
+# thermostat), sized to fit a single 12.9" iPad screen with no scrolling —
+# the full 7-day forecast lives on pages/climate.yaml's weather hero
+# (components/weather_card.yaml), which has the vertical room for it.
 #
 # PLACEHOLDER ENTITY: weather.ranson_wv_nws
 # Set up Settings → Devices & Services → Add Integration → "National
@@ -21,7 +23,7 @@ hide_clock: true
 hide_today_section: false
 hide_forecast_section: false
 hourly_forecast: false
-forecast_rows: 7
+forecast_rows: 4
 name: Ranson, WV
 card_mod:
   style: |

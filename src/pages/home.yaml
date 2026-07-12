@@ -1,12 +1,17 @@
 # =============================================================================
 # Page: Home
-# Layout (single column, top to bottom):
+# Dense single-screen layout — everything visible on one 12.9" iPad Pro
+# screen with no scrolling, not a tall stack of full-width sections:
 #   1. Header (greeting, clock, date, weather chip, notifications)
-#   2. Camera hero (full width)
-#   3. Home Status row (Garage/Locks/Alarm/Internet/Powerwall)
-#   4. Weather forecast card (Ranson, WV — current conditions + daily/weekly)
-#   5. Thermostat (Honeywell T6 Pro)
-#   6. Room tiles (Living Room, Kitchen, Bedroom, Office, Garage, Patio)
+#   2. Main row, 3 equal columns: Camera hero | Weather forecast | Thermostat
+#   3. Bottom row, 2 columns: Home Status chips | Room tiles
+#
+# Each card in rows 2-3 was deliberately trimmed for this compact layout
+# (no thermostat history graph, 4-day forecast instead of 7, 3-column room
+# tile grid instead of 6) — see the comments in each component file. If
+# this still doesn't fit your iPad without scrolling, the next things to
+# trim are room_tiles.yaml's tile height/count or weather_forecast_card's
+# forecast_rows.
 #
 # Navigation is HA's native sidebar + the automatic view-tabs strip — this
 # project no longer ships a custom nav rail (see components/nav_rail.yaml
@@ -25,8 +30,20 @@ cards:
         ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
     cards:
       - !include ../components/header.yaml
-      - !include ../components/camera_card.yaml
-      - !include ../components/home_status_card.yaml
-      - !include ../components/weather_forecast_card.yaml
-      - !include ../components/thermostat_card.yaml
-      - !include ../components/room_tiles.yaml
+
+      - type: horizontal-stack
+        card_mod:
+          style: |
+            ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+        cards:
+          - !include ../components/camera_card.yaml
+          - !include ../components/weather_forecast_card.yaml
+          - !include ../components/thermostat_card.yaml
+
+      - type: horizontal-stack
+        card_mod:
+          style: |
+            ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
+        cards:
+          - !include ../components/home_status_card.yaml
+          - !include ../components/room_tiles.yaml

@@ -99,7 +99,7 @@ non-iPad/kiosk deployment wants it back.
 
 | Page | Path | Highlights |
 |---|---|---|
-| Home | `/home` | Greeting header, live camera hero, Home Status row, Ranson WV weather forecast, T6 Pro thermostat, 6 room tiles |
+| Home | `/home` | Single-screen grid: header, camera/weather/thermostat row, status/room-tiles row — no scrolling on a 12.9" iPad |
 | Cameras | `/cameras` | Large feed, thumbnail selector, fullscreen, recent motion |
 | Climate | `/climate` | Full thermostat, temp/humidity graphs, outside weather |
 | Lighting | `/lighting` | Whole-home scenes + per-room light control |

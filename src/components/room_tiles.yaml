@@ -6,10 +6,15 @@
 #
 # Uses Home Assistant's built-in `grid` card (not a custom/nested layout
 # card) so this renders reliably wherever it is included as a plain card.
+#
+# 3 columns (2 rows of 6 tiles), not 6-in-a-row: this sits beside
+# components/home_status_card.yaml in pages/home.yaml's bottom row, sharing
+# roughly half the screen width — 6 columns there would squeeze each tile
+# too narrow to read.
 # =============================================================================
 
 type: grid
-columns: 6
+columns: 3
 square: false
 cards:
   - type: custom:button-card

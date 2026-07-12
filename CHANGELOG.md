@@ -3,6 +3,33 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.3.1] - 2026-07-11
+
+### Changed
+
+- **Reworked the Home page from a tall single column back into a dense,
+  single-screen grid.** 1.3.0 stacked Header → Camera → Home Status →
+  Weather → Thermostat → Room tiles as six full-width sections, which
+  requires scrolling on a 12.9" iPad — not what was wanted. Now: Header,
+  then a 3-column row (Camera | Weather | Thermostat), then a 2-column row
+  (Home Status | Room tiles), matching the original compact footprint
+  while still fitting in the new weather and status content.
+- Trimmed each card to fit this compact layout: dropped the mini-graph-card
+  history from the Home page's thermostat widget (kept exclusively on the
+  Climate page, which has the vertical room for it); reduced the Home
+  page's weather forecast from 7 rows to a 4-day glance (the full week
+  stays on the Climate page); reduced room tiles from a 6-column single
+  row to a 3-column, 2-row grid to fit half the screen width next to the
+  Home Status chips.
+
+### Note
+
+This was built and validated for YAML correctness, but its actual fit on
+a physical 12.9" iPad screen hasn't been visually confirmed — if any
+section still requires scrolling, the next things to trim are further
+reducing `weather_forecast_card.yaml`'s `forecast_rows` or
+`room_tiles.yaml`'s tile height/column count.
+
 ## [1.3.0] - 2026-07-11
 
 ### Added

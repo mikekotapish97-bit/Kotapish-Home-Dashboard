@@ -1,15 +1,12 @@
 # =============================================================================
-# Component: Honeywell T6 Pro Thermostat
+# Component: Honeywell T6 Pro Thermostat (compact)
 # Real entity: climate.t6_pro
-# Mushroom climate card for the compact Home-page placement; the full
-# thermostat dial + graphs live on pages/climate.yaml.
 #
-# Included directly as a top-level card in pages/home.yaml's own outer
-# vertical-stack (not nested inside a horizontal-stack alongside another
-# card) — that shallow nesting matters for the mini-graph-card below: an
-# earlier layout nested it one level deeper than the working graphs on
-# pages/climate.yaml, a known trigger for chart cards computing a
-# collapsed/zero width before a nested flex layout finishes settling.
+# Deliberately just title + climate control, no history graph — this is
+# one of three equal-width columns in pages/home.yaml's main row (camera |
+# weather | thermostat), sized to fit a single 12.9" iPad screen with no
+# scrolling. The full thermostat dial + 24h history graph lives on
+# pages/climate.yaml, which has the vertical room for it.
 # =============================================================================
 
 type: vertical-stack
@@ -42,31 +39,3 @@ cards:
           --icon-color: var(--kotapish-orange);
           --shape-color: rgba(255, 159, 10, 0.14);
         }
-
-  # ---------------------------------------------------------------------------
-  # Single-line current-temperature trend. Deliberately does NOT also graph
-  # the `temperature` (setpoint) attribute here: that attribute doesn't
-  # exist while a climate entity is in heat_cool/auto mode (it uses
-  # target_temp_low/target_temp_high instead), which would silently break
-  # this card. current_temperature is always present. The full breakdown
-  # (current + humidity) lives on pages/climate.yaml, which only ever
-  # graphs attributes guaranteed to exist.
-  # ---------------------------------------------------------------------------
-  - type: custom:mini-graph-card
-    cache: false
-    entities:
-      - entity: climate.t6_pro
-        attribute: current_temperature
-        name: Current
-        color: var(--kotapish-blue)
-    hours_to_show: 24
-    points_per_hour: 2
-    line_width: 3
-    show:
-      labels: false
-      legend: false
-      name: false
-      icon: false
-    card_mod:
-      style: |
-        ha-card { padding: 8px 16px 12px 16px; }
