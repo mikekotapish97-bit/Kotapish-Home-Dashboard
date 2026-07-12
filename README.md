@@ -37,17 +37,21 @@ kotapish-home-dashboard/
     ├── components/
     │   ├── nav_rail.yaml         # Custom nav rail — kept for reference,
     │   │                          # not included by any page (see below)
-    │   ├── header.yaml           # Greeting, clock, date, weather, bell
+    │   ├── header.yaml           # Top bar: status pills + clock (Home page)
     │   ├── camera_card.yaml      # State Switch live camera hero
-    │   ├── thermostat_card.yaml # Honeywell T6 Pro (native circular dial)
+    │   ├── thermostat_card.yaml # Honeywell T6 Pro (native circular dial
+    │   │                          # + HVAC mode row)
     │   ├── home_status_card.yaml # Garage/Locks/Alarm/Internet/Powerwall tiles
-    │   ├── rooms_list.yaml       # Rooms list -> Browser Mod popups (Home page)
+    │   │                          # — kept for reference, not included by
+    │   │                          # any page (see below)
+    │   ├── rooms_list.yaml       # Rooms browse list -> Browser Mod popups
+    │   ├── shortcuts_card.yaml   # Quick device toggles (Home page)
     │   ├── room_tiles.yaml       # 6-room tile grid — kept for reference,
     │   │                          # superseded by rooms_list.yaml (see below)
     │   ├── calendar_card.yaml    # Native calendar card (Home page)
     │   ├── status_bar.yaml       # Bottom status bar + Assist button (Home page)
     │   ├── weather_card.yaml     # Clock Weather Card hero (Climate page)
-    │   └── weather_forecast_card.yaml # Clock-less forecast card (Home page)
+    │   └── weather_forecast_card.yaml # Native weather-forecast card (Home page)
     ├── popups/
     │   ├── room_living_room.yaml
     │   ├── room_kitchen.yaml
@@ -107,13 +111,22 @@ grid-based dashboard layout — rather than a hand-rolled stack of
 horizontal-stacks, matching the structure of the reference dashboard this
 project was modeled on:
 
-- Header (full width): greeting, clock, date, weather chip, notifications
-- Main row: Camera hero | Weather forecast | Thermostat (native circular
-  dial via HA's built-in `type: thermostat` card, plus a 4-button HVAC
-  mode row below it)
-- Middle row: Rooms list | Home Status tiles | Calendar
+- Header (full width): status pills (Garage/Locks/Alarm/Internet) + a
+  live clock + notifications bell — matching the reference's own
+  pill-row top bar, not a greeting/date banner
+- Main row: Camera hero | Weather (native `weather-forecast` card, not
+  Clock Weather Card — see `components/weather_forecast_card.yaml` for
+  why) | Thermostat (native circular dial via HA's built-in `type:
+  thermostat` card, plus a 4-button HVAC mode row below it)
+- Middle row: Rooms list (browse/info) | Shortcuts (quick device
+  toggles) | Calendar
 - Bottom status bar (full width): lights/climate/media/garage pills +
   a native Assist voice button
+
+`components/home_status_card.yaml` (the previous Garage/Locks/Alarm/
+Internet/Powerwall tile grid) is no longer used on the Home page — its
+Garage/Locks/Alarm/Internet content moved into the header's pills, and
+Shortcuts took its old grid slot in the middle row instead.
 
 The visual language (30px card radius, layered glass highlight/shadow,
 "SF Pro Rounded" font) was adapted directly from the reference
@@ -126,7 +139,7 @@ for how each card was trimmed to fit.
 
 | Page | Path | Highlights |
 |---|---|---|
-| Home | `/home` | Dense `sections`-view grid: header, camera/weather/thermostat row, rooms/status/calendar row, bottom status bar + Assist — no scrolling on a 12.9" iPad |
+| Home | `/home` | Dense `sections`-view grid: status-pill header, camera/weather/thermostat row, rooms/shortcuts/calendar row, bottom status bar + Assist — no scrolling on a 12.9" iPad |
 | Cameras | `/cameras` | Large feed, thumbnail selector, fullscreen, recent motion |
 | Climate | `/climate` | Full thermostat, temp/humidity graphs, outside weather |
 | Lighting | `/lighting` | Whole-home scenes + per-room light control |

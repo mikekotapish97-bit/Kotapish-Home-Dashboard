@@ -3,6 +3,46 @@
 All notable changes to this project are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [1.6.0] - 2026-07-12
+
+### Changed
+
+- **Rebuilt the Home page's top bar to match the reference dashboard's
+  actual structure** instead of a reinterpreted greeting/clock/weather
+  banner: small status pills (Garage/Locks/Alarm/Internet, in the exact
+  190×50px pill shape from the reference's own CSS) on the left, a big
+  clock with a live seconds readout on the right of them, and the
+  notifications bell standing in for the reference's person-avatar pair
+  (this project has no person-tracking entities). The old
+  greeting/date/weather-chip header is gone.
+- **Weather card rebuilt on HA's native `type: weather-forecast`** (two
+  stacked instances: current conditions, then a daily forecast strip)
+  instead of Clock Weather Card — this supersedes an earlier explicit
+  request to use Clock Weather Card for the Home page, made because an
+  exact visual match to the reference (which builds its weather widget
+  from primitives, not a single HACS card) now takes priority. Clock
+  Weather Card remains in use on the Climate page.
+- **Split the old "Home Status" tile grid into two separate, more
+  accurate pieces**: Garage/Locks/Alarm/Internet moved into the new
+  header pills; a genuinely new **Shortcuts** grid
+  (`components/shortcuts_card.yaml`) — real device toggles (garage door,
+  TV, and four room lights) — took over its old grid slot in the middle
+  row, matching the reference's actual Shortcuts tiles (quick actions),
+  which is distinct from the Rooms list (browse/info). The old
+  `home_status_card.yaml` is kept, unreferenced, same pattern as
+  `nav_rail.yaml`.
+- **Rooms list rows now show three distinct elements** (icon badge, name,
+  and a separate orange light-count pill + temperature) instead of one
+  combined text string, matching the reference's actual row structure.
+
+### Fixed
+
+- Caught and fixed a third occurrence of the "`# PLACEHOLDER ENTITY`
+  comment on the same line as a closing `]]]` inside a `|` block scalar"
+  bug (silently becomes literal string content instead of a real
+  comment) — this time in the new header pills. Moved all four instances
+  to their own comment line above the affected key.
+
 ## [1.5.0] - 2026-07-11
 
 ### Changed

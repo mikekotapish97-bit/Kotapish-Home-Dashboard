@@ -7,9 +7,9 @@
 #
 # max_columns: 12 gives fine-grained width control per section via
 # column_span. Layout, top to bottom:
-#   1. Header section (full width, column_span: 12)
+#   1. Header section (full width, column_span: 12) — status pills + clock
 #   2. Main row (column_span 5/4/3 = 12): Camera | Weather | Thermostat
-#   3. Middle row (column_span 4/4/4 = 12): Rooms | Home Status | Calendar
+#   3. Middle row (column_span 4/4/4 = 12): Rooms | Shortcuts | Calendar
 #   4. Status bar (full width, column_span: 12): quick-glance pills + Assist
 #
 # Each component file carries its own `grid_options: {columns: full}` at
@@ -71,7 +71,7 @@ sections:
   - type: grid
     column_span: 4
     cards:
-      - !include ../components/home_status_card.yaml
+      - !include ../components/shortcuts_card.yaml
 
   - type: grid
     column_span: 4

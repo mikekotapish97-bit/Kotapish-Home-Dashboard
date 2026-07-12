@@ -1,13 +1,12 @@
 # =============================================================================
-# Component: Home Status Tiles
-# Garage / Locks / Alarm / Internet / Powerwall — five compact status tiles,
-# styled like the "Shortcuts" tile grid in the reference dashboard (icon in
-# a colored circular badge, name/state below). All entities below are
-# PLACEHOLDERS except the ones explicitly noted.
+# Component: Home Status Tiles — NOT CURRENTLY USED BY ANY PAGE
 #
-# Uses a wrapping `grid` (2 columns), not a `horizontal-stack`: this card
-# shares its section with siblings on the Home page, and a horizontal-stack
-# would force all 5 tiles onto one non-wrapping row.
+# Garage/Locks/Alarm/Internet moved into components/header.yaml as top-bar
+# pills (matching the reference dashboard's actual top-row pill layout);
+# components/shortcuts_card.yaml took this file's tile-grid slot in the
+# Home page's middle row instead. Powerwall is still reachable via the
+# Energy page. Kept here, unreferenced, same pattern as nav_rail.yaml, in
+# case a future layout wants a dedicated status-tile grid back.
 # =============================================================================
 
 type: grid

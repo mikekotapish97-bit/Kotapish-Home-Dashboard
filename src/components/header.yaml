@@ -1,8 +1,16 @@
 # =============================================================================
-# Component: Top Header
-# Dynamic greeting (Good Morning/Afternoon/Evening) + live clock + date on the
-# left; compact weather chip + notifications bell + fullscreen-safe status
-# pill on the right. Used at the top of pages/home.yaml.
+# Component: Top Bar
+# Rebuilt to match the reference dashboard's actual top row: small status
+# pills on the left, a big clock (with a small seconds readout) on the
+# right of them, and a circular icon on the far right. The reference's own
+# pills are personal-life trackers (baby sleep monitor, washing machine,
+# work meeting status, 3D printer) this project has no equivalent for —
+# repurposed here with Garage/Locks/Alarm/Internet status instead, in the
+# exact same pill shape/size. Its "avatar" pair (person-tracker photos) has
+# no equivalent either — replaced with the notifications bell, since this
+# project has no person-tracking entities.
+#
+# All entities below are PLACEHOLDERS except noted.
 # =============================================================================
 
 type: horizontal-stack
@@ -12,40 +20,89 @@ card_mod:
   style: |
     ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; }
 cards:
-  # ---------------------------------------------------------------------------
-  # Greeting + date + compact "all systems" status pill
-  # ---------------------------------------------------------------------------
   - type: custom:button-card
-    template: kotapish_glass_base
-    show_name: false
-    show_icon: false
-    styles:
-      grid:
-        - grid-template-areas: '"greeting" "subline"'
-        - grid-template-columns: 1fr
-        - grid-template-rows: auto auto
-      card:
-        - flex: "3"
-        - align-items: flex-start
-        - justify-content: center
-        - padding: 22px 28px
-    custom_fields:
-      greeting: |
+    template: kotapish_top_pill
+    icon: mdi:garage
+    name: Garage
+    # PLACEHOLDER ENTITY
+    label: |
+      [[[
+        const s = states['cover.garage_door_placeholder'];
+        return (s && s.state === 'closed') ? 'Closed' : 'Open';
+      ]]]
+    variables:
+      badge_color: |
         [[[
-          const h = new Date().getHours();
-          const greeting = h < 12 ? 'Good Morning' : (h < 18 ? 'Good Afternoon' : 'Good Evening');
-          return `<div style="font-family: var(--kotapish-font-family); font-size: 30px; font-weight: 700; color: var(--primary-text-color);">${greeting}</div>`;
+          const s = states['cover.garage_door_placeholder'];
+          return (s && s.state === 'closed') ? 'var(--kotapish-green)' : 'var(--kotapish-orange)';
         ]]]
-      subline: |
+    tap_action:
+      action: more-info
+      entity: cover.garage_door_placeholder
+
+  - type: custom:button-card
+    template: kotapish_top_pill
+    icon: mdi:lock
+    name: Locks
+    # PLACEHOLDER ENTITY
+    label: |
+      [[[
+        const s = states['lock.front_door_placeholder'];
+        return (s && s.state === 'locked') ? 'Locked' : 'Unlocked';
+      ]]]
+    variables:
+      badge_color: |
         [[[
-          const now = new Date();
-          const dateStr = now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
-          return `<div style="font-family: var(--kotapish-font-family); font-size: 15px; font-weight: 500; color: var(--secondary-text-color); margin-top: 4px;">${dateStr} · All Systems Normal</div>`;
+          const s = states['lock.front_door_placeholder'];
+          return (s && s.state === 'locked') ? 'var(--kotapish-green)' : 'var(--kotapish-red)';
         ]]]
+    tap_action:
+      action: more-info
+      entity: lock.front_door_placeholder
+
+  - type: custom:button-card
+    template: kotapish_top_pill
+    icon: mdi:shield-home
+    name: Alarm
+    # PLACEHOLDER ENTITY
+    label: |
+      [[[
+        const s = states['alarm_control_panel.home_alarm_placeholder'];
+        return s ? s.state.replace('_', ' ') : 'Unknown';
+      ]]]
+    variables:
+      badge_color: |
+        [[[
+          const s = states['alarm_control_panel.home_alarm_placeholder'];
+          return (s && s.state === 'armed_away') ? 'var(--kotapish-green)' : 'var(--kotapish-orange)';
+        ]]]
+    tap_action:
+      action: more-info
+      entity: alarm_control_panel.home_alarm_placeholder
+
+  - type: custom:button-card
+    template: kotapish_top_pill
+    icon: mdi:web
+    name: Internet
+    # PLACEHOLDER ENTITY
+    label: |
+      [[[
+        const s = states['binary_sensor.internet_connection_placeholder'];
+        return (s && s.state === 'on') ? 'Online' : 'Offline';
+      ]]]
+    variables:
+      badge_color: |
+        [[[
+          const s = states['binary_sensor.internet_connection_placeholder'];
+          return (s && s.state === 'on') ? 'var(--kotapish-green)' : 'var(--kotapish-red)';
+        ]]]
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/network
 
   # ---------------------------------------------------------------------------
-  # Live clock — large, monospaced numerals, updates via button-card's own
-  # re-render cycle (driven by any hass state tick)
+  # Spacer — pushes the clock + bell to the right, matching the reference's
+  # pills-left / clock-and-avatars-right arrangement
   # ---------------------------------------------------------------------------
   - type: custom:button-card
     template: kotapish_glass_base
@@ -53,48 +110,46 @@ cards:
     show_icon: false
     styles:
       card:
-        - flex: "1.4"
+        - flex: "1"
+        - background: transparent
+        - box-shadow: none
+        - border: none
+        - backdrop-filter: none
+
+  # ---------------------------------------------------------------------------
+  # Live clock — big numerals with a small live seconds readout, matching
+  # the reference's "15:24" + small superscript seconds
+  # ---------------------------------------------------------------------------
+  - type: custom:button-card
+    template: kotapish_glass_base
+    show_name: false
+    show_icon: false
+    styles:
+      card:
+        - flex: "0 0 auto"
         - align-items: center
         - justify-content: center
-        - padding: 22px
+        - padding: 12px 24px
+        - background: transparent
+        - box-shadow: none
+        - border: none
+        - backdrop-filter: none
     custom_fields:
       clock: |
         [[[
           const now = new Date();
-          const time = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-          return `<div style="font-family: var(--kotapish-font-family); font-size: 34px; font-weight: 700; letter-spacing: -1px; color: var(--primary-text-color);">${time}</div>`;
+          const time = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', hour12: false });
+          const seconds = now.getSeconds().toString().padStart(2, '0');
+          return `<div style="font-family: var(--kotapish-font-family); display: flex; align-items: flex-start;">
+            <span style="font-size: 34px; font-weight: 700; letter-spacing: -1px; color: var(--primary-text-color);">${time}</span>
+            <span style="font-size: 14px; font-weight: 600; color: var(--secondary-text-color); margin-top: 2px;">${seconds}</span>
+          </div>`;
         ]]]
 
   # ---------------------------------------------------------------------------
-  # Weather chip — PLACEHOLDER ENTITY: weather.ranson_wv_nws
-  # Set up Settings → Devices & Services → Add Integration → "National
-  # Weather Service (NWS)" for Ranson, WV, then replace this with the
-  # entity_id it creates (check Developer Tools → States, or rename it to
-  # match via the entity's Settings → Advanced → Entity ID). See
-  # INSTALLATION.md step 8 for the full walkthrough.
-  # ---------------------------------------------------------------------------
-  - type: custom:button-card
-    template: kotapish_glass_base
-    entity: weather.ranson_wv_nws # PLACEHOLDER ENTITY
-    show_name: false
-    show_icon: true
-    show_state: true
-    size: 30px
-    styles:
-      card:
-        - flex: "1.2"
-        - align-items: center
-        - justify-content: center
-        - padding: 22px
-      icon:
-        - color: var(--kotapish-blue)
-      state:
-        - font-size: 20px
-        - font-weight: "700"
-        - color: var(--primary-text-color)
-
-  # ---------------------------------------------------------------------------
-  # Notifications bell — opens HA's persistent_notification panel via more-info
+  # Notifications bell — stands in for the reference's person-avatar pair
+  # (this project has no person-tracking entities). Opens HA's
+  # persistent_notification panel via more-info.
   # ---------------------------------------------------------------------------
   - type: custom:button-card
     template: kotapish_header_icon_button

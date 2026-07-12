@@ -1,14 +1,13 @@
 # =============================================================================
 # Component: Rooms List (Home page)
-# Compact list matching the reference dashboard's "Rooms" card: icon, room
-# name, and a combined lights/temperature status per row. Tapping a row
-# opens the same Browser Mod room popups already built in
-# src/popups/room_*.yaml — this replaces components/room_tiles.yaml's grid
-# on the Home page with a denser list shape; room_tiles.yaml itself is kept
-# unreferenced (see its header comment) in case a future layout wants tiles
-# back instead of a list.
+# Matches the reference dashboard's "Rooms" card structure per row: a
+# colored icon badge, the room name, an orange light-count pill, and the
+# room temperature — as three distinct visual elements, not one combined
+# text string. Tapping a row opens the same Browser Mod room popups
+# already built in src/popups/room_*.yaml. This is a browse/info list,
+# distinct from components/shortcuts_card.yaml (quick action toggles).
 #
-# Uses the kotapish_list_row template (a standalone glass row, normal
+# Uses the kotapish_room_row template (a standalone glass row, normal
 # document flow — see templates/button_card_templates.yaml for why it's
 # built that way). All light/temperature entities are PLACEHOLDERS — see
 # the popups for full lists.
@@ -32,18 +31,24 @@ cards:
     name: Rooms
 
   - type: custom:button-card
-    template: kotapish_list_row
+    template: kotapish_room_row
     icon: mdi:sofa
     name: Living Room
     variables:
       badge_color: var(--kotapish-blue)
-    state_display: |
-      [[[
-        const light = states['light.living_room_placeholder'];
-        const temp = states['sensor.living_room_temp_placeholder'];
-        const lightText = (light && light.state === 'on') ? 'Lights on' : 'Lights off';
-        return temp ? `${lightText} · ${temp.state}°` : lightText;
-      ]]]
+    # PLACEHOLDER ENTITIES: light.living_room_placeholder, sensor.living_room_temp_placeholder
+    custom_fields:
+      info: |
+        [[[
+          const light = states['light.living_room_placeholder'];
+          const temp = states['sensor.living_room_temp_placeholder'];
+          const on = (light && light.state === 'on') ? 1 : 0;
+          const tempText = temp ? `${temp.state}°` : '--';
+          return `<div style="display:flex; align-items:center; gap:8px; font-family: var(--kotapish-font-family);">
+            <span style="display:flex; align-items:center; gap:3px; background: var(--kotapish-orange); color:white; border-radius:12px; padding:2px 8px; font-size:12px; font-weight:600;">💡 ${on}</span>
+            <span style="font-size:13px; color: var(--secondary-text-color); min-width: 34px; text-align:right;">${tempText}</span>
+          </div>`;
+        ]]]
     tap_action:
       action: fire-dom-event
       browser_mod:
@@ -52,22 +57,28 @@ cards:
           title: Living Room
           size: wide
           style: |
-            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+            .mdc-dialog__surface { border-radius: 30px !important; backdrop-filter: blur(30px); }
           content: !include ../popups/room_living_room.yaml
 
   - type: custom:button-card
-    template: kotapish_list_row
+    template: kotapish_room_row
     icon: mdi:silverware-fork-knife
     name: Kitchen
     variables:
       badge_color: var(--kotapish-orange)
-    state_display: |
-      [[[
-        const light = states['light.kitchen_placeholder'];
-        const temp = states['sensor.kitchen_temp_placeholder'];
-        const lightText = (light && light.state === 'on') ? 'Lights on' : 'Lights off';
-        return temp ? `${lightText} · ${temp.state}°` : lightText;
-      ]]]
+    # PLACEHOLDER ENTITIES: light.kitchen_placeholder, sensor.kitchen_temp_placeholder
+    custom_fields:
+      info: |
+        [[[
+          const light = states['light.kitchen_placeholder'];
+          const temp = states['sensor.kitchen_temp_placeholder'];
+          const on = (light && light.state === 'on') ? 1 : 0;
+          const tempText = temp ? `${temp.state}°` : '--';
+          return `<div style="display:flex; align-items:center; gap:8px; font-family: var(--kotapish-font-family);">
+            <span style="display:flex; align-items:center; gap:3px; background: var(--kotapish-orange); color:white; border-radius:12px; padding:2px 8px; font-size:12px; font-weight:600;">💡 ${on}</span>
+            <span style="font-size:13px; color: var(--secondary-text-color); min-width: 34px; text-align:right;">${tempText}</span>
+          </div>`;
+        ]]]
     tap_action:
       action: fire-dom-event
       browser_mod:
@@ -76,22 +87,28 @@ cards:
           title: Kitchen
           size: wide
           style: |
-            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+            .mdc-dialog__surface { border-radius: 30px !important; backdrop-filter: blur(30px); }
           content: !include ../popups/room_kitchen.yaml
 
   - type: custom:button-card
-    template: kotapish_list_row
+    template: kotapish_room_row
     icon: mdi:bed
     name: Bedroom
     variables:
       badge_color: var(--kotapish-purple)
-    state_display: |
-      [[[
-        const light = states['light.bedroom_placeholder'];
-        const temp = states['sensor.bedroom_temp_placeholder'];
-        const lightText = (light && light.state === 'on') ? 'Lights on' : 'Lights off';
-        return temp ? `${lightText} · ${temp.state}°` : lightText;
-      ]]]
+    # PLACEHOLDER ENTITIES: light.bedroom_placeholder, sensor.bedroom_temp_placeholder
+    custom_fields:
+      info: |
+        [[[
+          const light = states['light.bedroom_placeholder'];
+          const temp = states['sensor.bedroom_temp_placeholder'];
+          const on = (light && light.state === 'on') ? 1 : 0;
+          const tempText = temp ? `${temp.state}°` : '--';
+          return `<div style="display:flex; align-items:center; gap:8px; font-family: var(--kotapish-font-family);">
+            <span style="display:flex; align-items:center; gap:3px; background: var(--kotapish-orange); color:white; border-radius:12px; padding:2px 8px; font-size:12px; font-weight:600;">💡 ${on}</span>
+            <span style="font-size:13px; color: var(--secondary-text-color); min-width: 34px; text-align:right;">${tempText}</span>
+          </div>`;
+        ]]]
     tap_action:
       action: fire-dom-event
       browser_mod:
@@ -100,22 +117,28 @@ cards:
           title: Bedroom
           size: wide
           style: |
-            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+            .mdc-dialog__surface { border-radius: 30px !important; backdrop-filter: blur(30px); }
           content: !include ../popups/room_bedroom.yaml
 
   - type: custom:button-card
-    template: kotapish_list_row
+    template: kotapish_room_row
     icon: mdi:desk
     name: Office
     variables:
       badge_color: var(--kotapish-teal)
-    state_display: |
-      [[[
-        const light = states['light.office_placeholder'];
-        const temp = states['sensor.office_temp_placeholder'];
-        const lightText = (light && light.state === 'on') ? 'Lights on' : 'Lights off';
-        return temp ? `${lightText} · ${temp.state}°` : lightText;
-      ]]]
+    # PLACEHOLDER ENTITIES: light.office_placeholder, sensor.office_temp_placeholder
+    custom_fields:
+      info: |
+        [[[
+          const light = states['light.office_placeholder'];
+          const temp = states['sensor.office_temp_placeholder'];
+          const on = (light && light.state === 'on') ? 1 : 0;
+          const tempText = temp ? `${temp.state}°` : '--';
+          return `<div style="display:flex; align-items:center; gap:8px; font-family: var(--kotapish-font-family);">
+            <span style="display:flex; align-items:center; gap:3px; background: var(--kotapish-orange); color:white; border-radius:12px; padding:2px 8px; font-size:12px; font-weight:600;">💡 ${on}</span>
+            <span style="font-size:13px; color: var(--secondary-text-color); min-width: 34px; text-align:right;">${tempText}</span>
+          </div>`;
+        ]]]
     tap_action:
       action: fire-dom-event
       browser_mod:
@@ -124,20 +147,23 @@ cards:
           title: Office
           size: wide
           style: |
-            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+            .mdc-dialog__surface { border-radius: 30px !important; backdrop-filter: blur(30px); }
           content: !include ../popups/room_office.yaml
 
   - type: custom:button-card
-    template: kotapish_list_row
+    template: kotapish_room_row
     icon: mdi:garage
     name: Garage
     variables:
       badge_color: var(--kotapish-red)
-    state_display: |
-      [[[
-        const door = states['cover.garage_door_placeholder'];
-        return (door && door.state === 'closed') ? 'Closed' : 'Open';
-      ]]]
+    # PLACEHOLDER ENTITY: cover.garage_door_placeholder
+    custom_fields:
+      info: |
+        [[[
+          const door = states['cover.garage_door_placeholder'];
+          const text = (door && door.state === 'closed') ? 'Closed' : 'Open';
+          return `<div style="font-size:13px; color: var(--secondary-text-color); font-family: var(--kotapish-font-family);">${text}</div>`;
+        ]]]
     tap_action:
       action: fire-dom-event
       browser_mod:
@@ -146,20 +172,23 @@ cards:
           title: Garage
           size: wide
           style: |
-            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+            .mdc-dialog__surface { border-radius: 30px !important; backdrop-filter: blur(30px); }
           content: !include ../popups/room_garage.yaml
 
   - type: custom:button-card
-    template: kotapish_list_row
+    template: kotapish_room_row
     icon: mdi:tree
     name: Patio
     variables:
       badge_color: var(--kotapish-green)
-    state_display: |
-      [[[
-        const temp = states['sensor.patio_temp_placeholder'];
-        return temp ? `${temp.state}°` : '--';
-      ]]]
+    # PLACEHOLDER ENTITY: sensor.patio_temp_placeholder
+    custom_fields:
+      info: |
+        [[[
+          const temp = states['sensor.patio_temp_placeholder'];
+          const tempText = temp ? `${temp.state}°` : '--';
+          return `<div style="font-size:13px; color: var(--secondary-text-color); font-family: var(--kotapish-font-family);">${tempText}</div>`;
+        ]]]
     tap_action:
       action: fire-dom-event
       browser_mod:
@@ -168,5 +197,5 @@ cards:
           title: Patio
           size: wide
           style: |
-            .mdc-dialog__surface { border-radius: 28px !important; backdrop-filter: blur(30px); }
+            .mdc-dialog__surface { border-radius: 30px !important; backdrop-filter: blur(30px); }
           content: !include ../popups/room_patio.yaml

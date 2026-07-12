@@ -381,3 +381,77 @@ kotapish_assist_button:
       - background: var(--kotapish-blue)
       - border-radius: "50%"
       - padding: 10px
+
+# -----------------------------------------------------------------------------
+# Top bar status pill — 190x50px, matching the reference dashboard's own
+# top-row notification pill exactly (verified against its real
+# `update_cards` template): icon circle badge on the left, name (bold)
+# stacked over a secondary label line on the right. grid-template-areas
+# "i n" / "i l" uses button-card's own area codes (icon/name/label),
+# copied directly from the reference's working config.
+# -----------------------------------------------------------------------------
+kotapish_top_pill:
+  template: kotapish_glass_base
+  show_name: true
+  show_label: true
+  show_icon: true
+  show_state: false
+  size: 18px
+  styles:
+    grid:
+      - grid-template-areas: '"i n" "i l"'
+      - grid-template-columns: min-content 1fr
+      - align-items: center
+    card:
+      - width: 190px
+      - height: 50px
+      - padding: 0 15px 0 8px
+      - border-radius: var(--kotapish-radius-pill)
+    name:
+      - justify-self: start
+      - font-size: 13px
+      - font-weight: "600"
+    label:
+      - justify-self: start
+      - font-size: 11px
+      - font-weight: "400"
+      - color: var(--secondary-text-color)
+    icon:
+      - width: 18px
+      - color: white
+      - background: |
+          [[[ return variables.badge_color || 'var(--kotapish-blue)'; ]]]
+      - border-radius: "50%"
+      - padding: 8px
+
+# -----------------------------------------------------------------------------
+# Room row — icon badge | name | (light-count pill + temperature), matching
+# the reference dashboard's own room-row structure (three distinct visual
+# elements per row, not one combined text string). The `info` custom_field
+# name becomes its own grid area automatically (same mechanism already
+# used by components/header.yaml's greeting/subline fields).
+# -----------------------------------------------------------------------------
+kotapish_room_row:
+  template: kotapish_glass_base
+  show_name: true
+  show_icon: true
+  show_state: false
+  size: 15px
+  styles:
+    grid:
+      - grid-template-areas: '"i n info"'
+      - grid-template-columns: min-content 1fr min-content
+      - align-items: center
+    card:
+      - padding: 12px 16px
+    name:
+      - justify-self: start
+      - font-size: 14px
+      - font-weight: "500"
+    icon:
+      - width: 15px
+      - color: white
+      - background: |
+          [[[ return variables.badge_color || 'var(--kotapish-blue)'; ]]]
+      - border-radius: "5px"
+      - padding: 4px

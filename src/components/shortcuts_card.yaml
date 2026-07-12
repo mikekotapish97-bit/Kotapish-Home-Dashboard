@@ -1,0 +1,121 @@
+# =============================================================================
+# Component: Shortcuts (Home page)
+# Real device toggles — Garage Door, TV, and four room lights — matching
+# the reference dashboard's actual Shortcuts tile grid (quick actions),
+# as distinct from components/rooms_list.yaml (a browse/info list that
+# opens room popups). Uses the same 88px flip-state tile look as the
+# reference's own Shortcuts tiles (kotapish_status_chip template).
+# All entities below are PLACEHOLDERS.
+# =============================================================================
+
+type: grid
+grid_options:
+  columns: full
+columns: 2
+square: false
+cards:
+  - type: custom:button-card
+    template: kotapish_status_chip
+    entity: cover.garage_door_placeholder # PLACEHOLDER ENTITY
+    icon: mdi:garage
+    name: Garage Door
+    show_state: false
+    variables:
+      chip_color: |
+        [[[
+          const s = states['cover.garage_door_placeholder'];
+          return (s && s.state === 'open') ? 'var(--kotapish-red)' : 'var(--kotapish-green)';
+        ]]]
+    tap_action:
+      action: call-service
+      service: cover.toggle
+      service_data:
+        entity_id: cover.garage_door_placeholder
+
+  - type: custom:button-card
+    template: kotapish_status_chip
+    entity: media_player.apple_tv_placeholder # PLACEHOLDER ENTITY
+    icon: mdi:television
+    name: TV
+    show_state: false
+    variables:
+      chip_color: |
+        [[[
+          const s = states['media_player.apple_tv_placeholder'];
+          return (s && s.state === 'playing') ? 'var(--kotapish-purple)' : 'var(--kotapish-blue)';
+        ]]]
+    tap_action:
+      action: navigate
+      navigation_path: /kotapish-home/media
+
+  - type: custom:button-card
+    template: kotapish_status_chip
+    entity: light.living_room_placeholder # PLACEHOLDER ENTITY
+    icon: mdi:sofa
+    name: Living Room
+    show_state: false
+    variables:
+      chip_color: |
+        [[[
+          const s = states['light.living_room_placeholder'];
+          return (s && s.state === 'on') ? 'var(--kotapish-yellow)' : 'var(--kotapish-blue)';
+        ]]]
+    tap_action:
+      action: call-service
+      service: light.toggle
+      service_data:
+        entity_id: light.living_room_placeholder
+
+  - type: custom:button-card
+    template: kotapish_status_chip
+    entity: light.kitchen_placeholder # PLACEHOLDER ENTITY
+    icon: mdi:silverware-fork-knife
+    name: Kitchen
+    show_state: false
+    variables:
+      chip_color: |
+        [[[
+          const s = states['light.kitchen_placeholder'];
+          return (s && s.state === 'on') ? 'var(--kotapish-yellow)' : 'var(--kotapish-blue)';
+        ]]]
+    tap_action:
+      action: call-service
+      service: light.toggle
+      service_data:
+        entity_id: light.kitchen_placeholder
+
+  - type: custom:button-card
+    template: kotapish_status_chip
+    entity: light.bedroom_placeholder # PLACEHOLDER ENTITY
+    icon: mdi:bed
+    name: Bedroom
+    show_state: false
+    variables:
+      chip_color: |
+        [[[
+          const s = states['light.bedroom_placeholder'];
+          return (s && s.state === 'on') ? 'var(--kotapish-yellow)' : 'var(--kotapish-blue)';
+        ]]]
+    tap_action:
+      action: call-service
+      service: light.toggle
+      service_data:
+        entity_id: light.bedroom_placeholder
+
+  - type: custom:button-card
+    template: kotapish_status_chip
+    entity: light.office_placeholder # PLACEHOLDER ENTITY
+    icon: mdi:desk
+    name: Office
+    show_state: false
+    variables:
+      chip_color: |
+        [[[
+          const s = states['light.office_placeholder'];
+          return (s && s.state === 'on') ? 'var(--kotapish-yellow)' : 'var(--kotapish-blue)';
+        ]]]
+    tap_action:
+      action: call-service
+      service: light.toggle
+      service_data:
+        entity_id: light.office_placeholder

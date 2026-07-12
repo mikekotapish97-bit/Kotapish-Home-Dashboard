@@ -1,12 +1,23 @@
 # =============================================================================
 # Component: Weather Forecast Card (Home page, compact)
-# Clock Weather Card, configured WITHOUT its own clock (`hide_clock: true`)
-# since the Home page's header (components/header.yaml) already has one —
-# current conditions + a compact 4-day glance. This is one of three
-# equal-width columns in pages/home.yaml's main row (camera | weather |
-# thermostat), sized to fit a single 12.9" iPad screen with no scrolling —
-# the full 7-day forecast lives on pages/climate.yaml's weather hero
-# (components/weather_card.yaml), which has the vertical room for it.
+#
+# Rebuilt on Home Assistant's native `type: weather-forecast` card instead
+# of Clock Weather Card, to match the reference dashboard's own weather
+# widget structure (built from primitives: icon+temp, condition+hi/lo, a
+# forecast strip) rather than a single all-in-one HACS card. This
+# supersedes an earlier explicit request to use Clock Weather Card here —
+# noted so the change is visible, not silently swapped. The reference's
+# own icon/temp/condition come from custom Australian BOM sensors this
+# project has no equivalent for; `weather.ranson_wv_nws` (NWS) provides
+# the same information through HA's standard weather entity model, so
+# native cards are the reliable way to display it (NWS also serves
+# forecasts through the modern `weather.get_forecasts` mechanism, which
+# `weather-forecast` handles correctly without extra config).
+#
+# One of three equal-width cards in pages/home.yaml's main section row
+# (camera | weather | thermostat), sized to fit a single 12.9" iPad screen
+# with no scrolling — the full 7-day forecast lives on pages/climate.yaml's
+# weather hero (components/weather_card.yaml), which has the room for it.
 #
 # PLACEHOLDER ENTITY: weather.ranson_wv_nws
 # Set up Settings → Devices & Services → Add Integration → "National
@@ -16,26 +27,28 @@
 # INSTALLATION.md step 8 for the full walkthrough.
 # =============================================================================
 
-type: custom:clock-weather-card
+# The outer vertical-stack keeps its default glass background (from the
+# theme's global card-mod-card hook) as the ONE visual container; both
+# inner cards below are made transparent so they read as two sections of
+# a single glass card, not two separate floating cards.
+type: vertical-stack
 grid_options:
   columns: full
-entity: weather.ranson_wv_nws # PLACEHOLDER ENTITY
-sun_entity: sun.sun
-hide_clock: true
-hide_today_section: false
-hide_forecast_section: false
-hourly_forecast: false
-forecast_rows: 4
-name: Ranson, WV
-card_mod:
-  style: |
-    ha-card {
-      padding: 20px 24px;
-    }
-    .date {
-      font-family: var(--kotapish-font-family) !important;
-      color: var(--secondary-text-color) !important;
-    }
-    .weather-icon svg {
-      filter: drop-shadow(0 4px 10px rgba(10, 132, 255, 0.25));
-    }
+cards:
+  - type: weather-forecast
+    entity: weather.ranson_wv_nws # PLACEHOLDER ENTITY
+    show_current: true
+    show_forecast: false
+    card_mod:
+      style: |
+        ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; padding: 16px 20px 4px 20px; font-family: var(--kotapish-font-family); }
+        .name, .state { font-family: var(--kotapish-font-family) !important; }
+
+  - type: weather-forecast
+    entity: weather.ranson_wv_nws # PLACEHOLDER ENTITY
+    show_current: false
+    show_forecast: true
+    forecast_type: daily
+    card_mod:
+      style: |
+        ha-card { background: transparent; box-shadow: none; border: none; backdrop-filter: none; padding: 0 20px 16px 20px; font-family: var(--kotapish-font-family); }

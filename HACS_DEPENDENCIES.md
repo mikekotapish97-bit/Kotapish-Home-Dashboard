@@ -20,7 +20,7 @@ repository URL, unless HACS reports it isn't found in your version.
 | **Mushroom** | Climate, light, lock, cover, media-player, alarm-panel, template cards |
 | **Bubble Card** | Optional pop-up/header/separator styling — bundled for future pages (Settings quick-toggles) |
 | **card-mod** | Global glass styling hook (`card-mod-card` in the theme), popup dialog styling |
-| **clock-weather-card** | Compact weather chip (header), full weather + daily/weekly forecast (Home page), weather hero (Climate page) |
+| **clock-weather-card** | Weather hero on the Climate page only — the Home page's weather card uses HA's native `type: weather-forecast` instead (see `components/weather_forecast_card.yaml`) |
 | **State Switch** | Camera hero card + fullscreen popup camera switching |
 | **Mini Graph Card** | All temperature/humidity/energy/BAS trend graphs |
 | **auto-entities** | Recent motion events, security events, UniFi device lists |
